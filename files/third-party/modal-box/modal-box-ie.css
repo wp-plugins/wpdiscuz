@@ -1,0 +1,8 @@
+/*the colorpicker dialog style in IE*/
+.modalDialog { 
+    display:none;
+}
+
+.modalDialog:target {
+    display:block;
+}

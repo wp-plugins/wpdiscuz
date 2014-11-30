@@ -156,7 +156,7 @@ class WC_Options_Serialize {
         $this->init_phrases();
         $this->add_options();
         $this->init_options(get_option($this->wc_options_slug));
-        add_action('plugins_loaded', array(&$this, 'init_phrases_on_load'), -126);
+        add_action('plugins_loaded', array(&$this, 'init_phrases_on_load'), 2126);
     }
 
     public function init_options($serialize_options) {
@@ -185,6 +185,8 @@ class WC_Options_Serialize {
      */
     public function init_phrases() {
         $this->wc_phrases = array(
+            'wc_leave_a_reply_text' => 'Leave a Reply',
+            'wc_be_the_first_text' => 'Be the First to Comment!',
             'wc_header_text' => 'Comment',
             'wc_header_on_text' => 'on',
             'wc_comment_start_text' => 'Start the discussion',
@@ -279,8 +281,8 @@ class WC_Options_Serialize {
             'wc_comment_bg_color' => '#fefefe',
             'wc_reply_bg_color' => '#f8f8f8',
             'wc_comment_text_color' => '#555',
-            'wc_author_title_color' => '#ad74a2',
-            'wc_vote_reply_color' => '#85ad74'
+            'wc_author_title_color' => '#00B38F',
+            'wc_vote_reply_color' => '#666666'
         );
         add_option($this->wc_options_slug, serialize($options));
     }

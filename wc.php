@@ -1,12 +1,12 @@
 <?php
 
 /*
-  Plugin Name: WpDiscuz
+  Plugin Name: WpDiscuz - Wordpress Comments
   Description: Better comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share.
-  Version: 1.0.0
+  Version: 1.0.1
   Author: gVectors Team (A. Chakhoyan, G. Zakaryan, H. Martirosyan)
   Author URI: http://www.gvectors.com/
-  Plugin URI: http://www.gvectors.com/
+  Plugin URI: http://www.gvectors.com/wpdiscuz/
  */
 
 include_once 'wc-options.php';
@@ -40,7 +40,7 @@ class WC_Core {
         register_activation_hook(__FILE__, array($this, 'db_operations'));
 
 
-        $this->wc_helper = new WC_Helper($this->wc_options->wc_options_serialize);
+        $this->wc_helper = new WC_Helper($this->wc_options->wc_options_serialized);
         $this->wc_css = new WC_CSS($this->wc_options);
         $this->comment_tpl_builder = new WC_Comment_Template_Builder($this->wc_helper, $this->wc_db_helper, $this->wc_options);
 
@@ -195,13 +195,13 @@ class WC_Core {
         $message_array = array();
         $comment_post_ID = intval(filter_input(INPUT_POST, 'comment_post_ID'));
         $comment_parent = intval(filter_input(INPUT_POST, 'comment_parent'));
-        if (!$this->wc_options->wc_options_serialize->wc_captcha_show_hide) {
+        if (!$this->wc_options->wc_options_serialized->wc_captcha_show_hide) {
             if (!is_user_logged_in()) {
                 $sess_captcha = $_SESSION['wc_captcha'][$comment_post_ID . '-' . $comment_parent];
                 $captcha = filter_input(INPUT_POST, 'captcha');
                 if (md5(strtolower($captcha)) !== $sess_captcha) {
                     $message_array['code'] = -1;
-                    $message_array['message'] = $this->wc_options->wc_options_serialize->wc_phrases['wc_invalid_captcha'];
+                    $message_array['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_invalid_captcha'];
                     echo json_encode($message_array);
                     exit;
                 }
@@ -227,7 +227,7 @@ class WC_Core {
         if ($name && filter_var($email, FILTER_VALIDATE_EMAIL) && $comment && filter_var($comment_post_ID)) {
 
             $held_moderate = 1;
-            if ($this->wc_options->wc_options_serialize->wc_held_comment_to_moderate) {
+            if ($this->wc_options->wc_options_serialized->wc_held_comment_to_moderate) {
                 $held_moderate = 0;
             }
 
@@ -254,7 +254,7 @@ class WC_Core {
 
             if (!$held_moderate) {
                 $message_array['code'] = -2;
-                $message_array['message'] = $this->wc_options->wc_options_serialize->wc_phrases['wc_held_for_moderate'];
+                $message_array['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_held_for_moderate'];
             } else {
                 $message_array['code'] = 1;
                 $message_array['message'] = $this->comment_tpl_builder->get_comment_template($new_comment);
@@ -263,7 +263,7 @@ class WC_Core {
         } else {
             $message_array['code'] = -1;
             $message_array['wc_new_comment_id'] = -1;
-            $message_array['message'] = $this->wc_options->wc_options_serialize->wc_phrases['wc_invalid_field'];
+            $message_array['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_invalid_field'];
         }
         echo json_encode($message_array);
         exit;
@@ -277,16 +277,16 @@ class WC_Core {
         $wc_new_comment_id = isset($_POST['wc_new_comment_id']) ? intval($_POST['wc_new_comment_id']) : -1;
         $wc_comment_parent = isset($_POST['wc_comment_parent']) ? intval($_POST['wc_comment_parent']) : -1;
         if ($wc_new_comment_id !== -1 && $wc_comment_parent !== -1) {
-            if ($this->wc_options->wc_options_serialize->wc_notify_moderator) {
+            if ($this->wc_options->wc_options_serialized->wc_notify_moderator) {
                 wp_notify_postauthor($wc_new_comment_id);
             }
-            if ($this->wc_options->wc_options_serialize->wc_notify_comment_author && $wc_comment_parent) {
+            if ($this->wc_options->wc_options_serialized->wc_notify_comment_author && $wc_comment_parent) {
                 $wc_new_comment_content = get_comment($wc_new_comment_id)->comment_content;
                 $comment = get_comment($wc_comment_parent);
                 $to = $comment->comment_author_email;
-                $subject = $this->wc_options->wc_options_serialize->wc_phrases['wc_email_subject'];
+                $subject = $this->wc_options->wc_options_serialized->wc_phrases['wc_email_subject'];
                 $permalink = get_comment_link($wc_comment_parent);
-                $message = $this->wc_options->wc_options_serialize->wc_phrases['wc_email_message'];
+                $message = $this->wc_options->wc_options_serialized->wc_phrases['wc_email_message'];
                 $message .= "<br/><br/><a href='$permalink'>$permalink</a>";
                 $message .= "<br/><br/>$wc_new_comment_content";
                 $headers = array();
@@ -305,7 +305,7 @@ class WC_Core {
         $messageArray['code'] = -1;
         $comment_id = '';
         if (!is_user_logged_in()) {
-            $messageArray['message'] = $this->wc_options->wc_options_serialize->wc_phrases['wc_login_to_vote'];
+            $messageArray['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_login_to_vote'];
             echo json_encode($messageArray);
             exit();
         }
@@ -317,7 +317,7 @@ class WC_Core {
             $is_user_voted = $this->wc_db_helper->is_user_voted($user_id, $comment_id);
             $comment = get_comment($comment_id);
             if ($comment->user_id == $user_id) {
-                $messageArray['message'] = $this->wc_options->wc_options_serialize->wc_phrases['wc_self_vote'];
+                $messageArray['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_self_vote'];
                 echo json_encode($messageArray);
                 exit();
             }
@@ -329,9 +329,9 @@ class WC_Core {
                     $vote_count = intval(get_comment_meta($comment_id, 'wpdiscuz_votes', true)) + intval($vote_type);
                     update_comment_meta($comment_id, 'wpdiscuz_votes', '' . $vote_count);
                     $messageArray['code'] = 1;
-                    $messageArray['message'] = $this->wc_options->wc_options_serialize->wc_phrases['wc_vote_counted'];
+                    $messageArray['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_vote_counted'];
                 } else {
-                    $messageArray['message'] = $this->wc_options->wc_options_serialize->wc_phrases['wc_vote_only_one_time'];
+                    $messageArray['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_vote_only_one_time'];
                 }
             } else {
                 $this->wc_db_helper->add_vote_type($user_id, $comment_id, $vote_type);
@@ -343,10 +343,10 @@ class WC_Core {
                     update_comment_meta($comment_id, 'wpdiscuz_votes', '' . $vote_count);
                 }
                 $messageArray['code'] = 1;
-                $messageArray['message'] = $this->wc_options->wc_options_serialize->wc_phrases['wc_vote_counted'];
+                $messageArray['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_vote_counted'];
             }
         } else {
-            $messageArray['message'] = $this->wc_options->wc_options_serialize->wc_phrases['wc_voting_error'];
+            $messageArray['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_voting_error'];
         }
 
         echo json_encode($messageArray);
@@ -362,7 +362,7 @@ class WC_Core {
         if (!$post_id) {
             $post_id = $post->ID;
         }
-        $wc_comment_count = $this->wc_options->wc_options_serialize->wc_comment_count;
+        $wc_comment_count = $this->wc_options->wc_options_serialized->wc_comment_count;
 
         $comm_list_args = array(
             'callback' => array(&$this, 'wc_comment_callback'),
@@ -416,7 +416,7 @@ class WC_Core {
 
     public function is_guest_can_comment() {
         $user_can_comment = TRUE;
-        if ($this->wc_options->wc_options_serialize->wc_user_must_be_registered) {
+        if ($this->wc_options->wc_options_serialized->wc_user_must_be_registered) {
             if (!is_user_logged_in()) {
                 $user_can_comment = FALSE;
             }
@@ -433,7 +433,7 @@ class WC_Core {
 
     public function init_current_post_type() {
         global $post;
-        if (in_array($post->post_type, $this->wc_options->wc_options_serialize->wc_post_types) && comments_open($post->ID)) {
+        if (in_array($post->post_type, $this->wc_options->wc_options_serialized->wc_post_types) && comments_open($post->ID)) {
             add_filter('comments_template', array(&$this, 'remove_comments_template_on_pages'), 1);
         }
     }

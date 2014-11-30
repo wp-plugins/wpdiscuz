@@ -1,9 +1,9 @@
-=== wpDiscuz ===
+=== WpDiscuz - Wordpress Comments ===
 Contributors: gVectors Team
 Tags: Wordpress Comments, Post Comments, comments box, comments, discussions, comment template
 Requires at least: 2.7
 Tested up to: 4.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,9 +16,9 @@ Better comment system. Wordpress post comments and discussion plugin. Allows you
 **wpDiscuz Features:**
 
 * | **Front-end**
-* | Adds a new comments box on posts page
+* | Adds interactive comment box on posts and other content types
 * | Responsive comments form and comment threads design
-* | Interactive, clean, simple and easy user interface and user experience
+* | Clean, simple and easy user interface and user experience
 * | Fast and easy comment form with ajax validation and data submitting 
 * | Allows to create a new discussion thread and reply to existing comment
 * | Ajax button "Load More Comments" instead of simple comments pagination
@@ -31,6 +31,8 @@ Better comment system. Wordpress post comments and discussion plugin. Allows you
 * | Post sharing options: Facebook, Twitter and Google+
 * 
 * | **Dashboard** 
+* | Option to display comment form for certain post types
+* | Option to set Discussion Tab as the first opened Tab on product page 
 * | Options to turn On/Off Comment Voting and Sharing features
 * | Option to hide/show CAPTCHA field on comment form
 * | Option for "User Must be registered to comment"
@@ -38,7 +40,10 @@ Better comment system. Wordpress post comments and discussion plugin. Allows you
 * | Option to hide user labels/titles
 * | Option to set number of comment threads per page (for "load more comments" button) 
 * | Option to notify administrators and comment authors on new comment/reply
-* | Option to manage font color and comment/reply background colors
+* | Option to manage font color
+* | Option to manage comment/reply background colors
+* | Option to manage author name and label color
+* | Option to manage reply/share/vote link colors
 * | Front-end phrase managing options, you'll be able to translate or change all phrases
 
 == Installation ==
@@ -53,6 +58,12 @@ Better comment system. Wordpress post comments and discussion plugin. Allows you
 * Support Forum: <http://gvectors.com/questions/>
 
 == Changelog ==
+
+= 1.0.1 =
+
+* Changed : Comment Box Header 
+* Fixed Bug : CSS Issues
+* Fixed Bug : Layout Issues with some themes
 
 = 1.0.0 =
 Initial version

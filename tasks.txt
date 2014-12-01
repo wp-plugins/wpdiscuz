@@ -1,5 +1,1 @@
 User role issue - multisite
-
-1. post types - option
-2. comments open
-3. post type support comment 

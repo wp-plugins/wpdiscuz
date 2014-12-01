@@ -25,7 +25,7 @@ class WC_Options {
             }
         }
 
-        if (isset($_POST['submit_options'])) {
+        if (isset($_POST['wc_submit_options'])) {
 
             if (function_exists('current_user_can') && !current_user_can('manage_options')) {
                 die(_e('Hacker?', 'wpdiscuz'));
@@ -52,6 +52,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_comment_text_color = isset($_POST['wc_comment_text_color']) ? $_POST['wc_comment_text_color'] : '#555';
             $this->wc_options_serialized->wc_author_title_color = isset($_POST['wc_author_title_color']) ? $_POST['wc_author_title_color'] : '#00B38F';
             $this->wc_options_serialized->wc_vote_reply_color = isset($_POST['wc_vote_reply_color']) ? $_POST['wc_vote_reply_color'] : '#666666';
+            $this->wc_options_serialized->wc_custom_css = isset($_POST['wc_custom_css']) ? $_POST['wc_custom_css'] : '.comments-area{width: 100%;margin: 0 auto;}';
 
             $this->wc_options_serialized->update_options();
         }
@@ -86,7 +87,7 @@ class WC_Options {
                         <tr valign="top">
                             <td colspan="4">
                                 <p class="submit">
-                                    <input type="submit" class="button button-primary" name="submit_options" value="<?php _e('Save Changes', 'wpdiscuz'); ?>" />
+                                    <input type="submit" class="button button-primary" name="wc_submit_options" value="<?php _e('Save Changes', 'wpdiscuz'); ?>" />
                                 </p>
                             </td>
                         </tr>
@@ -102,7 +103,7 @@ class WC_Options {
 
     public function phrases_options_form() {
 
-        if (isset($_POST['submit_phrases'])) {
+        if (isset($_POST['wc_submit_phrases'])) {
 
             if (function_exists('current_user_can') && !current_user_can('manage_options')) {
                 die(_e('Hacker?', 'wpdiscuz'));
@@ -165,7 +166,7 @@ class WC_Options {
 
             $this->wc_db_helper->update_phrases($this->wc_options_serialized->wc_phrases);
         }
-        if ($this->wc_db_helper->is_phrase_exists('wc_discuss_tab')) {
+        if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
             $this->wc_options_serialized->wc_phrases = $this->wc_db_helper->get_phrases();
         }
         ?>
@@ -199,7 +200,7 @@ class WC_Options {
                         <tr valign="top">
                             <td colspan="4">
                                 <p class="submit">
-                                    <input type="submit" class="button button-primary" name="submit_phrases" value="<?php _e('Save Changes', 'wpdiscuz'); ?>" />
+                                    <input type="submit" class="button button-primary" name="wc_submit_phrases" value="<?php _e('Save Changes', 'wpdiscuz'); ?>" />
                                 </p>
                             </td>
                         </tr>

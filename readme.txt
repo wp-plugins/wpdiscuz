@@ -1,9 +1,9 @@
-=== WpDiscuz - Wordpress Comments ===
+=== WpDiscuz - Wordpress Comment System ===
 Contributors: gVectors Team
 Tags: Wordpress Comments, Post Comments, comments box, comments, discussions, comment template
 Requires at least: 2.7
 Tested up to: 4.0
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,9 +58,10 @@ Better comment system. Wordpress post comments and discussion plugin. Allows you
 * Support Forum: <http://gvectors.com/questions/>
 
 == Changelog ==
+= 1.0.2 =
+* Fixed Bug : Translations does not work, they come by default when saving
 
 = 1.0.1 =
-
 * Changed : Comment Box Header 
 * Fixed Bug : CSS Issues
 * Fixed Bug : Layout Issues with some themes

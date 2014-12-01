@@ -142,6 +142,17 @@ class WC_Options_Serialize {
      */
     public $wc_vote_reply_color;
 
+
+    /*
+     * Type - Textarea
+     * Available Values - custom css code
+     * Description - Custom css code
+     * Default Value - 
+     */
+    public $wc_custom_css;
+
+
+
     /*
      * Type - HTML elements array
      * Available Values - Text
@@ -178,6 +189,7 @@ class WC_Options_Serialize {
         $this->wc_comment_text_color = $options['wc_comment_text_color'];
         $this->wc_author_title_color = $options['wc_author_title_color'];
         $this->wc_vote_reply_color = $options['wc_vote_reply_color'];
+        $this->wc_custom_css = $options['wc_custom_css'];
     }
 
     /**
@@ -254,7 +266,8 @@ class WC_Options_Serialize {
             'wc_reply_bg_color' => $this->wc_reply_bg_color,
             'wc_comment_text_color' => $this->wc_comment_text_color,
             'wc_author_title_color' => $this->wc_author_title_color,
-            'wc_vote_reply_color' => $this->wc_vote_reply_color
+            'wc_vote_reply_color' => $this->wc_vote_reply_color,
+            'wc_custom_css' => $this->wc_custom_css
         );
 
         return $options;
@@ -282,7 +295,8 @@ class WC_Options_Serialize {
             'wc_reply_bg_color' => '#f8f8f8',
             'wc_comment_text_color' => '#555',
             'wc_author_title_color' => '#00B38F',
-            'wc_vote_reply_color' => '#666666'
+            'wc_vote_reply_color' => '#666666',
+            'wc_custom_css' => '.comments-area{width: 100%;margin: 0 auto;}'
         );
         add_option($this->wc_options_slug, serialize($options));
     }

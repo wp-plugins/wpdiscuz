@@ -271,3 +271,12 @@
         </div>
     </td>
 </tr>
+
+<tr valign="top">
+    <th scope="row">
+        <label for="wc_custom_css"><?php _e('Custom CSS Code', 'wpdiscuz'); ?></label>
+    </th>
+    <td>
+        <textarea cols="50" rows="10" class="regular-text" id="wc_custom_css" name="wc_custom_css" placeholder=""><?php echo $this->wc_options_serialized->wc_custom_css; ?></textarea>
+    </td>   
+</tr>

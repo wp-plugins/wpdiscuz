@@ -1,4 +1,4 @@
-=== WpDiscuz - Wordpress Comment System ===
+=== wpDiscuz - Wordpress Comment System ===
 Contributors: gVectors Team
 Tags: Wordpress Comments, Post Comments, comments box, comments, discussions, comment template
 Requires at least: 2.7

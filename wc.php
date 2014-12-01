@@ -1,7 +1,7 @@
 <?php
 
 /*
-  Plugin Name: wpDiscuz - Wordpress Comment System
+  Plugin Name: wpDiscuz - Wordpress Comments
   Description: Better comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share.
   Version: 1.0.2
   Author: gVectors Team (A. Chakhoyan, G. Zakaryan, H. Martirosyan)

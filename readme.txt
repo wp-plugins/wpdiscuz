@@ -32,7 +32,6 @@ Better comment system. Wordpress post comments and discussion plugin. Allows you
 * 
 * | **Dashboard** 
 * | Option to display comment form for certain post types
-* | Option to set Discussion Tab as the first opened Tab on product page 
 * | Options to turn On/Off Comment Voting and Sharing features
 * | Option to hide/show CAPTCHA field on comment form
 * | Option for "User Must be registered to comment"

@@ -127,7 +127,11 @@ class WC_Comment_Template_Builder {
 
             if (!$this->wc_options->wc_options_serialized->wc_captcha_show_hide) {
                 if (!is_user_logged_in()) {
-                    $output .= '<div class="wc-field-captcha item"><input id="wc_captcha-' . $unique_id . '" name="wc_captcha" required="required" value="" type="text" /><span class="wc-label wc-captcha-label"><img src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/captcha/captcha.php?comm_id=' . $comment->comment_post_ID . '-' . $comment->comment_ID) . '" id="wc_captcha_img-' . $unique_id . '" /><img src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/refresh-16x16.png') . '" id="wc_captcha_refresh_img-' . $unique_id . '" class="wc_captcha_refresh_img" /></span><span class="captcha_msg">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_captcha_text'] . '</span></div>';
+                    $output .= '<div class="wc-field-captcha item">'; 
+                    $output .= '<input id="wc_captcha-' . $unique_id . '" name="wc_captcha" required="required" value="" type="text" /><span class="wc-label wc-captcha-label">'; 
+                    $output .= '<img rel="nofollow" src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/captcha/captcha.php?comm_id=' . $comment->comment_post_ID . '-' . $comment->comment_ID) . '" id="wc_captcha_img-' . $unique_id . '" />'; 
+                    $output .= '<img rel="nofollow" src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/refresh-16x16.png') . '" id="wc_captcha_refresh_img-' . $unique_id . '" class="wc_captcha_refresh_img" />';
+                    $output .= '</span><span class="captcha_msg">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_captcha_text'] . '</span></div>';
                 }
             }
 

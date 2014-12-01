@@ -71,8 +71,8 @@ $header_text .= ' "' . get_the_title($post) . '"';
                                     <div class="wc-field-captcha item">
                                         <input id="wc_captcha-<?php echo $unique_id; ?>" name="wc_captcha" required="required" value="" type="text" />
                                         <span class="wc-label wc-captcha-label">
-                                            <img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/captcha/captcha.php?comm_id=' . $post->ID . '-' . 0); ?>" id="wc_captcha_img-<?php echo $unique_id; ?>" />
-                                            <img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/refresh-16x16.png'); ?>" id="wc_captcha_refresh_img-<?php echo $unique_id; ?>" class="wc_captcha_refresh_img" />
+                                            <img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/captcha/captcha.php?comm_id=' . $post->ID . '-' . 0); ?>" id="wc_captcha_img-<?php echo $unique_id; ?>" rel="nofollow"/>
+                                            <img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/refresh-16x16.png'); ?>" id="wc_captcha_refresh_img-<?php echo $unique_id; ?>" class="wc_captcha_refresh_img" rel="nofollow"/>
                                         </span>
                                         <span class="captcha_msg"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_captcha_text']; ?></span>
                                     </div>

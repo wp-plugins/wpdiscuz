@@ -2,8 +2,8 @@
 Contributors: gVectors Team
 Tags: Wordpress Comments, Post Comments, comments box, comments, discussions, comment template
 Requires at least: 2.7
-Tested up to: 4.0
-Stable tag: 1.0.2
+Tested up to: 4.0.1
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,7 @@ Better comment system. Wordpress post comments and discussion plugin. Allows you
 * 
 * | **Dashboard** 
 * | Option to display comment form for certain post types
+* | Option to set Discussion Tab as the first opened Tab on product page 
 * | Options to turn On/Off Comment Voting and Sharing features
 * | Option to hide/show CAPTCHA field on comment form
 * | Option for "User Must be registered to comment"
@@ -57,6 +58,9 @@ Better comment system. Wordpress post comments and discussion plugin. Allows you
 * Support Forum: <http://gvectors.com/questions/>
 
 == Changelog ==
+= 1.0.3 =
+* Fixed Bug : Problem with options page redirection on Wordpress multi-sites
+
 = 1.0.2 =
 * Fixed Bug : Translations does not work, they come by default when saving
 

@@ -1,5 +1,9 @@
 <?php global $post, $wc_core; ?>
-<?php $wc_core->wc_options->wc_options_serialized->wc_phrases = $wc_core->wc_db_helper->get_phrases(); ?>
+<?php
+if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
+    $wc_core->wc_options->wc_options_serialized->wc_phrases = $wc_core->wc_db_helper->get_phrases();
+}
+?>
 <script type="text/javascript">
 //    initialize the validator function
     validator.message['invalid'] = '<?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_invalid_field']; ?>';

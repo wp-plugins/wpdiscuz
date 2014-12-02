@@ -3,7 +3,7 @@
 /*
   Plugin Name: wpDiscuz - Wordpress Comments
   Description: Better comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share.
-  Version: 1.0.2
+  Version: 1.0.3
   Author: gVectors Team (A. Chakhoyan, G. Zakaryan, H. Martirosyan)
   Author URI: http://www.gvectors.com/
   Plugin URI: http://www.gvectors.com/wpdiscuz/
@@ -301,7 +301,9 @@ class WC_Core {
      * vote on comment via ajax
      */
     public function vote_on_comment() {
-        $this->wc_options->wc_options_serialized->wc_phrases = $this->wc_db_helper->get_phrases();
+        if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
+            $this->wc_options->wc_options_serialized->wc_phrases = $this->wc_db_helper->get_phrases();
+        }
         $messageArray = array();
         $messageArray['code'] = -1;
         $comment_id = '';
@@ -359,7 +361,9 @@ class WC_Core {
      */
     public function get_wp_comments($comments_offset, $post_id = null) {
         global $post;
-        $this->wc_options->wc_options_serialized->wc_phrases = $this->wc_db_helper->get_phrases();
+        if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
+            $this->wc_options->wc_options_serialized->wc_phrases = $this->wc_db_helper->get_phrases();
+        }
 
         if (!$post_id) {
             $post_id = $post->ID;

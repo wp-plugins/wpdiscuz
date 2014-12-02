@@ -65,7 +65,7 @@ class WC_Options {
             </div>
             <h2 style="padding-bottom:20px; padding-top:15px;"><?php _e('WpDiscuz General Settings', 'wpdiscuz'); ?></h2>
             <br style="clear:both" />
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>?page=wpdiscuz_options_page&updated=true" method="post" name="wpdiscuz_options_page" class="wc-main-settings-form wc-form">
+            <form action="<?php echo admin_url(); ?>admin.php?page=wpdiscuz_options_page&updated=true" method="post" name="wpdiscuz_options_page" class="wc-main-settings-form wc-form">
                 <?php
                 if (function_exists('wp_nonce_field')) {
                     wp_nonce_field('wc_options_form');
@@ -177,7 +177,7 @@ class WC_Options {
             </div>
             <h2 style="padding-bottom:20px; padding-top:15px;"><?php _e('WpDiscuz Front-end Phrases', 'wpdiscuz'); ?></h2>
             <br style="clear:both" />
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>?page=wpdiscuz_phrases_page&updated=true" method="post" name="wpdiscuz_phrases_page" class="wc-phrases-settings-form wc-form">
+            <form action="<?php echo admin_url(); ?>admin.php?page=wpdiscuz_phrases_page&updated=true" method="post" name="wpdiscuz_phrases_page" class="wc-phrases-settings-form wc-form">
                 <?php
                 if (function_exists('wp_nonce_field')) {
                     wp_nonce_field('wc_phrases_form');

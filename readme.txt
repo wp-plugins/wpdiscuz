@@ -59,7 +59,7 @@ Better comment system. Wordpress post comments and discussion plugin. Allows you
 
 == Changelog ==
 = 1.0.4 =
-Fixed Error: Broken plugin
+Fixed Bug: Fatal error - Using $this when not in object context in ...
 
 = 1.0.3 =
 * Fixed Bug : Problem with options page redirection on Wordpress multi-sites

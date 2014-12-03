@@ -1,6 +1,6 @@
 <?php global $post, $wc_core; ?>
 <?php
-if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
+if ($wc_core->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
     $wc_core->wc_options->wc_options_serialized->wc_phrases = $wc_core->wc_db_helper->get_phrases();
 }
 ?>

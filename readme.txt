@@ -58,6 +58,9 @@ Better comment system. Wordpress post comments and discussion plugin. Allows you
 * Support Forum: <http://gvectors.com/questions/>
 
 == Changelog ==
+= 1.0.4 =
+Fixed Error: Broken plugin
+
 = 1.0.3 =
 * Fixed Bug : Problem with options page redirection on Wordpress multi-sites
 

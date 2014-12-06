@@ -42,9 +42,20 @@ class WC_Comment_Template_Builder {
         $share_text = $this->wc_options->wc_options_serialized->wc_phrases['wc_share_text'];
         $comment_wrapper_class = ($comment->comment_parent) ? 'wc-comment wc-reply' : 'wc-comment';
         $textarea_placeholder = $this->get_textarea_placeholder($comment);
-        $comm_author_avatar = $this->wc_helper->get_comment_author_avatar($comment);
+
         $vote_count = ($comment->votes) ? $comment->votes : 0;
         $unique_id = $this->get_unique_id($comment);
+
+        $wc_author_name = $comment->comment_author;
+
+        $wc_comm_author_avatar = $this->wc_helper->get_comment_author_avatar($comment);
+        $wc_profile_url = $this->get_profile_url($user);
+
+
+        if ($wc_profile_url) {
+            $wc_comm_author_avatar = "<a target='_blank' href='$wc_profile_url'>" . $this->wc_helper->get_comment_author_avatar($comment) . "</a>";
+            $wc_author_name = "<a target='_blank' href='$wc_profile_url'>" . $wc_author_name . "</a>";
+        }
 
         $child_comments = get_comments(array(
             'parent' => $comment->comment_ID,
@@ -65,13 +76,13 @@ class WC_Comment_Template_Builder {
         $parent_comment = (!$comment->comment_parent && count($child_comments)) ? ' parnet_comment' : '';
 
         $output = '<div id="wc-comm-' . $unique_id . '" class="' . $comment_wrapper_class . ' ' . $parent_comment . '">';
-        $output .= '<div class="wc-comment-left">' . $comm_author_avatar;
+        $output .= '<div class="wc-comment-left">' . $wc_comm_author_avatar;
         if (!$this->wc_options->wc_options_serialized->wc_author_titles_show_hide) {
             $output .= '<div class="wc-comment-label">' . $author_title . '</div>';
         }
         $output .= '</div>';
         $output .= '<div class="wc-comment-right">';
-        $output .= '<div class="wc-comment-header"><div class="wc-comment-author">' . $comment->comment_author . '</div><div class="wc-comment-date">' . $posted_date . '</div><div style="clear:both"></div></div>';
+        $output .= '<div class="wc-comment-header"><div class="wc-comment-author">' . $wc_author_name . '</div><div class="wc-comment-date">' . $posted_date . '</div><div style="clear:both"></div></div>';
         $output .= '<div class="wc-comment-text">' . $comment_content . '</div>';
         $output .= '<div class="wc-comment-footer">';
         if (!$this->wc_options->wc_options_serialized->wc_voting_buttons_show_hide) {
@@ -127,9 +138,9 @@ class WC_Comment_Template_Builder {
 
             if (!$this->wc_options->wc_options_serialized->wc_captcha_show_hide) {
                 if (!is_user_logged_in()) {
-                    $output .= '<div class="wc-field-captcha item">'; 
-                    $output .= '<input id="wc_captcha-' . $unique_id . '" name="wc_captcha" required="required" value="" type="text" /><span class="wc-label wc-captcha-label">'; 
-                    $output .= '<img rel="nofollow" src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/captcha/captcha.php?comm_id=' . $comment->comment_post_ID . '-' . $comment->comment_ID) . '" id="wc_captcha_img-' . $unique_id . '" />'; 
+                    $output .= '<div class="wc-field-captcha item">';
+                    $output .= '<input id="wc_captcha-' . $unique_id . '" name="wc_captcha" required="required" value="" type="text" /><span class="wc-label wc-captcha-label">';
+                    $output .= '<img rel="nofollow" src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/captcha/captcha.php?comm_id=' . $comment->comment_post_ID . '-' . $comment->comment_ID) . '" id="wc_captcha_img-' . $unique_id . '" />';
                     $output .= '<img rel="nofollow" src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/refresh-16x16.png') . '" id="wc_captcha_refresh_img-' . $unique_id . '" class="wc_captcha_refresh_img" />';
                     $output .= '</span><span class="captcha_msg">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_captcha_text'] . '</span></div>';
                 }
@@ -188,6 +199,23 @@ class WC_Comment_Template_Builder {
             }
         }
         return $user_can_comment;
+    }
+
+    /**
+     * 
+     * get profile url 
+     */
+    private function get_profile_url($user) {
+        $wc_profile_url = '';
+        if ($user) {
+            if (class_exists('BuddyPress')) {
+                $wc_profile_url = bp_core_get_user_domain($user->ID);
+            } else if (class_exists('XooUserUltra')) {
+                global $xoouserultra;
+                $wc_profile_url = $xoouserultra->userpanel->get_user_profile_permalink($user->ID);
+            }
+        }
+        return $wc_profile_url;
     }
 
     /**

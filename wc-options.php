@@ -63,8 +63,71 @@ class WC_Options {
             <div style="float:left; width:50px; height:55px; margin:10px 10px 20px 0px;">
                 <img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/plugin-icon-48.png'); ?>" style="height:43px;"/>
             </div>
-            <h2 style="padding-bottom:20px; padding-top:15px;"><?php _e('WpDiscuz General Settings', 'wpdiscuz'); ?></h2>
+            <h2 style="padding-bottom:20px; padding-top:15px;"><?php _e('wpDiscuz General Settings', 'wpdiscuz'); ?></h2>
             <br style="clear:both" />
+            
+            
+    <link rel="stylesheet" href="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/'); ?>bxslider/jquery.bxslider.css" type="text/css" />
+    <script src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/'); ?>bxslider/jquery.min.js"></script>
+    <script src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/'); ?>bxslider/jquery.bxslider.js"></script>
+ 	<table width="100%" border="0" cellspacing="1" class="widefat">
+      <tr>
+        <td style="padding:10px; padding-left:0px; vertical-align:top; width:500px;">
+                <div class="slider">
+                    <ul class="bxslider">
+                      <li><a href="https://wordpress.org/plugins/woodiscuz-woocommerce-comments/screenshots/"><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/'); ?>files/img/gc/3.png" title="Free Download from Wordpress.org" style="padding:0px 0px 20px 20px;" /></a></li>
+                      <li><a href="https://wordpress.org/plugins/woocommerce-pdf-print/"><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/'); ?>files/img/gc/4.png" title="Free Download from Wordpress.org" style="padding:0px 0px 20px 20px;" /></a></li>
+                      <li><a href="https://wordpress.org/plugins/advanced-content-pagination/screenshots/"><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/'); ?>files/img/gc/1.png" title="Free Download from Wordpress.org" style="padding:0px 0px 20px 20px;" /></a></li>
+                      <li><a href="https://wordpress.org/plugins/author-and-post-statistic-widgets/"><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/'); ?>files/img/gc/2.png" title="Free Download from Wordpress.org" style="padding:0px 0px 20px 20px;" /></a></li>
+                    </ul>
+                </div>
+                <div style="clear:both"></div>
+        </td>
+        <td valign="top" style="padding:20px;">
+        
+        <table width="100%" border="0" cellspacing="1" class="widefat">
+            <thead>
+            <tr>
+            <th style="font-size:18px;">&nbsp;Information</th>
+            </tr>
+            </thead>
+                <tr valign="top">
+                    <td style="background:#FFF; text-align:left; font-size:14px;">
+                    wpDiscuz is alsow available for WooCommerce. The WooCommerce Comments plugin name is <a href="https://wordpress.org/plugins/woodiscuz-woocommerce-comments/" style="color:#993399; text-decoration:underline;"><strong>WooDiscuz</strong></a>. It adds a new "Discussion" Tab on product page and allows your customers ask Pre-Sale Questions and discuss about your products. 
+                    </td>
+                </tr>
+            </table><br />
+
+            <table width="100%" border="0" cellspacing="1" class="widefat">
+                <thead>
+                <tr>
+                <th>&nbsp;Like wpDiscuz plugin?</th>
+                </tr>
+                </thead>
+                    <tr valign="top">
+                        <td style="background:#FFF; text-align:left; font-size:12px;">
+                        <ul>
+                        <li>If you like wpDiscuz and want to encourage us to develop and maintain it,why not do any or all of the following:</li>
+                        <li>- Link to it so other folks can find out about it.</li>
+                        <li>- Give it a good rating on <a href="https://wordpress.org/plugins/wpdiscuz/" target="_blank">WordPress.org.</a></li>
+                        <li>- We spend as much of my spare time as possible working on wpDiscuz and any donation is appreciated. Donations play a crucial role in supporting Free and Open Source Software projects. <div style="width:200px; float:right;">
+                        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top"><input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="UC44WQM5XJFPA"><input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"><img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1"></form>
+                        </ul>
+                        </td>
+                    </tr>
+                </table>
+            
+        </td>
+      </tr>
+    </table>
+    <script>
+		$('.bxslider').bxSlider({
+		  mode: 'fade',
+		  captions: false,
+		  auto: true
+		});
+	</script>
+    <br />
             <form action="<?php echo admin_url(); ?>admin.php?page=wpdiscuz_options_page&updated=true" method="post" name="wpdiscuz_options_page" class="wc-main-settings-form wc-form">
                 <?php
                 if (function_exists('wp_nonce_field')) {

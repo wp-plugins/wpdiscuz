@@ -1,0 +1,10 @@
+/* ===== Options Form CSS ===== */
+
+.wc-form tr:nth-child(even) {background: #fff}
+.wc-form tr:nth-child(odd) {background: #fbfbfb}
+
+.wpdiscuz_options_page .wc-phrases-settings-form input[type="text"],
+.wpdiscuz_options_page .wc-phrases-settings-form textarea {
+    width: 300px;
+}
+

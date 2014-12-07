@@ -21,6 +21,23 @@
     </td>
 </tr>
 
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Show the latest comments on', 'wpdiscuz'); ?>
+    </th>
+    <td colspan="3">
+        <fieldset class="comment_list_order">
+            <label title="<?php _e('the top of the list', 'wpdiscuz') ?>">
+                <input type="radio" value="desc" <?php checked('desc' == $this->wc_options_serialized->wc_comment_list_order); ?> name="wc_comment_list_order" id="wc_comment_list_order" /> 
+                <span><?php _e('top of the threads', 'wpdiscuz') ?></span>
+            </label> &nbsp;<br/>
+            <label title="<?php _e('bottom of the threads', 'wpdiscuz') ?>">
+                <input type="radio" value="asc" <?php checked('asc' == $this->wc_options_serialized->wc_comment_list_order); ?> name="wc_comment_list_order" id="wc_comment_list_order" /> 
+                <span><?php _e('the bottom of the list', 'wpdiscuz') ?></span>
+            </label><br>                                    
+        </fieldset>
+    </td>
+</tr>
 
 <tr valign="top">
     <th scope="row">

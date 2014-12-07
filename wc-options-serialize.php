@@ -6,21 +6,31 @@ class WC_Options_Serialize {
 
     public $wc_options_slug = 'wc_options';
 
-    /* Type - Checkbox array
+    /**
+     * Type - Checkbox array
      * Available Values - Checked/Unchecked
      * Description - On which post types display comment form
      * Default Value - Post
      */
     public $wc_post_types = array('post');
 
-    /* Type - Checkbox
+    /**
+     * Type - Dropdown Menu
+     * Available Values - Selected "..."
+     * Description - Comment list order
+     * Default Value - Post
+     */
+    public $wc_comment_list_order;
+
+    /**
+     * Type - Checkbox
      * Available Values - Checked/Unchecked
      * Description - Show/Hide Voting buttons
      * Default Value - Unchecked
      */
     public $wc_voting_buttons_show_hide;
 
-    /*
+    /**
      * Type - Checkbox
      * Available Values - Checked/Unchecked
      * Description - Show/Hide Share Buttons
@@ -36,7 +46,7 @@ class WC_Options_Serialize {
      */
     public $wc_captcha_show_hide;
 
-    /*
+    /**
      * Type - Radiobutton
      * Available Values - Yes/No
      * Description - User Must be registered to comment
@@ -46,7 +56,7 @@ class WC_Options_Serialize {
      */
     public $wc_user_must_be_registered;
 
-    /*
+    /**
      * Type - Checkbox
      * Available Values - Checked/Unchecked
      * Description - If checked held the comment to approve manually    
@@ -54,7 +64,7 @@ class WC_Options_Serialize {
      */
     public $wc_held_comment_to_moderate;
 
-    /*
+    /**
      * Type - Checkbox
      * Available Values - Checked/Unchecked
      * Description - Show/Hide Reply button for Guests 
@@ -62,7 +72,7 @@ class WC_Options_Serialize {
      */
     public $wc_reply_button_guests_show_hide;
 
-    /*
+    /**
      * Type - Checkbox
      * Available Values - Checked/Unchecked
      * Description - Show/Hide Reply button for Customers 
@@ -70,7 +80,7 @@ class WC_Options_Serialize {
      */
     public $wc_reply_button_members_show_hide;
 
-    /*
+    /**
      * Type - Checkbox
      * Available Values - Checked/Unchecked
      * Description - Show/Hide Author Titles
@@ -78,7 +88,7 @@ class WC_Options_Serialize {
      */
     public $wc_author_titles_show_hide;
 
-    /*
+    /**
      * Type - Input
      * Available Values - Integer
      * Description - Comment count per click
@@ -86,7 +96,7 @@ class WC_Options_Serialize {
      */
     public $wc_comment_count;
 
-    /*
+    /**
      * Type - Checkbox
      * Available Values - Checked/Unchecked
      * Description - Notify moderator on new comment
@@ -94,7 +104,7 @@ class WC_Options_Serialize {
      */
     public $wc_notify_moderator;
 
-    /*
+    /**
      * Type - Checkbox
      * Available Values - Checked/Unchecked
      * Description - Notify comment author on new reply
@@ -102,7 +112,7 @@ class WC_Options_Serialize {
      */
     public $wc_notify_comment_author;
 
-    /*
+    /**
      * Type - Input
      * Available Values - color codes
      * Description - Comment Background Color
@@ -110,7 +120,7 @@ class WC_Options_Serialize {
      */
     public $wc_comment_bg_color;
 
-    /*
+    /**
      * Type - Input
      * Available Values - color codes
      * Description - Reply Background Color
@@ -118,7 +128,7 @@ class WC_Options_Serialize {
      */
     public $wc_reply_bg_color;
 
-    /*
+    /**
      * Type - Input
      * Available Values - color codes
      * Description - Comment Text Color
@@ -126,7 +136,7 @@ class WC_Options_Serialize {
      */
     public $wc_comment_text_color;
 
-    /*
+    /**
      * Type - Input
      * Available Values - color codes
      * Description - Author title Color, Author title label color
@@ -134,7 +144,7 @@ class WC_Options_Serialize {
      */
     public $wc_author_title_color;
 
-    /*
+    /**
      * Type - Input
      * Available Values - color codes
      * Description - Vote, Reply, Share, Edit - text colors
@@ -142,8 +152,7 @@ class WC_Options_Serialize {
      */
     public $wc_vote_reply_color;
 
-
-    /*
+    /**
      * Type - Textarea
      * Available Values - custom css code
      * Description - Custom css code
@@ -151,15 +160,17 @@ class WC_Options_Serialize {
      */
     public $wc_custom_css;
 
-
-
-    /*
+    /**
      * Type - HTML elements array
      * Available Values - Text
      * Description - Phrases for form elements texts
      * Default Value - 
      */
     public $wc_phrases;
+
+    /**
+     * helper class for database operations
+     */
     public $wc_db_helper;
 
     function __construct($wc_db_helper) {
@@ -173,6 +184,7 @@ class WC_Options_Serialize {
     public function init_options($serialize_options) {
         $options = unserialize($serialize_options);
         $this->wc_post_types = $options['wc_post_types'];
+        $this->wc_comment_list_order = $options['wc_comment_list_order'];
         $this->wc_voting_buttons_show_hide = $options['wc_voting_buttons_show_hide'];
         $this->wc_share_buttons_show_hide = $options['wc_share_buttons_show_hide'];
         $this->wc_captcha_show_hide = $options['wc_captcha_show_hide'];
@@ -251,6 +263,7 @@ class WC_Options_Serialize {
     public function to_array() {
         $options = array(
             'wc_post_types' => $this->wc_post_types,
+            'wc_comment_list_order' => $this->wc_comment_list_order,
             'wc_voting_buttons_show_hide' => $this->wc_voting_buttons_show_hide,
             'wc_share_buttons_show_hide' => $this->wc_share_buttons_show_hide,
             'wc_captcha_show_hide' => $this->wc_captcha_show_hide,
@@ -280,6 +293,7 @@ class WC_Options_Serialize {
     public function add_options() {
         $options = array(
             'wc_post_types' => $this->wc_post_types,
+            'wc_comment_list_order' => 'desc',
             'wc_voting_buttons_show_hide' => '0',
             'wc_share_buttons_show_hide' => '0',
             'wc_captcha_show_hide' => '0',

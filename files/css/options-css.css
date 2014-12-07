@@ -8,3 +8,6 @@
     width: 300px;
 }
 
+.comment_list_order label {
+    float: left;
+}

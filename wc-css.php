@@ -32,7 +32,7 @@ class WC_CSS {
             #wpcomm .wc-field-email input[type="email"]{ width:100%; max-width:100%; padding:5px; font-size:14px; margin:0px; }
             #wpcomm .wc-field-captcha input[type="text"]{ width:40%; padding:5px; font-size:14px; margin:0px; }
             #wpcomm .wc-field-submit input[type="submit"]{ margin:1px; }
-            #wpcomm .wc-field-submit input[type="button"]{ margin:1px; border:#DDDDDD 1px solid; font-size: 14px; line-height: 16px; padding: 6px 25px; }
+            #wpcomm .wc-field-submit input[type="button"]{ margin:1px; border:#DDDDDD 1px solid; font-size: 13px; line-height: 16px; padding: 6px 25px; }
             #wpcomm .captcha_msg{ color: #aaaaaa; font-family: Lato,sans-serif; font-size: 12px; line-height: 18px; display:block; clear:both; }
             #wpcomm .wc-field-comment textarea{ width:100%; max-width:100%; height:43px; min-height: 43px !important; padding:5px; box-sizing: border-box; }
             #wpcomm .wc-label{ display:block; font-size:14px; padding:5px; }
@@ -52,7 +52,7 @@ class WC_CSS {
             #wpcomm .wc-must-login{  margin:0px; font-size:14px; line-height:16px; padding:10px }
             #wpcomm hr{ background-color: rgba(0, 0, 0, 0.1); border: 0 none; height: 1px; margin:10px 0px; }
             #wpcomm .avatar{ border: 1px solid rgba(0, 0, 0, 0.1); padding: 2px; margin:0px auto; float:none; }
-            #wpcomm .wc-comment-text{ font-size:13px; text-align:left; color:<?php echo $this->wc_options->wc_options_serialized->wc_comment_text_color; ?>; padding-bottom:5px; }
+            #wpcomm .wc-comment-text{ font-size:13px; text-align:left; color:<?php echo $this->wc_options->wc_options_serialized->wc_comment_text_color; ?>; padding-bottom:5px; line-height: 18px; }
             #wpcomm .wc-comment-header{ margin-bottom:7px; font-family:Lato,sans-serif; }
             #wpcomm .wc-comment-author{ color:<?php echo $this->wc_options->wc_options_serialized->wc_author_title_color; ?>; font-size:16px; width:40%; float:left; white-space:nowrap; }            
             #wpcomm .wc-comment-author a{ color:<?php echo $this->wc_options->wc_options_serialized->wc_author_title_color; ?>; font-size:16px; white-space:nowrap; text-decoration:none; }                        
@@ -87,6 +87,5 @@ class WC_CSS {
         </style>
         <?php
     }
-
 }
 ?>

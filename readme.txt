@@ -1,10 +1,10 @@
 === wpDiscuz - Wordpress Comments ===
 Contributors: gVectors Team
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UC44WQM5XJFPA
-Tags: wordpress comments, ajax comments, ajax, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system, captcha, comment form with captcha,
+Tags: wordpress comments, ajax comments, ajax, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system
 Requires at least: 2.7
 Tested up to: 4.0.1
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,7 +36,7 @@ New interactive, Ajax comment system. Wordpress post comments and discussion plu
 **Dashboard** 
 
 * | Option to display comment form for certain post types
-* | Option to set Discussion Tab as the first opened Tab on product page 
+* | Option to show the latest comments on top or bottom of threads
 * | Options to turn On/Off Comment Voting and Sharing features
 * | Option to hide/show CAPTCHA field on comment form
 * | Option for "User Must be registered to comment"
@@ -66,7 +66,19 @@ https://wordpress.org/plugins/woodiscuz-woocommerce-comments/
 * Support Forum: <http://gvectors.com/questions/>
 * Plugin Page: <http://gvectors.com/wpdiscuz/>
 
+== Screenshots ==
+
+1. Ajax Form to add a new discussion thread Screenshot #1
+2. Discussion Threads with Reply Form Screenshot #2
+3. Full Front-End View Screenshot #3
+4. wpDiscuz General Settings #4
+5. Another Full Front-End View Screenshot #5
+
+
 == Changelog ==
+
+= 1.0.6 =
+* Added : Option to sort comments by comment date with ascending or descending order
 
 = 1.0.5 =
 * Added : Comment author names are links to their profile page (BuddyPress, Users Ultra)

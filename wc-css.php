@@ -14,7 +14,7 @@ class WC_CSS {
     public function init_styles() {
         ?>
         <style type="text/css">
-            .wc-comment-header{ padding:20px 5px 1px 5px; display:block; float:none; clear:both; font-size:18px;} /*#2892BF*/
+            #wc-comment-header{ padding:20px 5px 1px 5px; display:block; float:none; clear:both; font-size:18px;} /*#2892BF*/
             #wpcomm form .item {display: block;} .item input {}
             #wpcomm { margin:15px 5px; padding:1px 0px 10px 0px; border-top:#DDDDDD solid 1px; }
             #wpcomm form { margin:0px; padding:0px; background:none; border:none; }

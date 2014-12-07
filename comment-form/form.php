@@ -45,7 +45,7 @@ $header_text .= ' "' . get_the_title($post) . '"';
 ?>
 <div style="clear:both"></div>
 <div class="comments-area">
-    <h3 class="wc-comment-header"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_leave_a_reply_text']; ?></h3>
+    <h3 id="wc-comment-header"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_leave_a_reply_text']; ?></h3>
     <div id="wpcomm">    
         <p class="wc-comment-title"><?php echo ($post->comment_count) ? $header_text : $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_be_the_first_text']; ?></p>
         <div class="wc-form-wrapper">

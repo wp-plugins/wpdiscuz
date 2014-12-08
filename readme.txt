@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: wordpress comments, ajax comments, ajax, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system
 Requires at least: 2.7
 Tested up to: 4.0.1
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,9 @@ https://wordpress.org/plugins/woodiscuz-woocommerce-comments/
 
 == Changelog ==
 
+= 1.0.7 =
+* Fixed Bug: wpDiscuz comments ordering conflict with wordpress comments ordering
+
 = 1.0.6 =
 * Added : Option to sort comments by comment date with ascending or descending order
 
@@ -85,7 +88,7 @@ https://wordpress.org/plugins/woodiscuz-woocommerce-comments/
 * Fixed Bug : CSS Issues
 
 = 1.0.4 =
-* Fixed Error: Broken plugin
+* Fixed Bug: Fatal error - Using $this when not in object context in ...
 
 = 1.0.3 =
 * Fixed Bug : Problem with options page redirection on Wordpress multi-sites

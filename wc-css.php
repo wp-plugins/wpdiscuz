@@ -28,13 +28,13 @@ class WC_CSS {
             #wpcomm .wc-field-comment{ margin:5px auto 10px auto; }
             #wpcomm .wc-field-captcha{ width:55%; float:left; margin:0px; }
             #wpcomm .wc-field-submit{ width:45%; float:right; text-align:right; margin:0px; }
-            #wpcomm .wc-field-name input[type="text"]{ width:95%; max-width:100%; padding:5px; font-size:14px; margin:0px; }
-            #wpcomm .wc-field-email input[type="email"]{ width:100%; max-width:100%; padding:5px; font-size:14px; margin:0px; }
-            #wpcomm .wc-field-captcha input[type="text"]{ width:40%; padding:5px; font-size:14px; margin:0px; }
+            #wpcomm .wc-field-name input[type="text"]{ width:95%; max-width:100%; padding:5px; font-size:14px; margin:0px; height:29px; }
+            #wpcomm .wc-field-email input[type="email"]{ width:100%; max-width:100%; padding:5px; font-size:14px; margin:0px; height:29px; }
+            #wpcomm .wc-field-captcha input[type="text"]{ width:40%; padding:5px; font-size:14px; margin:0px; height:29px; }
             #wpcomm .wc-field-submit input[type="submit"]{ margin:1px; }
             #wpcomm .wc-field-submit input[type="button"]{ margin:1px; border:#DDDDDD 1px solid; font-size: 13px; line-height: 16px; padding: 6px 25px; }
             #wpcomm .captcha_msg{ color: #aaaaaa; font-family: Lato,sans-serif; font-size: 12px; line-height: 18px; display:block; clear:both; }
-            #wpcomm .wc-field-comment textarea{ width:100%; max-width:100%; height:43px; min-height: 43px !important; padding:5px; box-sizing: border-box; }
+            #wpcomm .wc-field-comment textarea{ width:100%; max-width:100%; height:46px; min-height: 46px !important; padding:5px; box-sizing: border-box; }
             #wpcomm .wc-label{ display:block; font-size:14px; padding:5px; }
             #wpcomm .wc-field-captcha .wc-label{ font-size:18px; padding:5px; text-align:center; display:inline; }
             #wpcomm input[type="text"], #wpcomm input[type="email"], #wpcomm textarea{ font-size:14px; color:#666666; font-family:Lato,sans-serif; box-sizing: border-box; margin:0px; }
@@ -51,8 +51,8 @@ class WC_CSS {
             #wpcomm .wc-reply .wc-comment-right{ background:<?php echo $this->wc_options->wc_options_serialized->wc_reply_bg_color; ?>; }
             #wpcomm .wc-must-login{  margin:0px; font-size:14px; line-height:16px; padding:10px }
             #wpcomm hr{ background-color: rgba(0, 0, 0, 0.1); border: 0 none; height: 1px; margin:10px 0px; }
-            #wpcomm .avatar{ border: 1px solid rgba(0, 0, 0, 0.1); padding: 2px; margin:0px auto; float:none; }
-            #wpcomm .wc-comment-text{ font-size:13px; text-align:left; color:<?php echo $this->wc_options->wc_options_serialized->wc_comment_text_color; ?>; padding-bottom:5px; line-height: 18px; }
+            #wpcomm .avatar{ border: 1px solid rgba(0, 0, 0, 0.1); padding: 2px; margin:0px auto; float:none; display:inline; }
+            #wpcomm .wc-comment-text{ font-size:14px; text-align:left; color:<?php echo $this->wc_options->wc_options_serialized->wc_comment_text_color; ?>; padding-bottom:5px; line-height: 20px; }
             #wpcomm .wc-comment-header{ margin-bottom:7px; font-family:Lato,sans-serif; }
             #wpcomm .wc-comment-author{ color:<?php echo $this->wc_options->wc_options_serialized->wc_author_title_color; ?>; font-size:16px; width:40%; float:left; white-space:nowrap; }            
             #wpcomm .wc-comment-author a{ color:<?php echo $this->wc_options->wc_options_serialized->wc_author_title_color; ?>; font-size:16px; white-space:nowrap; text-decoration:none; }                        
@@ -63,11 +63,11 @@ class WC_CSS {
             #wpcomm .wc-comment-footer .share_buttons_box img{ vertical-align:middle; }
             #wpcomm .wc-comment-footer .wc-voted{ color:#666666; cursor:default; }
             #wpcomm .wc-comment-footer .wc-vote-result{ padding:2px 6px 2px 5px; background:<?php echo $this->wc_options->wc_options_serialized->wc_vote_reply_color; ?>; color:#FFFFFF; font-size:12px; font-weight:bold; display:inline; margin-right:5px;}
-            #wpcomm .wc-toggle{ float:right; text-align:right; padding-right:0px; margin-right:0px; color:#999999; cursor:pointer; font-size:12px; }
+            #wpcomm .wc-toggle{ float:right; text-align:right; padding-right:0px; margin-right:0px; color:#999999; cursor:pointer; font-size:12px; white-space:nowrap; }
             #wpcomm .item { background: none; border-radius: 0px; box-shadow: none; }
             #wc_response_info img{ margin: 0px auto 0px auto; }
             #wpcomm .share_buttons_box img { display:inline!important; width:16px; height:16px; }
-            #wpcomm .wc-captcha-label img{ display: inline!important; border:none; padding:0px 1px; margin:0px; }
+            #wpcomm .wc-captcha-label img{ display: inline!important; border:none; padding:0px 1px; margin:0px; vertical-align:middle; }
             #wpcomm .wc-reply-link, #wpcomm .wc-vote-link, #wpcomm .wc-share-link { cursor: pointer; font-size:13px; font-weight:bold; color: <?php echo $this->wc_options->wc_options_serialized->wc_vote_reply_color; ?>; }
             #wpcomm .wc-form-footer, #wpcomm .wc-secondary-forms-wrapper {display: none;}
             #wpcomm .wc-field-captcha .wc-captcha-label { margin-left: 5px; padding: 0; display: inline-block; }
@@ -80,8 +80,10 @@ class WC_CSS {
             #wc_openModalFormAction > div#wc_response_info { width: 200px; background: none repeat scroll 0 0 #EDEDED; color:#444444; font-size: 18px; font-weight: normal; padding: 45px 10px 50px 10px!important; text-align: center; line-height:25px;}
             #wc_openModalFormAction > div#wc_response_info { /*z-index: 10000;*/ }
             #wc_openModalFormAction > div#wc_response_info a.close {  background: url("<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/x.png'); ?>") no-repeat;  background-position-x: right; background-position-y: top; }
-            #wpcomm .by-wpdiscuz{ text-align:right; border-top:#DDDDDD solid 1px; padding:3px 1px 1px 1px; }
+            #wpcomm #bywpdiscuz{ display:none; }
+			#wpcomm .by-wpdiscuz{ text-align:right; border-top:#DDDDDD solid 1px; padding:1px 1px 1px 1px; }
             #wpcomm .by-wpdiscuz a{ font-size:11px; font-weight:bold; text-align:right; color:#CCCCCC; padding:1px; margin:0px; line-height:12px; border:none; text-decoration:none; }
+			#wpcomm .wpdimg{ border:none; padding:0px; margin:0px; height:12px; cursor:pointer; display:inline; clear:both; }
 
             <?php echo $this->wc_options->wc_options_serialized->wc_custom_css; ?>
         </style>

@@ -256,7 +256,7 @@ class WC_Options_Serialize {
             'wc_self_vote' => 'You cannot vote for your comment',
             'wc_invalid_captcha' => 'Invalid Captcha Code',
             'wc_invalid_field' => 'Some of field value is invalid',
-            'wc_held_for_moderate' => 'Your Comment awaiting moderation',
+            'wc_held_for_moderate' => 'Your Comment awaiting moderation'
         );
     }
 

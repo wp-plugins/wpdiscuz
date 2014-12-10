@@ -3,7 +3,7 @@
 /*
   Plugin Name: wpDiscuz - Wordpress Comments
   Description: Better comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share.
-  Version: 1.0.7
+  Version: 1.0.8
   Author: gVectors Team (A. Chakhoyan, G. Zakaryan, H. Martirosyan)
   Author URI: http://www.gvectors.com/
   Plugin URI: http://www.gvectors.com/wpdiscuz/
@@ -143,7 +143,7 @@ class WC_Core {
         wp_register_style('validator-style', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/css/fv.css'));
         wp_enqueue_style('validator-style');
 
-        wp_enqueue_script('wc-ajax-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-ajax.js'), array('jquery'), '1.0.0', false);
+        wp_enqueue_script('wc-ajax-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-ajax.js'), array('jquery'), '1.0.8', false);
         wp_localize_script('wc-ajax-js', 'wc_ajax_obj', array('url' => admin_url('admin-ajax.php')));
 
         wp_enqueue_script('wc-cookie-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/jquery.cookie.js'), array('jquery'), '1.4.1', false);
@@ -370,7 +370,7 @@ class WC_Core {
         }
         $wc_comment_count = $this->wc_options->wc_options_serialized->wc_comment_count;
         $wc_comment_list_order = $this->wc_options->wc_options_serialized->wc_comment_list_order;
-        
+
         $comm_list_args = array(
             'callback' => array(&$this, 'wc_comment_callback'),
             'style' => 'div',
@@ -378,14 +378,14 @@ class WC_Core {
             'max_depth' => 2,
             'reverse_top_level' => false
         );
-        
-        
-        
+
+
+
         $comments = get_comments(array('post_id' => $post_id, 'status' => 'approve', 'order' => $wc_comment_list_order));
-       
+
         $wc_comments = $this->init_wc_comments($comments);
         wp_list_comments($comm_list_args, $wc_comments);
-                
+
         return $this->wc_parent_comments_count;
     }
 
@@ -444,6 +444,7 @@ class WC_Core {
         global $post;
         if (in_array($post->post_type, $this->wc_options->wc_options_serialized->wc_post_types) && comments_open($post->ID)) {
             add_filter('comments_template', array(&$this, 'remove_comments_template_on_pages'), 1);
+//            add_action('comment_form', array(&$this, 'remove_comments_template_on_pages'), 1);
         }
     }
 
@@ -453,6 +454,8 @@ class WC_Core {
     }
 
 }
+
+
 
 $wc_core = new WC_Core();
 ?>

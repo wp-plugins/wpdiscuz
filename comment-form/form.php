@@ -46,8 +46,12 @@ $header_text .= ' "' . get_the_title($post) . '"';
 <div style="clear:both"></div>
 <div class="comments-area">
     <h3 id="wc-comment-header"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_leave_a_reply_text']; ?></h3>
+    <?php do_action('comment_form_before'); ?>
     <div id="wpcomm">    
-        <p class="wc-comment-title"><?php echo ($post->comment_count) ? $header_text : $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_be_the_first_text']; ?></p>
+        <p class="wc-comment-title">
+            <?php echo ($post->comment_count) ? $header_text : $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_be_the_first_text']; ?>
+        </p>
+        <?php do_action('comment_form_top'); ?>
         <div class="wc-form-wrapper">
             <?php
             if ($wc_core->is_guest_can_comment()) {
@@ -111,7 +115,7 @@ $header_text .= ' "' . get_the_title($post) . '"';
         <?php } ?>
 
         <div style="clear:both"></div>
-        <div class="by-wpdiscuz"><a href="http://gvectors.com/wpdiscuz/">wpDiscuz</a></div>
+        <div class="by-wpdiscuz"><span id="awpdiscuz" onclick='javascript:document.getElementById("bywpdiscuz").style.display = "inline";document.getElementById("awpdiscuz").style.display = "none";'><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/icon_info.png'); ?>" align="absmiddle" class="wpdimg"/></span>&nbsp;<a href="http://gvectors.com/wpdiscuz/" id="bywpdiscuz" title="wpDiscuz - Interactive Comment System">wpDiscuz</a></div>
 
         <div id="wc_openModalFormAction" class="modalDialog">
             <div id="wc_response_info" class="wc_modal">
@@ -123,3 +127,4 @@ $header_text .= ' "' . get_the_title($post) . '"';
         </div>
     </div>
 </div>
+<?php do_action('comment_form_after'); ?>

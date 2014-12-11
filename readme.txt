@@ -62,14 +62,16 @@ https://wordpress.org/plugins/woodiscuz-woocommerce-comments/
 == Frequently Asked Questions ==
 
 
-* QUESTION: Does it fully replace the current comment system? That in this case what happens to old comments?
-* ANSWER: wpDiscuz changes default comment system to a new interactive system and shows all old comments, nothing will be lost.
+	* QUESTION: Does it fully replace the current comment system? That in this case what happens to old comments?
+	* ANSWER: wpDiscuz changes default comment system to a new interactive system and shows all old comments, nothing will be lost.
 
-* QUESTION: Where comments are stored?
-* ANSWER: wpDiscuz uses the default WordPress comment storage system, all comments are on your database and all comments are manageable from Dashboard > Comments admin page. 
 
-* QUESTION: The data will not be lost if I install this plugin, and then remove it? Old comments will remain in place?
-* ANSWER: wpDiscuz doesn't affect any data. You can install and uninstall whenever you want without any worries. 
+	* QUESTION: Where comments are stored?
+	* ANSWER: wpDiscuz uses the default WordPress comment storage system, all comments are on your database and all comments are manageable from Dashboard > Comments admin page. 
+
+
+	* QUESTION: The data will not be lost if I install this plugin, and then remove it? Old comments will remain in place?
+	* ANSWER: wpDiscuz doesn't affect any data. You can install and uninstall whenever you want without any worries. 
 
 
 = Please Check the Following wpDiscuz Resources =

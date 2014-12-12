@@ -113,6 +113,22 @@ class WC_Options_Serialize {
     public $wc_notify_comment_author;
 
     /**
+     * Type - Select
+     * Available Values - 12px-16px
+     * Description - Comment Text Size
+     * Default Value - 14px
+     */
+    public $wc_comment_text_size;
+
+    /**
+     * Type - Input
+     * Available Values - color codes
+     * Description - Form Background Color
+     * Default Value - #F9F9F9
+     */
+    public $wc_form_bg_color;
+
+    /**
      * Type - Input
      * Available Values - color codes
      * Description - Comment Background Color
@@ -196,6 +212,8 @@ class WC_Options_Serialize {
         $this->wc_comment_count = $options['wc_comment_count'];
         $this->wc_notify_moderator = $options['wc_notify_moderator'];
         $this->wc_notify_comment_author = $options['wc_notify_comment_author'];
+        $this->wc_comment_text_size = $options['wc_comment_text_size'];
+        $this->wc_form_bg_color = $options['wc_form_bg_color'];
         $this->wc_comment_bg_color = $options['wc_comment_bg_color'];
         $this->wc_reply_bg_color = $options['wc_reply_bg_color'];
         $this->wc_comment_text_color = $options['wc_comment_text_color'];
@@ -275,6 +293,8 @@ class WC_Options_Serialize {
             'wc_comment_count' => $this->wc_comment_count,
             'wc_notify_moderator' => $this->wc_notify_moderator,
             'wc_notify_comment_author' => $this->wc_notify_comment_author,
+            'wc_comment_text_size' => $this->wc_comment_text_size,
+            'wc_form_bg_color' => $this->wc_form_bg_color,
             'wc_comment_bg_color' => $this->wc_comment_bg_color,
             'wc_reply_bg_color' => $this->wc_reply_bg_color,
             'wc_comment_text_color' => $this->wc_comment_text_color,
@@ -305,6 +325,8 @@ class WC_Options_Serialize {
             'wc_comment_count' => '5',
             'wc_notify_moderator' => '1',
             'wc_notify_comment_author' => '1',
+            'wc_comment_text_size' => '14px',
+            'wc_form_bg_color' => '#f9f9f9',
             'wc_comment_bg_color' => '#fefefe',
             'wc_reply_bg_color' => '#f8f8f8',
             'wc_comment_text_color' => '#555',

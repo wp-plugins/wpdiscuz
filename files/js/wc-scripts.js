@@ -38,4 +38,11 @@ jQuery(document).ready(function ($) {
             $('#wc_vote_reply_color').val('#' + hex);
         }
     });
+
+    $('#wc_colorpickerHolder6').ColorPicker({
+        flat: true,
+        onChange: function (hsb, hex, rgb) {
+            $('#wc_form_bg_color').val('#' + hex);
+        }
+    });
 });

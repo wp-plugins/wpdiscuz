@@ -169,6 +169,46 @@
 
 <tr valign="top">
     <th scope="row">
+        <label for="wc_comment_text_size"><?php _e('Comment text size in pixels', 'wpdiscuz'); ?></label>
+    </th>
+    <td colspan="3">
+        <select id="wc_comment_text_size" name="wc_comment_text_size">
+            <?php $wc_comment_text_size = isset($this->wc_options_serialized->wc_comment_text_size) ? $this->wc_options_serialized->wc_comment_text_size : '14px'; ?>
+            <option value="12px" <?php selected($wc_comment_text_size, '12px'); ?>>12px</option>
+            <option value="13px" <?php selected($wc_comment_text_size, '13px'); ?>>13px</option>
+            <option value="14px" <?php selected($wc_comment_text_size, '14px'); ?>>14px</option>
+            <option value="15px" <?php selected($wc_comment_text_size, '15px'); ?>>15px</option>
+            <option value="16px" <?php selected($wc_comment_text_size, '16px'); ?>>16px</option>
+        </select>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <label for="wc_form_bg_color"><?php _e('Comment Form Background Color', 'wpdiscuz'); ?></label>
+    </th>
+    <td width="1">
+        <input type="text" class="regular-text" value="<?php echo isset($this->wc_options_serialized->wc_form_bg_color) ? $this->wc_options_serialized->wc_form_bg_color : '#f9f9f9' ; ?>" id="wc_form_bg_color" name="wc_form_bg_color" placeholder="<?php _e('Example: #00ff00', 'wpdiscuz'); ?>"/>
+    </td>
+
+    <td class="picker_img_cell">
+        <a href="#wc_openModal6">
+            <img class="wc_colorpicker_img6" src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/colorpicker/img/colorpicker_icon_22.png'); ?>" />
+        </a>
+    </td>
+    <td class="color_picker">
+        <div id="wc_openModal6" class="modalDialog">
+            <div id="wc_box6">
+                <a href="#close" title="Close" class="close">X</a>
+                <h2>Color Picker</h2>
+                <p id="wc_colorpickerHolder6"></p>
+            </div>
+        </div>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
         <label for="wc_comment_bg_color"><?php _e('Comment Background Color', 'wpdiscuz'); ?></label>
     </th>
     <td width="1">

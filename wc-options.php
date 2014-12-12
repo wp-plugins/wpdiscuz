@@ -47,7 +47,9 @@ class WC_Options {
             $this->wc_options_serialized->wc_author_titles_show_hide = isset($_POST['wc_author_titles_show_hide']) ? $_POST['wc_author_titles_show_hide'] : 0;
             $this->wc_options_serialized->wc_comment_count = isset($_POST['wc_comment_count']) ? $_POST['wc_comment_count'] : 10;
             $this->wc_options_serialized->wc_notify_moderator = isset($_POST['wc_notify_moderator']) ? $_POST['wc_notify_moderator'] : 0;
-            $this->wc_options_serialized->wc_notify_comment_author = isset($_POST['wc_notify_comment_author']) ? $_POST['wc_notify_comment_author'] : 0;
+            $this->wc_options_serialized->wc_notify_comment_author = isset($_POST['wc_notify_comment_author']) ? $_POST['wc_notify_comment_author'] : 0;            
+            $this->wc_options_serialized->wc_form_bg_color = isset($_POST['wc_form_bg_color']) ? $_POST['wc_form_bg_color'] : '#f9f9f9';
+            $this->wc_options_serialized->wc_comment_text_size = isset($_POST['wc_comment_text_size']) ? $_POST['wc_comment_text_size'] : '14px';            
             $this->wc_options_serialized->wc_comment_bg_color = isset($_POST['wc_comment_bg_color']) ? $_POST['wc_comment_bg_color'] : '#fefefe';
             $this->wc_options_serialized->wc_reply_bg_color = isset($_POST['wc_reply_bg_color']) ? $_POST['wc_reply_bg_color'] : '#f8f8f8';
             $this->wc_options_serialized->wc_comment_text_color = isset($_POST['wc_comment_text_color']) ? $_POST['wc_comment_text_color'] : '#555';

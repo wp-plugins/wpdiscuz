@@ -24,9 +24,22 @@ $_SESSION['wc_captcha'][$comm_id] = md5(strtolower(trim($randomString)));
 
 $im = @imagecreatefrompng("captcha_bg_easy.png");
 
+
 $font_path = './consolai.ttf';
 
-imagettftext($im, 16, 0, 5, 20, imagecolorallocate($im, 0, 0, 0), $font_path, $randomString);
+
+$x = 5;
+for ($i = 0; $i < strlen($randomString); $i++) {
+    $color = imagecolorallocate($im, rand(0, 255), 0, rand(0, 255));
+    $letter = substr($randomString, $i, 1);
+    imagettftext($im, 16, 0, $x, 20, $color, $font_path, $letter);
+    $x += 13;
+}
+
+for ($i = 0; $i < 5; $i++) {
+    $color = imagecolorallocate($im, rand(0, 255), rand(0, 200), rand(0, 255));
+    imageline($im, rand(0, 20), rand(1, 50), rand(150, 180), rand(1, 50), $color);
+}
 
 header('Content-type: image/png');
 imagepng($im, NULL, 0);

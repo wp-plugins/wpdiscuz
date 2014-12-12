@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: wordpress comments, ajax comments, ajax, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system
 Requires at least: 2.7
 Tested up to: 4.0.1
-Stable tag: 1.0.8
+Stable tag: 1.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,16 +61,17 @@ https://wordpress.org/plugins/woodiscuz-woocommerce-comments/
 
 == Frequently Asked Questions ==
 
+= Q&A =
 
 	* QUESTION: Does it fully replace the current comment system? That in this case what happens to old comments?
 	* ANSWER: wpDiscuz changes default comment system to a new interactive system and shows all old comments, nothing will be lost.
 
 
 	* QUESTION: Where comments are stored?
-	* ANSWER: wpDiscuz uses the default WordPress comment storage system, all comments are on your database and all comments are manageable from Dashboard > Comments admin page. 
+	* ANSWER: wpDiscuz uses the default WordPress comment storage system, all comments are on your database and all comments are manageable in Dashboard > Comments admin page. 
 
 
-	* QUESTION: The data will not be lost if I install this plugin, and then remove it? Old comments will remain in place?
+	* QUESTION: Will my comments be lost if I install this plugin, and then remove it? 
 	* ANSWER: wpDiscuz doesn't affect any data. You can install and uninstall whenever you want without any worries. 
 
 
@@ -89,6 +90,13 @@ https://wordpress.org/plugins/woodiscuz-woocommerce-comments/
 
 
 == Changelog ==
+
+= 1.0.9 =
+* Added : Option to set comment text font size
+* Added : Option to set form background color
+* Added : Better responsively on mobile devices
+* Added : better CAPTCHA image with colors and lines
+* Fixed Bug: Undefined loader spinner image source.
 
 = 1.0.8 =
 * Fixed Bug: CSS Issues

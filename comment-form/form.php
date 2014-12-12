@@ -89,15 +89,15 @@ $header_text .= ' "' . get_the_title($post) . '"';
                             <div class="wc-field-submit"><input type="button" name="submit" value="<?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_submit_text']; ?>" id="wc_comm-<?php echo $unique_id; ?>" class="wc_comm_submit button alt"/></div>
                             <div style="clear:both"></div>
                         </div>
-                    </div>           
-                    <input type="hidden" name="wc_home_url" value="<?php echo plugins_url(); ?>" id="wc_home_url" />
-                    <input type="hidden" name="wc_plugin_dir_url" value="<?php echo WC_Core::$PLUGIN_DIRECTORY; ?>" id="wc_plugin_dir_url" />
+                    </div> 
                     <input type="hidden" name="wc_comment_post_ID" value="<?php echo $post->ID; ?>" id="wc_comment_post_ID-<?php echo $unique_id; ?>" />
                     <input type="hidden" name="wc_comment_parent"  value="0" id="wc_comment_parent-<?php echo $unique_id; ?>" />
                 </form>
             <?php } else { ?>
                 <p class="wc-must-login"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_you_must_be_text']; ?> <a href="<?php echo wp_login_url(); ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_logged_in_text']; ?></a> <?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_to_post_comment_text']; ?></p>
             <?php } ?>
+            <input type="hidden" name="wc_home_url" value="<?php echo plugins_url(); ?>" id="wc_home_url" />
+            <input type="hidden" name="wc_plugin_dir_url" value="<?php echo WC_Core::$PLUGIN_DIRECTORY; ?>" id="wc_plugin_dir_url" />            
         </div>
         <hr/>
 
@@ -115,7 +115,8 @@ $header_text .= ' "' . get_the_title($post) . '"';
         <?php } ?>
 
         <div style="clear:both"></div>
-        <div class="by-wpdiscuz"><span id="awpdiscuz" onclick='javascript:document.getElementById("bywpdiscuz").style.display = "inline";document.getElementById("awpdiscuz").style.display = "none";'><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/icon_info.png'); ?>" align="absmiddle" class="wpdimg"/></span>&nbsp;<a href="http://gvectors.com/wpdiscuz/" id="bywpdiscuz" title="wpDiscuz - Interactive Comment System">wpDiscuz</a></div>
+        <div class="by-wpdiscuz"><span id="awpdiscuz" onclick='javascript:document.getElementById("bywpdiscuz").style.display = "inline";
+                document.getElementById("awpdiscuz").style.display = "none";'><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/icon_info.png'); ?>" align="absmiddle" class="wpdimg"/></span>&nbsp;<a href="http://gvectors.com/wpdiscuz/" id="bywpdiscuz" title="wpDiscuz - Interactive Comment System">wpDiscuz</a></div>
 
         <div id="wc_openModalFormAction" class="modalDialog">
             <div id="wc_response_info" class="wc_modal">

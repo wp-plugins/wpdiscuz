@@ -26,7 +26,7 @@ class WC_DB_Helper {
             dbDelta($sql);
         }
         if ($this->db->get_var("SHOW TABLES LIKE '$this->phrases'") != $this->phrases) {
-            $sql = "CREATE TABLE `" . $this->phrases . "`(`id` INT(11) NOT NULL AUTO_INCREMENT, `phrase_key` VARCHAR(255) NOT NULL, `phrase_value` VARCHAR(255) NOT NULL, PRIMARY KEY (`id`), KEY `phrase_key` (`phrase_key`) );";
+            $sql = "CREATE TABLE `" . $this->phrases . "`(`id` INT(11) NOT NULL AUTO_INCREMENT, `phrase_key` VARCHAR(255) NOT NULL, `phrase_value` VARCHAR(255) NOT NULL, PRIMARY KEY (`id`), KEY `phrase_key` (`phrase_key`)) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci AUTO_INCREMENT=1;;";
             dbDelta($sql);
         }
     }

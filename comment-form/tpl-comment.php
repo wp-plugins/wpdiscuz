@@ -5,6 +5,7 @@ class WC_Comment_Template_Builder {
     public $wc_helper;
     public $wc_db_helper;
     public $wc_options;
+    private $wc_last_comment_id;
 
     function __construct($wc_helper, $wc_db_helper, $wc_options) {
         $this->wc_helper = $wc_helper;
@@ -17,8 +18,10 @@ class WC_Comment_Template_Builder {
      * @param type $args
      * @return single comment template
      */
-    public function get_comment_template($comment) {
-        $comment_content = $comment->comment_content;
+    public function get_comment_template($comment, $args, $depth) {
+        $comment_content = $this->wc_helper->make_clickable($comment->comment_content);
+        $comment_content = apply_filters('comment_text', $comment->comment_content);
+        $comment_content = nl2br($comment_content);       
 
         $vote_cls = '';
         $vote_title_text = '';
@@ -36,7 +39,17 @@ class WC_Comment_Template_Builder {
             $author_title = $this->wc_options->wc_options_serialized->wc_phrases['wc_user_title_guest_text'];
         }
 
-        $posted_date = $this->wc_helper->dateDiff(time(), strtotime($comment->comment_date_gmt), 2);
+        if ($this->wc_options->wc_options_serialized->wc_simple_comment_date) {
+            $date_format = get_option('date_format');
+            $time_format = get_option('time_format');
+            if (WC_Helper::isPostedToday(strtotime($comment->comment_date_gmt))) {
+                $posted_date = $this->wc_options->wc_options_serialized->wc_phrases['wc_posted_today_text'] . ' ' . mysql2date($time_format, $comment->comment_date_gmt);
+            } else {
+                $posted_date = get_comment_date($date_format, $comment->comment_ID);
+            }
+        } else {
+            $posted_date = $this->wc_helper->dateDiff(time(), strtotime($comment->comment_date_gmt), 2);
+        }
 
         $reply_text = $this->wc_options->wc_options_serialized->wc_phrases['wc_reply_text'];
         $share_text = $this->wc_options->wc_options_serialized->wc_phrases['wc_share_text'];
@@ -51,10 +64,9 @@ class WC_Comment_Template_Builder {
         $wc_comm_author_avatar = $this->wc_helper->get_comment_author_avatar($comment);
         $wc_profile_url = $this->get_profile_url($user);
 
-
         if ($wc_profile_url) {
-            $wc_comm_author_avatar = "<a target='_blank' href='$wc_profile_url'>" . $this->wc_helper->get_comment_author_avatar($comment) . "</a>";
-            $wc_author_name = "<a target='_blank' href='$wc_profile_url'>" . $wc_author_name . "</a>";
+            $wc_comm_author_avatar = "<a href='$wc_profile_url'>" . $this->wc_helper->get_comment_author_avatar($comment) . "</a>";
+            $wc_author_name = "<a href='$wc_profile_url'>" . $wc_author_name . "</a>";
         }
 
         $child_comments = get_comments(array(
@@ -74,14 +86,17 @@ class WC_Comment_Template_Builder {
         }
 
         $parent_comment = (!$comment->comment_parent && count($child_comments)) ? ' parnet_comment' : '';
+       
+        $wc_visible_parent_comment_ids = isset($args['wc_visible_parent_comment_ids']) ? $args['wc_visible_parent_comment_ids'] : null;        
+        $comment_content_class = ($wc_visible_parent_comment_ids != null && !in_array($comment->comment_ID, $wc_visible_parent_comment_ids)) ? ' wc_new_loaded_comment' : '';
 
-        $output = '<div id="wc-comm-' . $unique_id . '" class="' . $comment_wrapper_class . ' ' . $parent_comment . '">';
-        $output .= '<div class="wc-comment-left">' . $wc_comm_author_avatar;
+        $output = '<div id="wc-comm-' . $unique_id . '" class="' . $comment_wrapper_class . ' ' . $parent_comment . ' wc_comment_level-' . $depth . '">';
+        $output .= '<div class="wc-comment-left" id="comment-' . $comment->comment_ID . '">' . $wc_comm_author_avatar;
         if (!$this->wc_options->wc_options_serialized->wc_author_titles_show_hide) {
             $output .= '<div class="wc-comment-label">' . $author_title . '</div>';
         }
         $output .= '</div>';
-        $output .= '<div class="wc-comment-right">';
+        $output .= '<div class="wc-comment-right ' . $comment_content_class . '">';
         $output .= '<div class="wc-comment-header"><div class="wc-comment-author">' . $wc_author_name . '</div><div class="wc-comment-date">' . $posted_date . '</div><div style="clear:both"></div></div>';
         $output .= '<div class="wc-comment-text">' . $comment_content . '</div>';
         $output .= '<div class="wc-comment-footer">';
@@ -98,7 +113,7 @@ class WC_Comment_Template_Builder {
         if (!$this->wc_options->wc_options_serialized->wc_share_buttons_show_hide) {
             $output .= '-&nbsp;&nbsp; <span id="wc-comm-share-' . $unique_id . '" class="wc-share-link" title="' . $share_text . '">' . $share_text . '</span> &nbsp;&nbsp;';
 
-            $twitt_content = $comment_content . ' ' . get_comment_link($comment);
+            $twitt_content = strip_tags($comment_content) . ' ' . get_comment_link($comment);
 
             $output .= '<span id="share_buttons_box-' . $unique_id . '" class="share_buttons_box">';
             $output .= '<a target="_blank" href="http://www.facebook.com/sharer.php" title="' . $this->wc_options->wc_options_serialized->wc_phrases['wc_share_facebook'] . '"><img src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/fb-18x18.png') . '"/></a>&nbsp;&nbsp;';
@@ -125,13 +140,13 @@ class WC_Comment_Template_Builder {
 
         if ($this->is_guest_can_reply() && $this->is_customer_can_reply()) {
             $output .= '<div class="wc-form-wrapper wc-secondary-forms-wrapper" id="wc-secondary-forms-wrapper-' . $unique_id . '">';
-            $output .= '<form action="" method="post" id="wc_comm_form-' . $unique_id . '" class="wc_comm_form">';
-            $output .= '<div class="wc-field-comment"><div style="width:60px; float:left; position:absolute;">' . $this->wc_helper->get_comment_author_avatar() . '</div><div style="margin-left:65px;" class="item"><textarea id="wc_comment-' . $unique_id . '" class="wc_comment" name="wc_comment" required="required" placeholder="' . $textarea_placeholder . '"></textarea></div><div style="clear:both"></div></div>';
+            $output .= '<form action="" method="post" id="wc_comm_form-' . $unique_id . '" class="wc_comm_form wc_secondary_form">';
+            $output .= '<div class="wc-field-comment"><div style="width:60px; float:left; position:absolute;">' . $this->wc_helper->get_comment_author_avatar() . '</div><div style="margin-left:65px;" class="item"><textarea id="wc_comment-' . $unique_id . '" class="wc_comment wc_field_input" name="wc_comment" required="required" placeholder="' . $textarea_placeholder . '"></textarea></div><div style="clear:both"></div></div>';
 
             $output .= '<div id="wc-form-footer-' . $unique_id . '" class="wc-form-footer">';
 
             if (!is_user_logged_in()) {
-                $output .= '<div class="wc-author-data"><div class="wc-field-name item"><input id="wc_name-' . $unique_id . '" name="wc_name" class="wc_name" required="required" value="" type="text" placeholder="' . $this->wc_options->wc_options_serialized->wc_phrases['wc_name_text'] . '"/></div><div class="wc-field-email item"><input id="wc_email-' . $unique_id . '" class="wc_email email" name="wc_email" required="required" value="" type="email" placeholder="' . $this->wc_options->wc_options_serialized->wc_phrases['wc_email_text'] . '"/></div><div style="clear:both"></div></div>';
+                $output .= '<div class="wc-author-data"><div class="wc-field-name item"><input id="wc_name-' . $unique_id . '" name="wc_name" class="wc_name wc_field_input" required="required" value="" type="text" placeholder="' . $this->wc_options->wc_options_serialized->wc_phrases['wc_name_text'] . '"/></div><div class="wc-field-email item"><input id="wc_email-' . $unique_id . '" class="wc_email wc_field_input email" name="wc_email" required="required" value="" type="email" placeholder="' . $this->wc_options->wc_options_serialized->wc_phrases['wc_email_text'] . '"/></div><div style="clear:both"></div></div>';
             }
 
             $output .= '<div class="wc-form-submit">';
@@ -139,16 +154,23 @@ class WC_Comment_Template_Builder {
             if (!$this->wc_options->wc_options_serialized->wc_captcha_show_hide) {
                 if (!is_user_logged_in()) {
                     $output .= '<div class="wc-field-captcha item">';
-                    $output .= '<input id="wc_captcha-' . $unique_id . '" name="wc_captcha" required="required" value="" type="text" /><span class="wc-label wc-captcha-label">';
+                    $output .= '<input id="wc_captcha-' . $unique_id . '" class="wc_field_input wc_field_captcha" name="wc_captcha" required="required" value="" type="text" /><span class="wc-label wc-captcha-label">';
                     $output .= '<img rel="nofollow" src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/captcha/captcha.php?comm_id=' . $comment->comment_post_ID . '-' . $comment->comment_ID) . '" id="wc_captcha_img-' . $unique_id . '" />';
                     $output .= '<img rel="nofollow" src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/refresh-16x16.png') . '" id="wc_captcha_refresh_img-' . $unique_id . '" class="wc_captcha_refresh_img" />';
                     $output .= '</span><span class="captcha_msg">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_captcha_text'] . '</span></div>';
                 }
             }
 
-            $output .= '<div class="wc-field-submit"><input type="button" name="submit" value="' . $this->wc_options->wc_options_serialized->wc_phrases['wc_submit_text'] . '" id="wc_comm-' . $unique_id . '" class="wc_comm_submit button alt"/>
-								</div>';
+            $output .= '<div class="wc-field-submit"><input type="button" name="submit" value="' . $this->wc_options->wc_options_serialized->wc_phrases['wc_submit_text'] . '" id="wc_comm-' . $unique_id . '" class="wc_comm_submit button alt"/></div>';
             $output .= '<div style="clear:both"></div>';
+            $output .= '<div class="wc_notification_checkboxes">';
+            if ($this->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox) {
+                $output .= '<input class="wc-label-reply-notify" id="wc_notification_new_reply-' . $unique_id . '" class="wc_notification_new_reply" value="0" type="checkbox" name="wc_notification_new_reply"/> <label class="wc-label-comment-notify" for="wc_notification_new_reply-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] . '</label><br />';
+            }
+            if ($this->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) {
+                $output .= '<input class="wc-label-comment-notify" id="wc_notification_new_comment-' . $unique_id . '" class="wc_notification_new_comment"  value="0" type="checkbox" name="wc_notification_new_comment"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_comment'] . '</label><br />';
+            }
+            $output .= '</div>';
             $output .= '</div>';
             $output .= '</div>';
 
@@ -213,6 +235,10 @@ class WC_Comment_Template_Builder {
             } else if (class_exists('XooUserUltra')) {
                 global $xoouserultra;
                 $wc_profile_url = $xoouserultra->userpanel->get_user_profile_permalink($user->ID);
+            } else {
+                if (count_user_posts($user->ID)) {
+                    $wc_profile_url = get_author_posts_url($user->ID);
+                }
             }
         }
         return $wc_profile_url;

@@ -20,7 +20,7 @@ class WC_Options {
 
         $default_post_types = get_post_types('', 'names');
         foreach ($default_post_types as $post_type) {
-            if ($post_type != 'attachment' && $post_type != 'revision' && $post_type != 'nav_menu_item') {
+            if ($post_type != 'revision' && $post_type != 'nav_menu_item') {
                 $this->wc_post_types[] = $post_type;
             }
         }
@@ -37,6 +37,8 @@ class WC_Options {
 
             $this->wc_options_serialized->wc_post_types = isset($_POST['wc_post_types']) ? $_POST['wc_post_types'] : array();
             $this->wc_options_serialized->wc_comment_list_order = isset($_POST['wc_comment_list_order']) ? $_POST['wc_comment_list_order'] : 'desc';
+            $this->wc_options_serialized->wc_comment_list_update_type = isset($_POST['wc_comment_list_update_type']) ? $_POST['wc_comment_list_update_type'] : 0;
+            $this->wc_options_serialized->wc_comment_list_update_timer = isset($_POST['wc_comment_list_update_timer']) ? $_POST['wc_comment_list_update_timer'] : 30;
             $this->wc_options_serialized->wc_voting_buttons_show_hide = isset($_POST['wc_voting_buttons_show_hide']) ? $_POST['wc_voting_buttons_show_hide'] : 0;
             $this->wc_options_serialized->wc_share_buttons_show_hide = isset($_POST['wc_share_buttons_show_hide']) ? $_POST['wc_share_buttons_show_hide'] : 0;
             $this->wc_options_serialized->wc_captcha_show_hide = isset($_POST['wc_captcha_show_hide']) ? $_POST['wc_captcha_show_hide'] : 0;
@@ -46,8 +48,10 @@ class WC_Options {
             $this->wc_options_serialized->wc_reply_button_members_show_hide = isset($_POST['wc_reply_button_members_show_hide']) ? $_POST['wc_reply_button_members_show_hide'] : 0;
             $this->wc_options_serialized->wc_author_titles_show_hide = isset($_POST['wc_author_titles_show_hide']) ? $_POST['wc_author_titles_show_hide'] : 0;
             $this->wc_options_serialized->wc_comment_count = isset($_POST['wc_comment_count']) ? $_POST['wc_comment_count'] : 10;
-            $this->wc_options_serialized->wc_notify_moderator = isset($_POST['wc_notify_moderator']) ? $_POST['wc_notify_moderator'] : 0;
-            $this->wc_options_serialized->wc_notify_comment_author = isset($_POST['wc_notify_comment_author']) ? $_POST['wc_notify_comment_author'] : 0;            
+            $this->wc_options_serialized->wc_comments_max_depth = isset($_POST['wc_comments_max_depth']) ? $_POST['wc_comments_max_depth'] : 2;
+            $this->wc_options_serialized->wc_simple_comment_date = isset($_POST['wc_simple_comment_date']) ? $_POST['wc_simple_comment_date'] : 0;
+            $this->wc_options_serialized->wc_show_hide_comment_checkbox = isset($_POST['wc_show_hide_comment_checkbox']) ? $_POST['wc_show_hide_comment_checkbox'] : 0;
+            $this->wc_options_serialized->wc_show_hide_reply_checkbox = isset($_POST['wc_show_hide_reply_checkbox']) ? $_POST['wc_show_hide_reply_checkbox'] : 0;            
             $this->wc_options_serialized->wc_form_bg_color = isset($_POST['wc_form_bg_color']) ? $_POST['wc_form_bg_color'] : '#f9f9f9';
             $this->wc_options_serialized->wc_comment_text_size = isset($_POST['wc_comment_text_size']) ? $_POST['wc_comment_text_size'] : '14px';            
             $this->wc_options_serialized->wc_comment_bg_color = isset($_POST['wc_comment_bg_color']) ? $_POST['wc_comment_bg_color'] : '#fefefe';
@@ -55,6 +59,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_comment_text_color = isset($_POST['wc_comment_text_color']) ? $_POST['wc_comment_text_color'] : '#555';
             $this->wc_options_serialized->wc_author_title_color = isset($_POST['wc_author_title_color']) ? $_POST['wc_author_title_color'] : '#00B38F';
             $this->wc_options_serialized->wc_vote_reply_color = isset($_POST['wc_vote_reply_color']) ? $_POST['wc_vote_reply_color'] : '#666666';
+            $this->wc_options_serialized->wc_new_loaded_comment_bg_color = isset($_POST['wc_new_loaded_comment_bg_color']) ? $_POST['wc_new_loaded_comment_bg_color'] : 'rgb(254,254,254)';
             $this->wc_options_serialized->wc_custom_css = isset($_POST['wc_custom_css']) ? $_POST['wc_custom_css'] : '.comments-area{width: 100%;margin: 0 auto;}';
 
             $this->wc_options_serialized->update_options();
@@ -64,7 +69,7 @@ class WC_Options {
         <div class="wrap wpdiscuz_options_page">
 
             <div style="float:left; width:50px; height:55px; margin:10px 10px 20px 0px;">
-                <img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/plugin-icon-48.png'); ?>" style="height:43px;"/>
+                <img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/plugin-icon-48.png'); ?>"/>
             </div>
             <h2 style="padding-bottom:20px; padding-top:15px;"><?php _e('wpDiscuz General Settings', 'wpdiscuz'); ?></h2>
             <br style="clear:both" />
@@ -79,6 +84,7 @@ class WC_Options {
                         <div class="slider">
                             <ul class="bxslider">
                                 <li><a href="https://wordpress.org/plugins/woodiscuz-woocommerce-comments/screenshots/"><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/'); ?>files/img/gc/3.png" title="Free Download from Wordpress.org" style="padding:0px 0px 20px 20px;" /></a></li>
+                                <li><a href="https://wordpress.org/plugins/woocommerce-category-slider/screenshots/"><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/'); ?>files/img/gc/5.png" title="Free Download from Wordpress.org" style="padding:0px 0px 20px 20px;" /></a></li>
                                 <li><a href="https://wordpress.org/plugins/woocommerce-pdf-print/"><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/'); ?>files/img/gc/4.png" title="Free Download from Wordpress.org" style="padding:0px 0px 20px 20px;" /></a></li>
                                 <li><a href="https://wordpress.org/plugins/advanced-content-pagination/screenshots/"><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/'); ?>files/img/gc/1.png" title="Free Download from Wordpress.org" style="padding:0px 0px 20px 20px;" /></a></li>
                                 <li><a href="https://wordpress.org/plugins/author-and-post-statistic-widgets/"><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/'); ?>files/img/gc/2.png" title="Free Download from Wordpress.org" style="padding:0px 0px 20px 20px;" /></a></li>
@@ -114,7 +120,7 @@ class WC_Options {
                                         <li>- Link to it so other folks can find out about it.</li>
                                         <li>- Give it a good rating on <a href="https://wordpress.org/plugins/wpdiscuz/" target="_blank">WordPress.org.</a></li>
                                         <li>- We spend as much of my spare time as possible working on wpDiscuz and any donation is appreciated. Donations play a crucial role in supporting Free and Open Source Software projects. <div style="width:200px; float:right;">
-                                                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top"><input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="UC44WQM5XJFPA"><input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"><img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1"></form>
+                                                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top"><input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="UC44WQM5XJFPA"><input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"><img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1"></form></div>
                                     </ul>
                                 </td>
                             </tr>
@@ -188,7 +194,9 @@ class WC_Options {
             $this->wc_options_serialized->wc_phrases['wc_email_text'] = $_POST['wc_email_text'];
             $this->wc_options_serialized->wc_phrases['wc_name_text'] = $_POST['wc_name_text'];
             $this->wc_options_serialized->wc_phrases['wc_captcha_text'] = $_POST['wc_captcha_text'];
-            $this->wc_options_serialized->wc_phrases['wc_submit_text'] = $_POST['wc_submit_text'];
+            $this->wc_options_serialized->wc_phrases['wc_submit_text'] = $_POST['wc_submit_text'];            
+            $this->wc_options_serialized->wc_phrases['wc_notify_on_new_comment'] = $_POST['wc_notify_on_new_comment'];
+            $this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] = $_POST['wc_notify_on_new_reply'];                                    
             $this->wc_options_serialized->wc_phrases['wc_load_more_submit_text'] = $_POST['wc_load_more_submit_text'];
             $this->wc_options_serialized->wc_phrases['wc_reply_text'] = $_POST['wc_reply_text'];
             $this->wc_options_serialized->wc_phrases['wc_share_text'] = $_POST['wc_share_text'];
@@ -202,10 +210,11 @@ class WC_Options {
             $this->wc_options_serialized->wc_phrases['wc_user_title_author_text'] = $_POST['wc_user_title_author_text'];
             $this->wc_options_serialized->wc_phrases['wc_user_title_admin_text'] = $_POST['wc_user_title_admin_text'];
             $this->wc_options_serialized->wc_phrases['wc_email_subject'] = $_POST['wc_email_subject'];
-            $this->wc_options_serialized->wc_phrases['wc_email_message'] = $_POST['wc_email_message'];
+            $this->wc_options_serialized->wc_phrases['wc_email_message'] = $_POST['wc_email_message'];            
+            $this->wc_options_serialized->wc_phrases['wc_new_reply_email_subject'] = $_POST['wc_new_reply_email_subject'];
+            $this->wc_options_serialized->wc_phrases['wc_new_reply_email_message'] = $_POST['wc_new_reply_email_message'];            
             $this->wc_options_serialized->wc_phrases['wc_error_empty_text'] = $_POST['wc_error_empty_text'];
             $this->wc_options_serialized->wc_phrases['wc_error_email_text'] = $_POST['wc_error_email_text'];
-
             $this->wc_options_serialized->wc_phrases['wc_year_text']['datetime'][0] = $_POST['wc_year_text'];
             $this->wc_options_serialized->wc_phrases['wc_month_text']['datetime'][0] = $_POST['wc_month_text'];
             $this->wc_options_serialized->wc_phrases['wc_day_text']['datetime'][0] = $_POST['wc_day_text'];
@@ -215,7 +224,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_phrases['wc_plural_text'] = $_POST['wc_plural_text'];
             $this->wc_options_serialized->wc_phrases['wc_right_now_text'] = $_POST['wc_right_now_text'];
             $this->wc_options_serialized->wc_phrases['wc_ago_text'] = $_POST['wc_ago_text'];
-
+            $this->wc_options_serialized->wc_phrases['wc_posted_today_text'] = $_POST['wc_posted_today_text'];
             $this->wc_options_serialized->wc_phrases['wc_you_must_be_text'] = $_POST['wc_you_must_be_text'];
             $this->wc_options_serialized->wc_phrases['wc_logged_in_text'] = $_POST['wc_logged_in_text'];
             $this->wc_options_serialized->wc_phrases['wc_to_post_comment_text'] = $_POST['wc_to_post_comment_text'];
@@ -229,6 +238,12 @@ class WC_Options {
             $this->wc_options_serialized->wc_phrases['wc_login_to_vote'] = $_POST['wc_login_to_vote'];
             $this->wc_options_serialized->wc_phrases['wc_invalid_captcha'] = $_POST['wc_invalid_captcha'];
             $this->wc_options_serialized->wc_phrases['wc_invalid_field'] = $_POST['wc_invalid_field'];            
+            $this->wc_options_serialized->wc_phrases['wc_new_comment_button_text'] = $_POST['wc_new_comment_button_text'];
+            $this->wc_options_serialized->wc_phrases['wc_new_comments_button_text'] = $_POST['wc_new_comments_button_text'];
+            $this->wc_options_serialized->wc_phrases['wc_new_reply_button_text'] = $_POST['wc_new_reply_button_text'];
+            $this->wc_options_serialized->wc_phrases['wc_new_replies_button_text'] = $_POST['wc_new_replies_button_text'];
+            
+            $this->wc_options_serialized->wc_phrases['wc_new_comments_text'] = $_POST['wc_new_comments_text'];
 
             $this->wc_db_helper->update_phrases($this->wc_options_serialized->wc_phrases);
         }

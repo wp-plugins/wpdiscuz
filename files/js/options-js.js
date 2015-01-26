@@ -63,7 +63,15 @@ jQuery(document).ready(function ($) {
         }
     });
 
-    $('#wc_notify_moderator').change(function () {
+    $('#wc_simple_comment_date').change(function () {
+        if ($(this).is(':checked')) {
+            $(this).val('1');
+        } else {
+            $(this).val('0');
+        }
+    });
+    
+    $('#wc_show_hide_comment_checkbox').change(function () {
         if ($(this).is(':checked')) {
             $(this).val('1');
         } else {
@@ -71,7 +79,7 @@ jQuery(document).ready(function ($) {
         }
     });
 
-    $('#wc_notify_comment_author').change(function () {
+    $('#wc_show_hide_reply_checkbox').change(function () {
         if ($(this).is(':checked')) {
             $(this).val('1');
         } else {

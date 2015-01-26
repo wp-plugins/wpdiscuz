@@ -110,6 +110,28 @@
     </td>
 </tr>
 
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Notify on new comments (checkbox)', 'wpdiscuz'); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_notify_on_new_comment">
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_notify_on_new_comment']) ? $this->wc_options_serialized->wc_phrases['wc_notify_on_new_comment'] : _e('Notify of all new follow-up comments', 'wpdiscuz'); ?>" name="wc_notify_on_new_comment" id="wc_notify_on_new_comment" />
+        </label>
+    </td>
+</tr>
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Notify on new replies (checkbox)', 'wpdiscuz'); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_notify_on_new_reply">
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply']) ? $this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] : _e('Notify of new replies to my comments', 'wpdiscuz'); ?>" name="wc_notify_on_new_reply" id="wc_notify_on_new_reply" />
+        </label>
+    </td>
+</tr>
+
 <tr valign="top">
     <th scope="row">
         <?php _e('Load More Button', 'wpdiscuz'); ?>
@@ -245,11 +267,6 @@
     </td>
 </tr>
 
-
-
-
-
-
 <tr valign="top">
     <th scope="row">
         <?php _e('Email Subject', 'wpdiscuz'); ?>
@@ -268,6 +285,28 @@
     <td colspan="3">                                
         <label for="wc_email_message">
             <textarea name="wc_email_message" id="wc_email_message"><?php echo $this->wc_options_serialized->wc_phrases['wc_email_message']; ?></textarea>            
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('New Reply Subject', 'wpdiscuz'); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_new_reply_email_subject">
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_new_reply_email_subject']) ? $this->wc_options_serialized->wc_phrases['wc_new_reply_email_subject'] : _e('New Reply', 'wpdiscuz'); ?>" name="wc_new_reply_email_subject" id="wc_new_reply_email_subject" />
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('New Reply Message', 'wpdiscuz'); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_new_reply_email_message">
+            <textarea name="wc_new_reply_email_message" id="wc_new_reply_email_message"><?php echo $this->wc_options_serialized->wc_phrases['wc_new_reply_email_message']; ?></textarea>
         </label>
     </td>
 </tr>
@@ -389,6 +428,17 @@
     <td colspan="3">                                
         <label for="wc_ago_text">
             <input type="text" value="<?php echo $this->wc_options_serialized->wc_phrases['wc_ago_text']; ?>" name="wc_ago_text" id="wc_ago_text" />
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('"Today" text', 'wpdiscuz'); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_posted_today_text">
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_posted_today_text']) ? $this->wc_options_serialized->wc_phrases['wc_posted_today_text'] : _e('Today', 'wpdiscuz'); ?>" name="wc_posted_today_text" id="wc_posted_today_text" placeholder="<?php _e('Today', 'wpdiscuz'); ?> 9:26 PM"/>
         </label>
     </td>
 </tr>
@@ -532,6 +582,61 @@
     <td colspan="3">                                
         <label for="wc_held_for_moderate">
             <input type="text" value="<?php echo $this->wc_options_serialized->wc_phrases['wc_held_for_moderate']; ?>" name="wc_held_for_moderate" id="wc_held_for_moderate" />
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Button text if has new comment', 'wpdiscuz'); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_new_comment_button_text">
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_new_comment_button_text']) ? $this->wc_options_serialized->wc_phrases['wc_new_comment_button_text'] : _e('New Comment', 'wpdisucz'); ?>" name="wc_new_comment_button_text" id="wc_new_comment_button_text" placeholder="<?php _e("New Comment", "wpdiscuz"); ?>"/>
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Button text if has new comments', 'wpdiscuz'); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_new_comments_button_text">
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_new_comments_button_text']) ? $this->wc_options_serialized->wc_phrases['wc_new_comments_button_text'] : _e('New Comments', 'wpdisucz'); ?>" name="wc_new_comments_button_text" id="wc_new_comments_button_text" placeholder="<?php _e("New Comments", "wpdiscuz"); ?>"/>
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Button text if has new reply', 'wpdiscuz'); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_new_reply_button_text">
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_new_reply_button_text']) ? $this->wc_options_serialized->wc_phrases['wc_new_reply_button_text'] : _e('New Reply', 'wpdisucz'); ?>" name="wc_new_reply_button_text" id="wc_new_reply_button_text" placeholder="<?php _e("New Reply", "wpdiscuz"); ?>"/>
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Button text if has new replies', 'wpdiscuz'); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_new_replies_button_text">
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_new_replies_button_text']) ? $this->wc_options_serialized->wc_phrases['wc_new_replies_button_text'] : _e('New Replies', 'wpdisucz'); ?>" name="wc_new_replies_button_text" id="wc_new_replies_button_text" placeholder="<?php _e("New Replies", "wpdiscuz"); ?>"/>
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Text on load more button if has new comment(s)', 'wpdiscuz'); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_new_comments_text">
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_new_comments_text']) ? $this->wc_options_serialized->wc_phrases['wc_new_comments_text'] : _e('New', 'wpdisucz'); ?>" name="wc_new_comments_text" id="wc_new_comments_text" />
         </label>
     </td>
 </tr>

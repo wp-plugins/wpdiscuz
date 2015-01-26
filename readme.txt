@@ -1,18 +1,18 @@
 === wpDiscuz - Wordpress Comments ===
 Contributors: gVectors Team
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UC44WQM5XJFPA
-Tags: wordpress comments, ajax comments, ajax, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system
+Tags: wordpress comments, ajax comments, ajax, live update, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system
 Requires at least: 2.7
 Tested up to: 4.1
-Stable tag: 1.0.9
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-New interactive, AJAX comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share. 
+New interactive, AJAX comment system. Responsive comment plugin with Live Update function. Allows your visitors discuss, vote for comments and share. 
 
 == Description ==
 
-New interactive, AJAX comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share.
+New interactive, AJAX comment system. Responsive comment plugin with Live Update function. Allows your visitors discuss, vote for comments and share. 
 
 **wpDiscuz Features:**
 
@@ -21,9 +21,16 @@ New interactive, AJAX comment system. Wordpress post comments and discussion plu
 * | Adds interactive comment box on posts and other content types
 * | Responsive comments form and comment threads design
 * | Clean, simple and easy user interface and user experience
-* | Fast and easy comment form with ajax validation and data submitting 
+* | Live update of new comments with notifier buttons
+* | Multi-level (nested) comment threads, with maximum levels depth setting option
 * | Allows to create a new discussion thread and reply to existing comment
 * | Ajax button "Load More Comments" instead of simple comments pagination
+* | Different comment date formats, reflects Wordpress date format settings
+* | Automatic URLs to link conversion in comment texts
+* | Multiple line-breaks (limited by Wordpress comment filter)
+* | Comment author notification options with special checkboxes on comment form
+* | Ability to add comment system on attachment pages if it's allowed by Wordpress
+* | Fast and easy comment form with ajax validation and data submitting 
 * | Fully integrated and compatible with Wordpress 
 * | Uses Wordpress Comment system with all managing functions and features
 * | Uses WP Avatar System, fully compatible with BuddyPress and other profiling plugins
@@ -37,12 +44,15 @@ New interactive, AJAX comment system. Wordpress post comments and discussion plu
 
 * | Option to display comment form for certain post types
 * | Option to show the latest comments on top or bottom of threads
+* | Option to set Live Update mode (auto or notifier buttons) and update period
 * | Options to turn On/Off Comment Voting and Sharing features
 * | Option to hide/show CAPTCHA field on comment form
 * | Option for "User Must be registered to comment"
 * | Option to held new comments for moderation 
 * | Option to hide user labels/titles
 * | Option to set number of comment threads per page (for "load more comments" button) 
+* | Option to set nested comments maximum depth level
+* | Option to manage (hide/show) email notification checkboxes
 * | Option to notify administrators and comment authors on new comment/reply
 * | Option to manage font color
 * | Option to manage comment/reply background colors
@@ -84,12 +94,30 @@ https://wordpress.org/plugins/woodiscuz-woocommerce-comments/
 
 1. Ajax Form to add a new discussion thread Screenshot #1
 2. Discussion Threads with Reply Form Screenshot #2
-3. Full Front-End View Screenshot #3
-4. wpDiscuz General Settings #4
-5. Another Full Front-End View Screenshot #5
+3. Live Update: checks for new comments and shows update buttons #3
+4. Front-End View with different colors Screenshot #4
+5. Full Front-End View Screenshot #5
+6. wpDiscuz General Settings #6
+
 
 
 == Changelog ==
+
+= 2.0.0 =
+* Added : Live update of new comments with notifier buttons
+* Added : Multi-level (nested) comment threads, with maximum levels depth setting option
+* Added : Different comment date formats, reflects Wordpress date format settings
+* Added : URLs to link auto-conversion in comment texts
+* Added : Multiple line-breaks (limited by Wordpress comment filter)
+* Added : Comment author notification options with special checkboxes on comment form
+* Added : Ability to add comment system on attachment pages if it's allowed by Wordpress
+* Added : Comments are generated with Wordpress comment-id to link those with anchor(#)
+* Added : Option to set Live Update mode (auto or notifier buttons) and update period
+* Added : Option to set nested comments maximum depth level
+* Added : Option to manage (hide/show) email notification checkboxes
+* Added : Option to manage background color of just loaded new comment (on live update)
+* Fixed Bug: Problem with multiple line-breaks
+
 
 = 1.0.9 =
 * Added : Option to set comment text font size

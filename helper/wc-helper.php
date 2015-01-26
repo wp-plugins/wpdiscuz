@@ -171,4 +171,95 @@ class WC_Helper {
         }
     }
 
+    public static function get_comment_root_id($comment_id) {
+        $comment = get_comment($comment_id);
+
+        if (!$comment) {
+            return -1;
+        }
+
+        if ($comment->comment_parent) {
+            return WC_Helper::get_comment_root_id($comment->comment_parent);
+        } else {
+            return $comment;
+        }
+    }
+
+    public static function wc_get_array($array) {
+        $new_array = array();
+        foreach ($array as $value) {
+            $new_array[] = $value[0];
+        }
+        return $new_array;
+    }
+
+    public function make_url_clickable($matches) {
+        $ret = '';
+        $url = $matches[2];
+
+        if (empty($url))
+            return $matches[0];
+        // removed trailing [.,;:] from URL
+        if (in_array(substr($url, -1), array('.', ',', ';', ':')) === true) {
+            $ret = substr($url, -1);
+            $url = substr($url, 0, strlen($url) - 1);
+        }
+        return $matches[1] . "<a href=\"$url\" rel=\"nofollow\">$url</a>" . $ret;
+    }
+
+    public function make_web_ftp_clickable($matches) {
+        $ret = '';
+        $dest = $matches[2];
+        $dest = 'http://' . $dest;
+
+        if (empty($dest))
+            return $matches[0];
+        // removed trailing [,;:] from URL
+        if (in_array(substr($dest, -1), array('.', ',', ';', ':')) === true) {
+            $ret = substr($dest, -1);
+            $dest = substr($dest, 0, strlen($dest) - 1);
+        }
+        return $matches[1] . "<a href=\"$dest\" rel=\"nofollow\">$dest</a>" . $ret;
+    }
+
+    public function make_email_clickable($matches) {
+        $email = $matches[2] . '@' . $matches[3];
+        return $matches[1] . "<a href=\"mailto:$email\">$email</a>";
+    }
+
+    public function make_clickable($ret) {
+        $ret = ' ' . $ret;
+        // in testing, using arrays here was found to be faster
+        $ret = preg_replace_callback('#([\s>])([\w]+?://[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]*)#is', array(&$this, 'make_url_clickable'), $ret);
+        $ret = preg_replace_callback('#([\s>])((www|ftp)\.[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]*)#is', array(&$this, 'make_web_ftp_clickable'), $ret);
+        $ret = preg_replace_callback('#([\s>])([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})#i', array(&$this, 'make_email_clickable'), $ret);
+
+        // this one is not in an array because we need it to run last, for cleanup of accidental links within links
+        $ret = preg_replace("#(<a( [^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i", "$1$3</a>", $ret);
+        $ret = trim($ret);
+        return $ret;
+    }
+
+    public static function isPostedToday($posted_date) {
+        return (time() - 60 * 60 * 24) < $posted_date;
+    }
+
+    public function wc_sort_parent_comments($wc_parent_comments) {
+        for ($i = 0; $i < count($wc_parent_comments); $i++) {
+            for ($j = $i + 1; $j < count($wc_parent_comments); $j++) {
+                if (intval($wc_parent_comments[$i]->comment_ID) > intval($wc_parent_comments[$j]->comment_ID)) {
+                   $wc_parent_comments = $this->wc_swap_comments($i, $j, $wc_parent_comments);
+                }
+            }
+        }
+        return $wc_parent_comments;
+    }
+
+    private function wc_swap_comments($i, $j, $wc_parent_comments) {
+        $tmp = $wc_parent_comments[$i];
+        $wc_parent_comments[$i] = $wc_parent_comments[$j];
+        $wc_parent_comments[$j] = $tmp;
+        return $wc_parent_comments;
+    }
+
 }

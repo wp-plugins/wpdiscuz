@@ -45,4 +45,11 @@ jQuery(document).ready(function ($) {
             $('#wc_form_bg_color').val('#' + hex);
         }
     });
+
+    $('#wc_colorpickerHolder7').ColorPicker({
+        flat: true,
+        onChange: function (hsb, hex, rgb) {
+            $('#wc_new_loaded_comment_bg_color').val('rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')');
+        }
+    });
 });

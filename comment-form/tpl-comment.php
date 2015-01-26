@@ -5,12 +5,14 @@ class WC_Comment_Template_Builder {
     public $wc_helper;
     public $wc_db_helper;
     public $wc_options;
-    private $wc_last_comment_id;
 
     function __construct($wc_helper, $wc_db_helper, $wc_options) {
         $this->wc_helper = $wc_helper;
         $this->wc_db_helper = $wc_db_helper;
         $this->wc_options = $wc_options;
+        if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
+            $this->wc_options->wc_options_serialized->wc_phrases = $this->wc_db_helper->get_phrases();
+        }
     }
 
     /**
@@ -21,7 +23,7 @@ class WC_Comment_Template_Builder {
     public function get_comment_template($comment, $args, $depth) {
         $comment_content = $this->wc_helper->make_clickable($comment->comment_content);
         $comment_content = apply_filters('comment_text', $comment->comment_content);
-        $comment_content = nl2br($comment_content);       
+        $comment_content = nl2br($comment_content);
 
         $vote_cls = '';
         $vote_title_text = '';
@@ -86,8 +88,8 @@ class WC_Comment_Template_Builder {
         }
 
         $parent_comment = (!$comment->comment_parent && count($child_comments)) ? ' parnet_comment' : '';
-       
-        $wc_visible_parent_comment_ids = isset($args['wc_visible_parent_comment_ids']) ? $args['wc_visible_parent_comment_ids'] : null;        
+
+        $wc_visible_parent_comment_ids = isset($args['wc_visible_parent_comment_ids']) ? $args['wc_visible_parent_comment_ids'] : null;
         $comment_content_class = ($wc_visible_parent_comment_ids != null && !in_array($comment->comment_ID, $wc_visible_parent_comment_ids)) ? ' wc_new_loaded_comment' : '';
 
         $output = '<div id="wc-comm-' . $unique_id . '" class="' . $comment_wrapper_class . ' ' . $parent_comment . ' wc_comment_level-' . $depth . '">';

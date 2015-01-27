@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: wordpress comments, ajax comments, ajax, live update, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system
 Requires at least: 2.7
 Tested up to: 4.1
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,10 +66,14 @@ https://wordpress.org/plugins/woodiscuz-woocommerce-comments/
 
 == Installation ==
 
+IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
+
 1. Upload plugin folder to the '/wp-content/plugins/' directory,
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 
 == Frequently Asked Questions ==
+
+IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
 
 = Q&A =
 
@@ -102,6 +106,12 @@ https://wordpress.org/plugins/woodiscuz-woocommerce-comments/
 
 
 == Changelog ==
+
+= 2.0.1 =
+* Fixed Bug: Problem with new options and phrase saving
+
+IMPORTANT: If you have a Cache Plugin, please reset after wpDiscuz update
+
 
 = 2.0.0 =
 * Added : Live update of new comments with notifier buttons

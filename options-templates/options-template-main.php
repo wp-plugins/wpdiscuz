@@ -193,7 +193,7 @@
     </th>
     <td colspan="3">
         <select id="wc_comments_max_depth" name="wc_comments_max_depth">
-            <?php $wc_comments_max_depth = isset($this->wc_options_serialized->wc_comments_max_depth) ? $this->wc_options_serialized->wc_comments_max_depth : 2; ?>
+            <?php $wc_comments_max_depth = isset($this->wc_options_serialized->wc_comments_max_depth) ? $this->wc_options_serialized->wc_comments_max_depth : 3; ?>
             <option value="1" <?php selected($wc_comments_max_depth, '1'); ?>>1 <?php _e('Level', 'wpdiscuz'); ?></option>
             <option value="2" <?php selected($wc_comments_max_depth, '2'); ?>>2 <?php _e('Levels', 'wpdiscuz'); ?></option>
             <option value="3" <?php selected($wc_comments_max_depth, '3'); ?>>3 <?php _e('Levels', 'wpdiscuz'); ?></option>
@@ -218,6 +218,7 @@
 <tr valign="top">
     <th scope="row">
         <?php _e('Show "Notify of all new follow-up comments"', 'wpdiscuz'); ?> 
+        <p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;">Please keep this option on, otherwise users will not have any option for email notifications and they'll not get any.</p>
     </th>
     <td colspan="3">                                
         <label for="wc_show_hide_comment_checkbox">
@@ -229,6 +230,7 @@
 <tr valign="top">
     <th scope="row">
         <?php _e('Show "Notify of new replies to my comments"', 'wpdiscuz'); ?> 
+        <p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;">Please keep this option on, otherwise users will not have any option for email notifications and they'll not get any.</p>
     </th>
     <td colspan="3">                                
         <label for="wc_show_hide_reply_checkbox">
@@ -428,6 +430,6 @@
         <label for="wc_custom_css"><?php _e('Custom CSS Code', 'wpdiscuz'); ?></label>
     </th>
     <td>
-        <textarea cols="50" rows="10" class="regular-text" id="wc_custom_css" name="wc_custom_css" placeholder=""><?php echo $this->wc_options_serialized->wc_custom_css; ?></textarea>
+        <textarea cols="50" rows="10" class="regular-text" id="wc_custom_css" name="wc_custom_css" placeholder=""><?php echo stripslashes($this->wc_options_serialized->wc_custom_css); ?></textarea>
     </td>   
 </tr>

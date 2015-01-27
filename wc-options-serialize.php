@@ -228,7 +228,7 @@ class WC_Options_Serialize {
      * helper class for database operations
      */
     public $wc_db_helper;
-
+    
     function __construct($wc_db_helper) {
         $this->wc_db_helper = $wc_db_helper;
         $this->init_phrases();
@@ -403,7 +403,7 @@ class WC_Options_Serialize {
     }
 
     public function init_phrases_on_load() {
-        if ($this->wc_db_helper->is_phrase_exists('wc_discuss_tab')) {
+        if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
             $this->wc_phrases = $this->wc_db_helper->get_phrases();
         }
     }

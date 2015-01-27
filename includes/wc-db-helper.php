@@ -94,6 +94,9 @@ class WC_DB_Helper {
         $phrases = $this->db->get_results($sql, ARRAY_A);
         $tmp_phrases = array();
         foreach ($phrases as $phrase) {
+            if (!is_array($phrase)) {
+                $phrase = stripslashes($phrase);
+            }
             $tmp_phrases[$phrase['phrase_key']] = WC_Helper::init_phrase_key_value($phrase);
         }
         return $tmp_phrases;
@@ -114,7 +117,7 @@ class WC_DB_Helper {
         }
         return $this->db->get_var($sql_new_comments);
     }
-    
+
     /**
      * get current post all parent comments count
      */
@@ -177,25 +180,25 @@ class WC_DB_Helper {
         }
         $this->db->query($sql);
     }
-    
-    public function wc_get_post_new_comment_notification($post_id,$email){
-        $sql = $this->db->prepare("SELECT `email` FROM `" . $this->email_notification . "` WHERE `post_id` = %d  AND `email` != %s",$post_id,$email);
+
+    public function wc_get_post_new_comment_notification($post_id, $email) {
+        $sql = $this->db->prepare("SELECT `email` FROM `" . $this->email_notification . "` WHERE `post_id` = %d  AND `email` != %s", $post_id, $email);
         return $this->db->get_results($sql, ARRAY_N);
     }
-    
-    public function wc_get_post_new_reply_notification($comment_id,$email){
-        $sql = $this->db->prepare("SELECT `email` FROM `" . $this->email_notification . "` WHERE `comment_id` = %d AND `email` != %s",$comment_id,$email);
+
+    public function wc_get_post_new_reply_notification($comment_id, $email) {
+        $sql = $this->db->prepare("SELECT `email` FROM `" . $this->email_notification . "` WHERE `comment_id` = %d AND `email` != %s", $comment_id, $email);
         return $this->db->get_results($sql, ARRAY_N);
     }
-    
-    public function wc_has_notification_in_comment($post_id,$email){
-        $sql = $this->db->prepare("SELECT `id` FROM `" . $this->email_notification . "` WHERE `post_id` = %d AND `email` = %s",$post_id,$email);
+
+    public function wc_has_notification_in_comment($post_id, $email) {
+        $sql = $this->db->prepare("SELECT `id` FROM `" . $this->email_notification . "` WHERE `post_id` = %d AND `email` = %s", $post_id, $email);
         $result = $this->db->get_results($sql, ARRAY_N);
         return count($result);
     }
-    
-    public function wc_has_notification_in_reply($comment_id,$email){
-        $sql = $this->db->prepare("SELECT `id` FROM `" . $this->email_notification . "` WHERE `comment_id` = %d AND `email` = %s",$comment_id,$email);
+
+    public function wc_has_notification_in_reply($comment_id, $email) {
+        $sql = $this->db->prepare("SELECT `id` FROM `" . $this->email_notification . "` WHERE `comment_id` = %d AND `email` = %s", $comment_id, $email);
         $result = $this->db->get_results($sql, ARRAY_N);
         return count($result);
     }

@@ -3,7 +3,7 @@
 /*
   Plugin Name: wpDiscuz - Wordpress Comments
   Description: Better comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share.
-  Version: 2.0.0
+  Version: 2.0.1
   Author: gVectors Team (A. Chakhoyan, G. Zakaryan, H. Martirosyan)
   Author URI: http://www.gvectors.com/
   Plugin URI: http://www.gvectors.com/wpdiscuz/
@@ -30,21 +30,23 @@ class WC_Core {
     public $comment_count_text;
     public static $PLUGIN_DIRECTORY;
     public $post_type;
+    private $wc_version_slug = 'wc_plugin_version';
 
     function __construct() {
-        add_action('init', array(&$this, 'init_plugin_dir_name'), 1);
+        add_action('init', array(&$this, 'init_plugin_dir_name'), 1);        
 
         $this->wc_options = new WC_Options();
         $this->wc_db_helper = $this->wc_options->wc_db_helper;
 
         register_activation_hook(__FILE__, array($this, 'db_operations'));
-        $this->wc_db_helper->wc_create_email_notification_tabel();
+        
 
         $this->wc_helper = new WC_Helper($this->wc_options->wc_options_serialized);
         $this->wc_css = new WC_CSS($this->wc_options);
         $this->comment_tpl_builder = new WC_Comment_Template_Builder($this->wc_helper, $this->wc_db_helper, $this->wc_options);
 
         add_action('init', array(&$this, 'register_session'), 2);
+        add_action('admin_init', array(&$this, 'wc_plugin_new_version'), 2);
 
         add_action('admin_enqueue_scripts', array(&$this, 'admin_page_styles_scripts'), 2315);
         add_action('wp_enqueue_scripts', array(&$this, 'front_end_styles_scripts'));
@@ -81,6 +83,37 @@ class WC_Core {
      */
     public function db_operations() {
         $this->wc_db_helper->create_tables();
+    }
+
+    public function wc_plugin_new_version() {
+        $this->wc_db_helper->wc_create_email_notification_tabel();
+        $wc_version = ( !get_option($this->wc_version_slug) ) ? '1.0.0' : get_option($this->wc_version_slug);
+        $wc_plugin_data = get_plugin_data(__FILE__);
+        if (version_compare($wc_plugin_data['Version'], $wc_version)) {
+            $this->wc_add_new_options();
+            $this->wc_add_new_phrases();
+            if ($wc_version === '1.0.0') {
+                add_option($this->wc_version_slug, $wc_plugin_data['Version']);
+            } else {
+                update_option($this->wc_version_slug, $wc_plugin_data['Version']);
+            }
+        }
+    }
+
+    private function wc_add_new_options() {
+        $this->wc_options->wc_options_serialized->init_options(get_option($this->wc_options->wc_options_serialized->wc_options_slug));
+        $wc_new_options = $this->wc_options->wc_options_serialized->to_array();
+        update_option($this->wc_options->wc_options_serialized->wc_options_slug, serialize($wc_new_options));
+    }
+
+    private function wc_add_new_phrases() {
+        if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
+            $wc_saved_phrases = $this->wc_db_helper->get_phrases();
+            $this->wc_options->wc_options_serialized->init_phrases();
+            $wc_phrases = $this->wc_options->wc_options_serialized->wc_phrases;
+            $wc_new_phrases = array_merge($wc_phrases, $wc_saved_phrases);
+            $this->wc_db_helper->update_phrases($wc_new_phrases);
+        }
     }
 
     /*
@@ -153,7 +186,7 @@ class WC_Core {
         wp_register_style('validator-style', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/css/fv.css'));
         wp_enqueue_style('validator-style');
 
-        wp_enqueue_script('wc-ajax-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-ajax.js'), array('jquery'), '2.0.0', false);
+        wp_enqueue_script('wc-ajax-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-ajax.js'), array('jquery'), '2.0.1', false);
         wp_localize_script('wc-ajax-js', 'wc_ajax_obj', array('url' => admin_url('admin-ajax.php')));
 
         wp_enqueue_script('wc-cookie-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/jquery.cookie.js'), array('jquery'), '1.4.1', false);

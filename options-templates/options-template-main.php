@@ -87,7 +87,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_voting_buttons_show_hide">
-            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_voting_buttons_show_hide == 1) ?> value="<?php echo $this->wc_options_serialized->wc_voting_buttons_show_hide; ?>" name="wc_voting_buttons_show_hide" id="wc_voting_buttons_show_hide" />
+            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_voting_buttons_show_hide == 1) ?> value="1" name="wc_voting_buttons_show_hide" id="wc_voting_buttons_show_hide" />
         </label>
     </td>
 </tr>
@@ -98,7 +98,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_share_buttons_show_hide">
-            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_share_buttons_show_hide == 1) ?> value="<?php echo $this->wc_options_serialized->wc_share_buttons_show_hide; ?>" name="wc_share_buttons_show_hide" id="wc_share_buttons_show_hide" />
+            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_share_buttons_show_hide == 1) ?> value="1" name="wc_share_buttons_show_hide" id="wc_share_buttons_show_hide" />
         </label>
     </td>
 </tr>
@@ -109,7 +109,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_captcha_show_hide">
-            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_captcha_show_hide == 1) ?> value="<?php echo $this->wc_options_serialized->wc_captcha_show_hide; ?>" name="wc_captcha_show_hide" id="wc_captcha_show_hide" />
+            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_captcha_show_hide == 1) ?> value="1" name="wc_captcha_show_hide" id="wc_captcha_show_hide" />
         </label>
     </td>
 </tr>
@@ -138,7 +138,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_held_comment_to_moderate">
-            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_held_comment_to_moderate == 1) ?> value="<?php echo $this->wc_options_serialized->wc_held_comment_to_moderate; ?>" name="wc_held_comment_to_moderate" id="wc_held_comment_to_moderate" />
+            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_held_comment_to_moderate == 1) ?> value="1" name="wc_held_comment_to_moderate" id="wc_held_comment_to_moderate" />
         </label>
     </td>
 </tr>
@@ -149,7 +149,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_reply_button_guests_show_hide">
-            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_reply_button_guests_show_hide == 1) ?> value="<?php echo $this->wc_options_serialized->wc_reply_button_guests_show_hide; ?>" name="wc_reply_button_guests_show_hide" id="wc_reply_button_guests_show_hide" />
+            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_reply_button_guests_show_hide == 1) ?> value="1" name="wc_reply_button_guests_show_hide" id="wc_reply_button_guests_show_hide" />
         </label>
     </td>
 </tr>
@@ -160,7 +160,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_reply_button_members_show_hide">
-            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_reply_button_members_show_hide == 1) ?> value="<?php echo $this->wc_options_serialized->wc_reply_button_members_show_hide; ?>" name="wc_reply_button_members_show_hide" id="wc_reply_button_members_show_hide" />
+            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_reply_button_members_show_hide == 1) ?> value="1" name="wc_reply_button_members_show_hide" id="wc_reply_button_members_show_hide" />
         </label>
     </td>
 </tr>
@@ -171,7 +171,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_author_titles_show_hide">
-            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_author_titles_show_hide == 1) ?> value="<?php echo $this->wc_options_serialized->wc_author_titles_show_hide; ?>" name="wc_author_titles_show_hide" id="wc_author_titles_show_hide" />
+            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_author_titles_show_hide == 1) ?> value="1" name="wc_author_titles_show_hide" id="wc_author_titles_show_hide" />
         </label>
     </td>
 </tr>
@@ -210,7 +210,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_simple_comment_date">
-            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_simple_comment_date == 1) ?> value="<?php echo isset($this->wc_options_serialized->wc_show_hide_comment_checkbox) ? $this->wc_options_serialized->wc_simple_comment_date : 0; ?>" name="wc_simple_comment_date" id="wc_simple_comment_date" />
+            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_simple_comment_date == 1) ?> value="1" name="wc_simple_comment_date" id="wc_simple_comment_date" />
         </label>
     </td>
 </tr>
@@ -222,7 +222,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_show_hide_comment_checkbox">
-            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_show_hide_comment_checkbox == 1) ?> value="<?php echo isset($this->wc_options_serialized->wc_show_hide_comment_checkbox) ? $this->wc_options_serialized->wc_show_hide_comment_checkbox : 0; ?>" name="wc_show_hide_comment_checkbox" id="wc_show_hide_comment_checkbox" />
+            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_show_hide_comment_checkbox == 1) ?> value="1" name="wc_show_hide_comment_checkbox" id="wc_show_hide_comment_checkbox" />
         </label>
     </td>
 </tr>
@@ -234,7 +234,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_show_hide_reply_checkbox">
-            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_show_hide_reply_checkbox == 1) ?> value="<?php echo isset($this->wc_options_serialized->wc_show_hide_reply_checkbox) ? $this->wc_options_serialized->wc_show_hide_reply_checkbox : 0; ?>" name="wc_show_hide_reply_checkbox" id="wc_show_hide_reply_checkbox" />
+            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_show_hide_reply_checkbox == 1) ?> value="1" name="wc_show_hide_reply_checkbox" id="wc_show_hide_reply_checkbox" />
         </label>
     </td>
 </tr>

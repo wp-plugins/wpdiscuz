@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: wordpress comments, ajax comments, ajax, live update, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system
 Requires at least: 2.7
 Tested up to: 4.1
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -107,10 +107,13 @@ IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz u
 
 == Changelog ==
 
+= 2.0.2 =
+* Fixed Bug: Problem with saving checkbox options (incorrect logic of values)
+IMPORTANT: If you have a Cache Plugin, please reset after wpDiscuz update
+
+
 = 2.0.1 =
 * Fixed Bug: Problem with new options and phrase saving
-
-IMPORTANT: If you have a Cache Plugin, please reset after wpDiscuz update
 
 
 = 2.0.0 =

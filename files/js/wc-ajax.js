@@ -167,14 +167,20 @@ jQuery(document).ready(function ($) {
                     if ($('.wc_notification_new_comment').length || $('.wc_notification_new_reply').length) {
                         if (obj.code !== -1) {
                             var notification_type = '';
-                            if (wc_notification_new_comment !== 0) {
-                                notification_type = 'post';
-                                $('#wc_notification_new_comment-' + uniqueID).val('0').prop("checked", false);
-                            }
+                            var wc_comment_reply_checkboxes_default_checked = $('#wc_comment_reply_checkboxes_default_checked').val();
                             if (wc_notification_new_reply !== 0) {
                                 notification_type = 'reply';
-                                $('#wc_notification_new_reply-' + uniqueID).val('0').prop("checked", false);
+                                if (wc_comment_reply_checkboxes_default_checked == 0) {                                    
+                                    $('#wc_notification_new_reply-' + uniqueID).val('0').prop("checked", false);
+                                }
                             }
+                            if (wc_notification_new_comment !== 0) {
+                                notification_type = 'post';
+                                if (wc_comment_reply_checkboxes_default_checked == 0) {
+                                    $('#wc_notification_new_comment-' + uniqueID).val('0').prop("checked", false);
+                                }
+                            }
+
                             notify_on_new_comment(wc_comment_post_ID, wc_new_comment_id, wc_email, notification_type);
                         }
                     }
@@ -296,7 +302,7 @@ jQuery(document).ready(function ($) {
             var comment_id = $(this).attr('id');
             var commentUniqueID = comment_id.substring(comment_id.lastIndexOf('-') + 1);
             wc_visible_comments_ids += getCommentID(commentUniqueID) + ',';
-        });        
+        });
 
         $.ajax({
             type: 'POST',

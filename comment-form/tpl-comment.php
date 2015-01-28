@@ -19,8 +19,18 @@ class WC_Comment_Template_Builder {
      * @return single comment template
      */
     public function get_comment_template($comment, $args, $depth) {
-        $comment_content = $this->wc_helper->make_clickable($comment->comment_content);
-        $comment_content = apply_filters('comment_text', $comment->comment_content);
+        $comment_content = wp_kses($comment->comment_content, array(
+            'br' => array(),
+            'a' => array('href' => array(), 'title' => array()),
+            'i' => array(),
+            'b' => array(),
+            'u' => array(),
+            'strong' => array(),
+            'p' => array()
+        ));
+
+        $comment_content = $this->wc_helper->make_clickable($comment_content);
+        $comment_content = apply_filters('comment_text', $comment_content);
         $comment_content = nl2br($comment_content);
 
         $vote_cls = '';
@@ -178,11 +188,13 @@ class WC_Comment_Template_Builder {
         $output_form .= '<div class="wc-field-submit"><input type="button" name="submit" value="' . $this->wc_options->wc_options_serialized->wc_phrases['wc_submit_text'] . '" id="wc_comm-' . $unique_id . '" class="wc_comm_submit button alt"/></div>';
         $output_form .= '<div style="clear:both"></div>';
         $output_form .= '<div class="wc_notification_checkboxes">';
+        
+        $wc_notification_state = ($this->wc_options->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) ? 'checked="checked" value="1"' : 'value="0"';
         if ($this->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox) {
-            $output_form .= '<input class="wc-label-reply-notify" id="wc_notification_new_reply-' . $unique_id . '" class="wc_notification_new_reply" value="0" type="checkbox" name="wc_notification_new_reply"/> <label class="wc-label-comment-notify" for="wc_notification_new_reply-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] . '</label><br />';
+            $output_form .= '<input class="wc-label-reply-notify wc_notification_new_reply" id="wc_notification_new_reply-' . $unique_id . '" ' . $wc_notification_state . ' type="checkbox" name="wc_notification_new_reply"/> <label class="wc-label-comment-notify" for="wc_notification_new_reply-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] . '</label><br />';
         }
         if ($this->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) {
-            $output_form .= '<input class="wc-label-comment-notify" id="wc_notification_new_comment-' . $unique_id . '" class="wc_notification_new_comment"  value="0" type="checkbox" name="wc_notification_new_comment"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_comment'] . '</label><br />';
+            $output_form .= '<input class="wc-label-comment-notify wc_notification_new_comment" id="wc_notification_new_comment-' . $unique_id . '" ' . $wc_notification_state . ' type="checkbox" name="wc_notification_new_comment"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_comment'] . '</label><br />';
         }
         $output_form .= '</div>';
         $output_form .= '</div>';

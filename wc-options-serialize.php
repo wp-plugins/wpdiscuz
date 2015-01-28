@@ -127,6 +127,14 @@ class WC_Options_Serialize {
      * Default Value - Checked
      */
     public $wc_simple_comment_date;
+    
+    /**
+     * Type - Checkbox
+     * Available Values - Checked/Unchecked
+     * Description - Set comment forms email notification checkboxes checked by default
+     * Default Value - Unchecked
+     */
+    public $wc_comment_reply_checkboxes_default_checked;
 
     /**
      * Type - Checkbox
@@ -254,6 +262,7 @@ class WC_Options_Serialize {
         $this->wc_comment_count = $options['wc_comment_count'];
         $this->wc_comments_max_depth = isset($options['wc_comments_max_depth']) ? $options['wc_comments_max_depth'] : 2;
         $this->wc_simple_comment_date = isset($options['wc_simple_comment_date']) ? $options['wc_simple_comment_date'] : 0;
+        $this->wc_comment_reply_checkboxes_default_checked = isset($options['wc_comment_reply_checkboxes_default_checked']) ? $options['wc_comment_reply_checkboxes_default_checked'] : 0;
         $this->wc_show_hide_comment_checkbox = isset($options['wc_show_hide_comment_checkbox']) ? $options['wc_show_hide_comment_checkbox'] : 0;
         $this->wc_show_hide_reply_checkbox = isset($options['wc_show_hide_reply_checkbox']) ? $options['wc_show_hide_reply_checkbox'] : 0;
         $this->wc_comment_text_size = isset($options['wc_comment_text_size']) ? $options['wc_comment_text_size'] : '14px';
@@ -350,6 +359,7 @@ class WC_Options_Serialize {
             'wc_comment_count' => $this->wc_comment_count,
             'wc_comments_max_depth' => $this->wc_comments_max_depth,
             'wc_simple_comment_date' => $this->wc_simple_comment_date,
+            'wc_comment_reply_checkboxes_default_checked' => $this->wc_comment_reply_checkboxes_default_checked,
             'wc_show_hide_comment_checkbox' => $this->wc_show_hide_comment_checkbox,
             'wc_show_hide_reply_checkbox' => $this->wc_show_hide_reply_checkbox,
             'wc_comment_text_size' => $this->wc_comment_text_size,
@@ -387,6 +397,7 @@ class WC_Options_Serialize {
             'wc_comment_count' => '5',
             'wc_comments_max_depth' => '3',
             'wc_simple_comment_date' => '0',
+            'wc_comment_reply_checkboxes_default_checked' => '0',
             'wc_show_hide_comment_checkbox' => '1',
             'wc_show_hide_reply_checkbox' => '1',
             'wc_comment_text_size' => '14px',

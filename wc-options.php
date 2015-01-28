@@ -50,6 +50,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_comment_count = isset($_POST['wc_comment_count']) ? $_POST['wc_comment_count'] : 10;
             $this->wc_options_serialized->wc_comments_max_depth = isset($_POST['wc_comments_max_depth']) ? $_POST['wc_comments_max_depth'] : 2;
             $this->wc_options_serialized->wc_simple_comment_date = isset($_POST['wc_simple_comment_date']) ? $_POST['wc_simple_comment_date'] : 0;
+            $this->wc_options_serialized->wc_comment_reply_checkboxes_default_checked = isset($_POST['wc_comment_reply_checkboxes_default_checked']) ? $_POST['wc_comment_reply_checkboxes_default_checked'] : 0;
             $this->wc_options_serialized->wc_show_hide_comment_checkbox = isset($_POST['wc_show_hide_comment_checkbox']) ? $_POST['wc_show_hide_comment_checkbox'] : 0;
             $this->wc_options_serialized->wc_show_hide_reply_checkbox = isset($_POST['wc_show_hide_reply_checkbox']) ? $_POST['wc_show_hide_reply_checkbox'] : 0;            
             $this->wc_options_serialized->wc_form_bg_color = isset($_POST['wc_form_bg_color']) ? $_POST['wc_form_bg_color'] : '#f9f9f9';

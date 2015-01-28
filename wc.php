@@ -3,7 +3,7 @@
 /*
   Plugin Name: wpDiscuz - Wordpress Comments
   Description: Better comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share.
-  Version: 2.0.2
+  Version: 2.0.3
   Author: gVectors Team (A. Chakhoyan, G. Zakaryan, H. Martirosyan)
   Author URI: http://www.gvectors.com/
   Plugin URI: http://www.gvectors.com/wpdiscuz/
@@ -33,13 +33,13 @@ class WC_Core {
     private $wc_version_slug = 'wc_plugin_version';
 
     function __construct() {
-        add_action('init', array(&$this, 'init_plugin_dir_name'), 1);        
+        add_action('init', array(&$this, 'init_plugin_dir_name'), 1);
 
         $this->wc_options = new WC_Options();
         $this->wc_db_helper = $this->wc_options->wc_db_helper;
 
         register_activation_hook(__FILE__, array($this, 'db_operations'));
-        
+
 
         $this->wc_helper = new WC_Helper($this->wc_options->wc_options_serialized);
         $this->wc_css = new WC_CSS($this->wc_options);
@@ -87,14 +87,14 @@ class WC_Core {
 
     public function wc_plugin_new_version() {
         $this->wc_db_helper->wc_create_email_notification_tabel();
-        $wc_version = ( !get_option($this->wc_version_slug) ) ? '1.0.0' : get_option($this->wc_version_slug);
+        $wc_version = (!get_option($this->wc_version_slug) ) ? '1.0.0' : get_option($this->wc_version_slug);
         $wc_plugin_data = get_plugin_data(__FILE__);
         if (version_compare($wc_plugin_data['Version'], $wc_version)) {
             $this->wc_add_new_options();
             $this->wc_add_new_phrases();
             if ($wc_version === '1.0.0') {
                 add_option($this->wc_version_slug, $wc_plugin_data['Version']);
-            } else {
+            } else {                
                 update_option($this->wc_version_slug, $wc_plugin_data['Version']);
             }
         }
@@ -103,6 +103,8 @@ class WC_Core {
     private function wc_add_new_options() {
         $this->wc_options->wc_options_serialized->init_options(get_option($this->wc_options->wc_options_serialized->wc_options_slug));
         $wc_new_options = $this->wc_options->wc_options_serialized->to_array();
+        $wc_new_options['wc_show_hide_comment_checkbox'] = '1';
+        $wc_new_options['wc_show_hide_reply_checkbox'] = '1';
         update_option($this->wc_options->wc_options_serialized->wc_options_slug, serialize($wc_new_options));
     }
 
@@ -761,15 +763,19 @@ class WC_Core {
         $post_id = intval($_POST['wc_post_id']);
         $notification_type = $_POST['wc_notifcattion_type'];
         $current_user = wp_get_current_user();
+
+
         if ($current_user->user_email) {
             $email = $current_user->user_email;
         } else {
             $email = isset($_POST['wc_email']) ? $_POST['wc_email'] : '';
         }
+
+
         if ($comment_id && $email && $post_id) {
             $comment = get_comment($comment_id);
             $parrent_comment_id = $comment->comment_parent;
-            if ($notification_type == 'post' && !$this->wc_db_helper->wc_get_post_new_comment_notification($post_id, $email)) {
+            if ($notification_type == 'post' && !$this->wc_db_helper->wc_has_notification_in_comment($post_id, $email)) {                
                 $this->wc_db_helper->wc_add_email_notification($post_id, $email, 1);
             } else if ($notification_type == 'reply' && !$this->wc_db_helper->wc_has_notification_in_reply($comment_id, $email)) {
                 $this->wc_db_helper->wc_add_email_notification($comment_id, $email, 0);
@@ -778,9 +784,10 @@ class WC_Core {
                 $this->wc_notify_on_new_comments($post_id, $comment_id, $email);
             }
             if ($comment->comment_approved && $parrent_comment_id) {
-                $this->wc_notify_on_new_reply($parrent_comment_id, $email);
+                $this->wc_notify_on_new_reply($parrent_comment_id, $comment->comment_ID, $email);
             }
         }
+        exit();
     }
 
     /**
@@ -798,12 +805,12 @@ class WC_Core {
     /**
      * notify on comment new replies
      */
-    public function wc_notify_on_new_reply($comment_id, $email) {
-        $emails_array = $this->wc_db_helper->wc_get_post_new_reply_notification($comment_id, $email);
+    public function wc_notify_on_new_reply($parent_comment_id, $new_comment_id, $email) {
+        $emails_array = $this->wc_db_helper->wc_get_post_new_reply_notification($parent_comment_id, $email);
         $subject = ($this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_subject']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_subject'] : 'New Reply';
         $message = ($this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_message']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_message'] : 'New reply on the discussion section you\'ve been interested in';
         foreach ($emails_array as $e_row) {
-            $this->wc_email_sender($e_row[0], $comment_id, $subject, $message);
+            $this->wc_email_sender($e_row[0], $new_comment_id, $subject, $message);
         }
     }
 
@@ -811,7 +818,8 @@ class WC_Core {
      * send email
      */
     public function wc_email_sender($email, $wc_new_comment_id, $subject, $message) {
-        $wc_new_comment_content = get_comment($wc_new_comment_id)->comment_content;
+        $comment = get_comment($wc_new_comment_id);
+        $wc_new_comment_content = $comment->comment_content;
         $permalink = get_comment_link($wc_new_comment_id);
         $message .= "<br/><br/><a href='$permalink'>$permalink</a>";
         $message .= "<br/><br/>$wc_new_comment_content";

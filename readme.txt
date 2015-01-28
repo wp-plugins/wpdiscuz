@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: wordpress comments, ajax comments, ajax, live update, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system
 Requires at least: 2.7
 Tested up to: 4.1
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,7 @@ New interactive, AJAX comment system. Responsive comment plugin with Live Update
 * | Option to set nested comments maximum depth level
 * | Option to manage (hide/show) email notification checkboxes
 * | Option to notify administrators and comment authors on new comment/reply
+* | Option to keep checked-on the email notification checkboxes on comment form by default
 * | Option to manage font color
 * | Option to manage comment/reply background colors
 * | Option to manage author name and label color
@@ -107,9 +108,15 @@ IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz u
 
 == Changelog ==
 
+= 2.0.3 =
+* Fixed Bug: Problem with email notification options on comment form
+* Added : Option to keep checked-on the email notification checkboxes on comment form by default
+
+IMPORTANT: If you have a Cache Plugin, please reset after wpDiscuz update
+
+
 = 2.0.2 =
 * Fixed Bug: Problem with saving checkbox options (incorrect logic of values)
-IMPORTANT: If you have a Cache Plugin, please reset after wpDiscuz update
 
 
 = 2.0.1 =

@@ -182,17 +182,17 @@ class WC_DB_Helper {
     }
 
     public function wc_get_post_new_comment_notification($post_id, $email) {
-        $sql = $this->db->prepare("SELECT `email` FROM `" . $this->email_notification . "` WHERE `post_id` = %d  AND `email` != %s", $post_id, $email);
+        $sql = $this->db->prepare("SELECT `email` FROM `" . $this->email_notification . "` WHERE `post_id` = %d  AND `email` != %s GROUP BY `email`", $post_id, $email);
         return $this->db->get_results($sql, ARRAY_N);
     }
 
     public function wc_get_post_new_reply_notification($comment_id, $email) {
-        $sql = $this->db->prepare("SELECT `email` FROM `" . $this->email_notification . "` WHERE `comment_id` = %d AND `email` != %s", $comment_id, $email);
+        $sql = $this->db->prepare("SELECT `email` FROM `" . $this->email_notification . "` WHERE `comment_id` = %d AND `email` != %s GROUP BY `email`", $comment_id, $email);
         return $this->db->get_results($sql, ARRAY_N);
     }
 
     public function wc_has_notification_in_comment($post_id, $email) {
-        $sql = $this->db->prepare("SELECT `id` FROM `" . $this->email_notification . "` WHERE `post_id` = %d AND `email` = %s", $post_id, $email);
+        $sql = $this->db->prepare("SELECT `id` FROM `" . $this->email_notification . "` WHERE `post_id` = %d AND `email` = %s", $post_id, $email);       
         $result = $this->db->get_results($sql, ARRAY_N);
         return count($result);
     }

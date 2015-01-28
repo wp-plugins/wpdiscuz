@@ -92,11 +92,12 @@ $header_text .= ' "' . get_the_title($post) . '"';
                             <div style="clear:both"></div>
                         </div>
                         <div class="wc_notification_checkboxes">
+                            <?php $wc_notification_state = ($wc_core->wc_options->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) ? 'checked="checked" value="1"' : 'value="0"'; ?>
                             <?php if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox) { ?>
-                                <input id="wc_notification_new_reply-<?php echo $unique_id; ?>" class="wc_notification_new_reply" value="0" type="checkbox" name="wp_comment_reply_notification"/> <label class="wc-label-reply-notify" for="wc_notification_new_reply-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_reply']; ?></label><br />
+                                <input id="wc_notification_new_reply-<?php echo $unique_id; ?>" class="wc_notification_new_reply" <?php echo $wc_notification_state; ?> type="checkbox" name="wp_comment_reply_notification"/> <label class="wc-label-reply-notify" for="wc_notification_new_reply-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_reply']; ?></label><br />
                             <?php } ?>
-							<?php if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) { ?>
-                                <input id="wc_notification_new_comment-<?php echo $unique_id; ?>" class="wc_notification_new_comment"  value="0" type="checkbox" name="wp_post_comment_notification"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_comment']; ?></label><br />
+                            <?php if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) { ?>                                
+                                <input id="wc_notification_new_comment-<?php echo $unique_id; ?>" class="wc_notification_new_comment" <?php echo $wc_notification_state; ?> type="checkbox" name="wp_post_comment_notification"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_comment']; ?></label><br />
                             <?php } ?>
                         </div>
 
@@ -146,10 +147,12 @@ $header_text .= ' "' . get_the_title($post) . '"';
 
             <input type="hidden" name="wc_last_new_comment_id" value="<?php echo $wc_last_comment_id; ?>" id="wc_last_new_comment_id" />
             <input type="hidden" name="wc_last_new_reply_id" value="<?php echo $wc_last_comment_id; ?>" id="wc_last_new_reply_id" />
+            <input type="hidden" name="wc_comment_reply_checkboxes_default_checked" value="<?php echo $wc_core->wc_options->wc_options_serialized->wc_comment_reply_checkboxes_default_checked; ?>" id="wc_comment_reply_checkboxes_default_checked" />
         </span>
 
         <div style="clear:both"></div>
-        <div class="by-wpdiscuz"><span id="awpdiscuz" onclick='javascript:document.getElementById("bywpdiscuz").style.display = "inline"; document.getElementById("awpdiscuz").style.display = "none";'><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/icon_info.png'); ?>" align="absmiddle" class="wpdimg"/></span>&nbsp;<a href="http://gvectors.com/wpdiscuz/" id="bywpdiscuz" title="wpDiscuz - Interactive Comment System">wpDiscuz</a></div>
+        <div class="by-wpdiscuz"><span id="awpdiscuz" onclick='javascript:document.getElementById("bywpdiscuz").style.display = "inline";
+                document.getElementById("awpdiscuz").style.display = "none";'><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/icon_info.png'); ?>" align="absmiddle" class="wpdimg"/></span>&nbsp;<a href="http://gvectors.com/wpdiscuz/" id="bywpdiscuz" title="wpDiscuz - Interactive Comment System">wpDiscuz</a></div>
 
         <div id="wc_openModalFormAction" class="modalDialog">
             <div id="wc_response_info" class="wc_modal">

@@ -42,25 +42,25 @@
 <tr valign="top">
     <th scope="row">
         <?php _e('Live update options', 'wpdiscuz'); ?>
-        <p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;">If you use Shared Web Hosting you should make sure the "Live Update" function doesn't overload your server resources. This function is good for VPS and Dedicated Hosting Plans.</p>
-    </th>
-    <td colspan="3">
-        <fieldset class="wc_comment_list_update_type">
-            <?php $wc_comment_list_update_type = isset($this->wc_options_serialized->wc_comment_list_update_type) ? $this->wc_options_serialized->wc_comment_list_update_type : 1; ?>
-            <label title="<?php _e('Never update', 'wpdiscuz') ?>">
-                <input type="radio" value="0" <?php checked('0' == $wc_comment_list_update_type); ?> name="wc_comment_list_update_type" id="wc_comment_list_update_never" /> 
-                <span><?php _e('Turn off "Live Update" function', 'wpdiscuz') ?></span>
-            </label> &nbsp;<br/>
-            <label title="<?php _e('Show new comment/reply buttons to update manualy', 'wpdiscuz') ?>">
-                <input type="radio" value="2" <?php checked('2' == $wc_comment_list_update_type); ?> name="wc_comment_list_update_type" id="wc_comment_list_update_new" /> 
-                <span><?php _e('Always check for new comments and show update buttons', 'wpdiscuz') ?></span>
-            </label><br>    
-            <label title="<?php _e('Always update', 'wpdiscuz') ?>">
-                <input type="radio" value="1" <?php checked('1' == $wc_comment_list_update_type); ?> name="wc_comment_list_update_type" id="wc_comment_list_update_always" /> 
-                <span><?php _e('Always check for new comments and update automatically', 'wpdiscuz') ?></span>
-            </label> &nbsp;<br/>          
-        </fieldset>
-    </td>
+<p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;">If you use Shared Web Hosting you should make sure the "Live Update" function doesn't overload your server resources. This function is good for VPS and Dedicated Hosting Plans.</p>
+</th>
+<td colspan="3">
+    <fieldset class="wc_comment_list_update_type">
+        <?php $wc_comment_list_update_type = isset($this->wc_options_serialized->wc_comment_list_update_type) ? $this->wc_options_serialized->wc_comment_list_update_type : 1; ?>
+        <label title="<?php _e('Never update', 'wpdiscuz') ?>">
+            <input type="radio" value="0" <?php checked('0' == $wc_comment_list_update_type); ?> name="wc_comment_list_update_type" id="wc_comment_list_update_never" /> 
+            <span><?php _e('Turn off "Live Update" function', 'wpdiscuz') ?></span>
+        </label> &nbsp;<br/>
+        <label title="<?php _e('Show new comment/reply buttons to update manualy', 'wpdiscuz') ?>">
+            <input type="radio" value="2" <?php checked('2' == $wc_comment_list_update_type); ?> name="wc_comment_list_update_type" id="wc_comment_list_update_new" /> 
+            <span><?php _e('Always check for new comments and show update buttons', 'wpdiscuz') ?></span>
+        </label><br>    
+        <label title="<?php _e('Always update', 'wpdiscuz') ?>">
+            <input type="radio" value="1" <?php checked('1' == $wc_comment_list_update_type); ?> name="wc_comment_list_update_type" id="wc_comment_list_update_always" /> 
+            <span><?php _e('Always check for new comments and update automatically', 'wpdiscuz') ?></span>
+        </label> &nbsp;<br/>          
+    </fieldset>
+</td>
 </tr>
 
 <tr valign="top">
@@ -206,39 +206,43 @@
 <tr valign="top">
     <th scope="row">
         <?php _e('Use WordPress Date/Time format', 'wpdiscuz'); ?> 
-        <p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;">wpDiscuz shows Human Readable date format. If you check this option it'll show the date/time format set in WordPress General Settings.</p>
-    </th>
-    <td colspan="3">                                
-        <label for="wc_simple_comment_date">
-            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_simple_comment_date == 1) ?> value="1" name="wc_simple_comment_date" id="wc_simple_comment_date" />
-        </label>
-    </td>
+<p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;"><?php _e('wpDiscuz shows Human Readable date format. If you check this option it\'ll show the date/time format set in WordPress General Settings.', 'wpdiscuz'); ?></p>
+</th>
+<td colspan="3">                                
+    <label for="wc_simple_comment_date">
+        <input type="checkbox" <?php checked($this->wc_options_serialized->wc_simple_comment_date == 1) ?> value="1" name="wc_simple_comment_date" id="wc_simple_comment_date" />
+    </label>
+</td>
 </tr>
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Show "Notify of all new follow-up comments"', 'wpdiscuz'); ?> 
-        <p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;">Please keep this option on, otherwise users will not have any option for email notifications and they'll not get any.</p>
-    </th>
-    <td colspan="3">                                
-        <label for="wc_show_hide_comment_checkbox">
-            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_show_hide_comment_checkbox == 1) ?> value="1" name="wc_show_hide_comment_checkbox" id="wc_show_hide_comment_checkbox" />
-        </label>
-    </td>
+        <?php _e('Keep checked-on the email notification checkboxes on comment form by default', 'wpdiscuz'); ?> 
+</th>
+<td colspan="3">                                
+    <label for="wc_comment_reply_checkboxes_default_checked">
+        <input type="checkbox" <?php checked($this->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) ?> value="1" name="wc_comment_reply_checkboxes_default_checked" id="wc_comment_reply_checkboxes_default_checked" />
+    </label>
+</td>
 </tr>
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Show "Notify of new replies to my comments"', 'wpdiscuz'); ?> 
-        <p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;">Please keep this option on, otherwise users will not have any option for email notifications and they'll not get any.</p>
-    </th>
-    <td colspan="3">                                
-        <label for="wc_show_hide_reply_checkbox">
-            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_show_hide_reply_checkbox == 1) ?> value="1" name="wc_show_hide_reply_checkbox" id="wc_show_hide_reply_checkbox" />
-        </label>
-    </td>
+        <span><?php _e('Show "Notify of all new follow-up comments"', 'wpdiscuz'); ?></span><br />
+        <span style="line-height:22px;"><?php _e('Show "Notify of new replies to my comments"', 'wpdiscuz'); ?></span><br />
+		<p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;">
+		<?php _e('Please keep the both or at least one of those options ON, otherwise users will not have any option for email notifications and they\'ll not get any messages.', 'wpdiscuz') ?></p>
+</th>
+<td colspan="3">   
+	<label for="wc_show_hide_comment_checkbox">
+        <input type="checkbox" <?php checked($this->wc_options_serialized->wc_show_hide_comment_checkbox == 1) ?> value="1" name="wc_show_hide_comment_checkbox" id="wc_show_hide_comment_checkbox" />
+    </label>
+    <br />
+    <label for="wc_show_hide_reply_checkbox" style="line-height:22px;">
+        <input type="checkbox" <?php checked($this->wc_options_serialized->wc_show_hide_reply_checkbox == 1) ?> value="1" name="wc_show_hide_reply_checkbox" id="wc_show_hide_reply_checkbox" />
+    </label>
+</td>
 </tr>
-
 <tr valign="top">
     <th scope="row">
         <label for="wc_comment_text_size"><?php _e('Comment text size in pixels', 'wpdiscuz'); ?></label>
@@ -260,7 +264,7 @@
         <label for="wc_form_bg_color"><?php _e('Comment Form Background Color', 'wpdiscuz'); ?></label>
     </th>
     <td width="1">
-        <input type="text" class="regular-text" value="<?php echo isset($this->wc_options_serialized->wc_form_bg_color) ? $this->wc_options_serialized->wc_form_bg_color : '#f9f9f9' ; ?>" id="wc_form_bg_color" name="wc_form_bg_color" placeholder="<?php _e('Example: #00ff00', 'wpdiscuz'); ?>"/>
+        <input type="text" class="regular-text" value="<?php echo isset($this->wc_options_serialized->wc_form_bg_color) ? $this->wc_options_serialized->wc_form_bg_color : '#f9f9f9'; ?>" id="wc_form_bg_color" name="wc_form_bg_color" placeholder="<?php _e('Example: #00ff00', 'wpdiscuz'); ?>"/>
     </td>
 
     <td class="picker_img_cell">

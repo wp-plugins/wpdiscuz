@@ -213,7 +213,11 @@ class WC_Options {
             $this->wc_options_serialized->wc_phrases['wc_email_subject'] = $_POST['wc_email_subject'];
             $this->wc_options_serialized->wc_phrases['wc_email_message'] = $_POST['wc_email_message'];            
             $this->wc_options_serialized->wc_phrases['wc_new_reply_email_subject'] = $_POST['wc_new_reply_email_subject'];
-            $this->wc_options_serialized->wc_phrases['wc_new_reply_email_message'] = $_POST['wc_new_reply_email_message'];            
+            $this->wc_options_serialized->wc_phrases['wc_new_reply_email_message'] = $_POST['wc_new_reply_email_message'];           
+            $this->wc_options_serialized->wc_phrases['wc_subscribed_on_comment'] = $_POST['wc_subscribed_on_comment'];
+            $this->wc_options_serialized->wc_phrases['wc_subscribed_on_post'] = $_POST['wc_subscribed_on_post'];
+            $this->wc_options_serialized->wc_phrases['wc_unsubscribe'] = $_POST['wc_unsubscribe'];            
+            $this->wc_options_serialized->wc_phrases['wc_unsubscribe_message'] = $_POST['wc_unsubscribe_message'];
             $this->wc_options_serialized->wc_phrases['wc_error_empty_text'] = $_POST['wc_error_empty_text'];
             $this->wc_options_serialized->wc_phrases['wc_error_email_text'] = $_POST['wc_error_email_text'];
             $this->wc_options_serialized->wc_phrases['wc_year_text']['datetime'][0] = $_POST['wc_year_text'];

@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: wordpress comments, ajax comments, ajax, live update, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system
 Requires at least: 2.7
 Tested up to: 4.1
-Stable tag: 2.0.3
+Stable tag: 2.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -108,11 +108,17 @@ IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz u
 
 == Changelog ==
 
+= 2.0.4 =
+* Added : Current subscribe status note on comment form (for logged-in users)
+* Added : Unsubscribe link on comment form and in "new comment" notification message.
+* Fixed Bug: Redirection to blank option.php on saving any option page.
+
+IMPORTANT: If you have a Cache Plugin, please reset after wpDiscuz update
+
+
 = 2.0.3 =
 * Fixed Bug: Problem with email notification options on comment form
 * Added : Option to keep checked-on the email notification checkboxes on comment form by default
-
-IMPORTANT: If you have a Cache Plugin, please reset after wpDiscuz update
 
 
 = 2.0.2 =

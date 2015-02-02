@@ -3,7 +3,7 @@
 /*
   Plugin Name: wpDiscuz - Wordpress Comments
   Description: Better comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share.
-  Version: 2.0.3
+  Version: 2.0.4
   Author: gVectors Team (A. Chakhoyan, G. Zakaryan, H. Martirosyan)
   Author URI: http://www.gvectors.com/
   Plugin URI: http://www.gvectors.com/wpdiscuz/
@@ -39,7 +39,6 @@ class WC_Core {
         $this->wc_db_helper = $this->wc_options->wc_db_helper;
 
         register_activation_hook(__FILE__, array($this, 'db_operations'));
-
 
         $this->wc_helper = new WC_Helper($this->wc_options->wc_options_serialized);
         $this->wc_css = new WC_CSS($this->wc_options);
@@ -86,15 +85,15 @@ class WC_Core {
     }
 
     public function wc_plugin_new_version() {
-        $this->wc_db_helper->wc_create_email_notification_tabel();
+        $this->wc_db_helper->wc_create_email_notification_table();
         $wc_version = (!get_option($this->wc_version_slug) ) ? '1.0.0' : get_option($this->wc_version_slug);
         $wc_plugin_data = get_plugin_data(__FILE__);
-        if (version_compare($wc_plugin_data['Version'], $wc_version)) {
+        if (version_compare($wc_plugin_data['Version'], $wc_version, '>')) {
             $this->wc_add_new_options();
             $this->wc_add_new_phrases();
             if ($wc_version === '1.0.0') {
                 add_option($this->wc_version_slug, $wc_plugin_data['Version']);
-            } else {                
+            } else {
                 update_option($this->wc_version_slug, $wc_plugin_data['Version']);
             }
         }
@@ -242,6 +241,9 @@ class WC_Core {
         $comment_parent = intval(filter_input(INPUT_POST, 'comment_parent'));
         $comment_depth = intval(filter_input(INPUT_POST, 'comment_depth'));
 
+        $notification_type = isset($_POST['notification_type']) ? $_POST['notification_type'] : '';
+
+
         if (!$this->wc_options->wc_options_serialized->wc_captcha_show_hide) {
             if (!is_user_logged_in()) {
                 $sess_captcha = $_SESSION['wc_captcha'][$comment_post_ID . '-' . $comment_parent];
@@ -308,6 +310,13 @@ class WC_Core {
             } else {
                 $new_comment_id = wp_insert_comment($new_commentdata);
             }
+
+            if ($notification_type == 'post' && !$this->wc_db_helper->wc_has_post_notification($comment_post_ID, $email)) {
+                $this->wc_db_helper->wc_add_email_notification($comment_post_ID, $comment_post_ID, $email, 1);
+            } else if ($notification_type == 'reply' && !$this->wc_db_helper->wc_has_comment_notification($comment_post_ID, $new_comment_id, $email)) {
+                $this->wc_db_helper->wc_add_email_notification($new_comment_id, $comment_post_ID, $email, 0);
+            }
+
             $new_comment = new WC_Comment(get_comment($new_comment_id, OBJECT));
 
             if (!$held_moderate) {
@@ -761,7 +770,7 @@ class WC_Core {
     public function wc_check_notification_type() {
         $comment_id = intval($_POST['wc_comment_id']);
         $post_id = intval($_POST['wc_post_id']);
-        $notification_type = $_POST['wc_notifcattion_type'];
+        $notification_type = isset($_POST['wc_notifcattion_type']) ? $_POST['wc_notifcattion_type'] : '';
         $current_user = wp_get_current_user();
 
 
@@ -775,11 +784,6 @@ class WC_Core {
         if ($comment_id && $email && $post_id) {
             $comment = get_comment($comment_id);
             $parrent_comment_id = $comment->comment_parent;
-            if ($notification_type == 'post' && !$this->wc_db_helper->wc_has_notification_in_comment($post_id, $email)) {                
-                $this->wc_db_helper->wc_add_email_notification($post_id, $email, 1);
-            } else if ($notification_type == 'reply' && !$this->wc_db_helper->wc_has_notification_in_reply($comment_id, $email)) {
-                $this->wc_db_helper->wc_add_email_notification($comment_id, $email, 0);
-            }
             if ($comment->comment_approved) {
                 $this->wc_notify_on_new_comments($post_id, $comment_id, $email);
             }
@@ -798,7 +802,7 @@ class WC_Core {
         $subject = ($this->wc_options->wc_options_serialized->wc_phrases['wc_email_subject']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_email_subject'] : 'New Comment';
         $message = ($this->wc_options->wc_options_serialized->wc_phrases['wc_email_message']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_email_message'] : 'New comment on the discussion section you\'ve been interested in';
         foreach ($emails_array as $e_row) {
-            $this->wc_email_sender($e_row[0], $comment_id, $subject, $message);
+            $this->wc_email_sender($e_row, $comment_id, $subject, $message);
         }
     }
 
@@ -810,23 +814,29 @@ class WC_Core {
         $subject = ($this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_subject']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_subject'] : 'New Reply';
         $message = ($this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_message']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_message'] : 'New reply on the discussion section you\'ve been interested in';
         foreach ($emails_array as $e_row) {
-            $this->wc_email_sender($e_row[0], $new_comment_id, $subject, $message);
+            $this->wc_email_sender($e_row, $new_comment_id, $subject, $message);
         }
     }
 
     /**
      * send email
      */
-    public function wc_email_sender($email, $wc_new_comment_id, $subject, $message) {
+    public function wc_email_sender($email_data, $wc_new_comment_id, $subject, $message) {
         $comment = get_comment($wc_new_comment_id);
         $wc_new_comment_content = $comment->comment_content;
         $permalink = get_comment_link($wc_new_comment_id);
+        $unsubscribe_url = get_permalink($comment->comment_post_ID) . "?wpdiscuzSubscribeID=" . $email_data['id'] . "&key=" . $email_data['activation_key'] . '&#wc_unsubscribe_message';
         $message .= "<br/><br/><a href='$permalink'>$permalink</a>";
         $message .= "<br/><br/>$wc_new_comment_content";
+        $message .= "<br/><br/><a href='$unsubscribe_url'>" . $this->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe'] . "</a>";
         $headers = array();
         $headers[] = "Content-Type: text/html; charset=UTF-8";
         $headers[] = "From: " . get_bloginfo('name') . "\r\n";
-        wp_mail($email, $subject, $message, $headers);
+        wp_mail($email_data['email'], $subject, $message, $headers);
+    }
+
+    public function wc_unsubscribe($id, $activation_key) {
+        $this->wc_db_helper->wc_unsubscribe($id, $activation_key);
     }
 
 }

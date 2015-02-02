@@ -260,6 +260,6 @@ class WC_Helper {
         $wc_parent_comments[$i] = $wc_parent_comments[$j];
         $wc_parent_comments[$j] = $tmp;
         return $wc_parent_comments;
-    }
+    }    
 
 }

@@ -127,7 +127,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_notify_on_new_reply">
-            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply']) ? $this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] : _e('Notify of new replies to my comments', 'wpdiscuz'); ?>" name="wc_notify_on_new_reply" id="wc_notify_on_new_reply" />
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply']) ? $this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] : _e('Notify of new replies to this comment', 'wpdiscuz'); ?>" name="wc_notify_on_new_reply" id="wc_notify_on_new_reply" />
         </label>
     </td>
 </tr>
@@ -307,6 +307,50 @@
     <td colspan="3">                                
         <label for="wc_new_reply_email_message">
             <textarea name="wc_new_reply_email_message" id="wc_new_reply_email_message"><?php echo $this->wc_options_serialized->wc_phrases['wc_new_reply_email_message']; ?></textarea>
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Subscribed on this comment replies', 'wpdiscuz'); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_subscribed_on_comment">
+            <textarea name="wc_subscribed_on_comment" id="wc_subscribed_on_comment"><?php echo $this->wc_options_serialized->wc_phrases['wc_subscribed_on_comment']; ?></textarea>
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Subscribed on this post', 'wpdiscuz'); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_subscribed_on_post">
+            <textarea name="wc_subscribed_on_post" id="wc_subscribed_on_post"><?php echo $this->wc_options_serialized->wc_phrases['wc_subscribed_on_post']; ?></textarea>
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('New Reply Message', 'wpdiscuz'); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_unsubscribe">
+            <input type="text" name="wc_unsubscribe" id="wc_unsubscribe" class="wc_unsubscribe" value="<?php echo $this->wc_options_serialized->wc_phrases['wc_unsubscribe']; ?>" placeholder="<?php echo _e('Unsubscribe', 'wpdiscuz'); ?>"/>
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('You\'ve successfully unsubscribed.', 'wpdiscuz'); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_unsubscribe_message">
+            <textarea name="wc_unsubscribe_message" id="wc_unsubscribe_message"><?php echo $this->wc_options_serialized->wc_phrases['wc_unsubscribe_message']; ?></textarea>
         </label>
     </td>
 </tr>

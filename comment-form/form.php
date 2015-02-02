@@ -29,6 +29,11 @@ $wc_comment_list_update_type = $wc_core->wc_options->wc_options_serialized->wc_c
             $('#wpcomm .wc_name').val($.cookie('wc_author_name'));
             $('#wpcomm .wc_email').val($.cookie('wc_author_email'));
         }
+
+        $('#wc_unsubscribe_message').delay(7000).fadeOut(1500, function () {
+            $(this).remove();
+        });
+
     });
 </script>
 <?php
@@ -47,6 +52,17 @@ $header_text .= ' "' . get_the_title($post) . '"';
 ?>
 <div style="clear:both"></div>
 <div class="comments-area">
+    <?php
+    if (isset($_GET['wpdiscuzSubscribeID']) && isset($_GET['key'])) {
+        $wc_core->wc_unsubscribe($_GET['wpdiscuzSubscribeID'], $_GET['key']);
+        ?>
+        <div id="wc_unsubscribe_message">
+            <span class="wc_unsubscribe_message"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe_message']; ?></span>
+        </div>
+        <?php
+    }
+    ?>
+
     <h3 id="wc-comment-header"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_leave_a_reply_text']; ?></h3>
     <?php do_action('comment_form_before'); ?>
     <div id="wpcomm">    
@@ -92,13 +108,28 @@ $header_text .= ' "' . get_the_title($post) . '"';
                             <div style="clear:both"></div>
                         </div>
                         <div class="wc_notification_checkboxes">
-                            <?php $wc_notification_state = ($wc_core->wc_options->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) ? 'checked="checked" value="1"' : 'value="0"'; ?>
-                            <?php if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox) { ?>
-                                <input id="wc_notification_new_reply-<?php echo $unique_id; ?>" class="wc_notification_new_reply" <?php echo $wc_notification_state; ?> type="checkbox" name="wp_comment_reply_notification"/> <label class="wc-label-reply-notify" for="wc_notification_new_reply-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_reply']; ?></label><br />
-                            <?php } ?>
-                            <?php if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) { ?>                                
-                                <input id="wc_notification_new_comment-<?php echo $unique_id; ?>" class="wc_notification_new_comment" <?php echo $wc_notification_state; ?> type="checkbox" name="wp_post_comment_notification"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_comment']; ?></label><br />
-                            <?php } ?>
+                            <?php
+                            global $current_user;
+                            get_currentuserinfo();
+                            if ($current_user->ID && $wc_core->wc_db_helper->wc_has_post_notification($post->ID, $current_user->user_email)) {
+                                ?>
+                                <label class="wc-label-comment-notify" style="cursor: default;"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_post']; ?> | <a href="<?php echo $wc_core->wc_db_helper->wc_unsubscribe_link($post->ID, $current_user->user_email, 'post'); ?>" rel="nofollow" class="unsubscribe"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe']; ?></a></label>
+                                <?php
+                            } else {
+                                $wc_notification_state = ($wc_core->wc_options->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) ? 'checked="checked" value="1"' : 'value="0"';
+                                if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox) {
+                                    ?>
+                                    <input id="wc_notification_new_reply-<?php echo $unique_id; ?>" class="wc_notification_new_reply" <?php echo $wc_notification_state; ?> type="checkbox" name="wp_comment_reply_notification"/> <label class="wc-label-reply-notify" for="wc_notification_new_reply-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_reply']; ?></label><br />
+                                    <?php
+                                }
+                                if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) {
+                                    ?>                                
+                                    <input id="wc_notification_new_comment-<?php echo $unique_id; ?>" class="wc_notification_new_comment" <?php echo $wc_notification_state; ?> type="checkbox" name="wp_post_comment_notification"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_comment']; ?></label><br />
+                                    <?php
+                                }
+                            }
+                            ?>
+
                         </div>
 
                     </div> 

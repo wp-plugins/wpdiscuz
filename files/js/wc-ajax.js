@@ -72,6 +72,25 @@ jQuery(document).ready(function ($) {
             depth = getCommentDepth($(this).parents('.wc-comment'));
         }
 
+
+        var notification_type = '';
+        if ($('.wc_notification_new_comment').length || $('.wc_notification_new_reply').length) {
+//var wc_comment_reply_checkboxes_default_checked = $('#wc_comment_reply_checkboxes_default_checked').val();
+            if (wc_notification_new_reply !== 0) {
+                notification_type = 'reply';
+//if (wc_comment_reply_checkboxes_default_checked == 0) {
+                $('#wc_notification_new_reply-' + uniqueID).val('0').prop("checked", false);
+//                                }
+            }
+            if (wc_notification_new_comment !== 0) {
+                notification_type = 'post';
+//if (wc_comment_reply_checkboxes_default_checked == 0) {
+                $('#wc_notification_new_comment-' + uniqueID).val('0').prop("checked", false);
+//                                }
+            }
+
+        }
+
         var submit = true;
         // evaluate the form using generic validaing
         if (!validator.checkAll(wc_form)) {
@@ -95,6 +114,7 @@ jQuery(document).ready(function ($) {
                     comment_post_ID: wc_comment_post_ID,
                     comment_parent: wc_comment_parent,
                     comment_depth: depth,
+                    notification_type: notification_type,
                     action: 'wc_comms_via_ajax'
                 }
             }).done(function (response) {
@@ -164,26 +184,7 @@ jQuery(document).ready(function ($) {
                     $('.wc_comm_form input').css('box-shadow', '0 0 4px -2px #d4d0ba');
                     $('.wc_comm_form textarea').css('box-shadow', '0 0 4px -2px #d4d0ba');
 
-                    if ($('.wc_notification_new_comment').length || $('.wc_notification_new_reply').length) {
-                        if (obj.code !== -1) {
-                            var notification_type = '';
-                            var wc_comment_reply_checkboxes_default_checked = $('#wc_comment_reply_checkboxes_default_checked').val();
-                            if (wc_notification_new_reply !== 0) {
-                                notification_type = 'reply';
-                                if (wc_comment_reply_checkboxes_default_checked == 0) {                                    
-                                    $('#wc_notification_new_reply-' + uniqueID).val('0').prop("checked", false);
-                                }
-                            }
-                            if (wc_notification_new_comment !== 0) {
-                                notification_type = 'post';
-                                if (wc_comment_reply_checkboxes_default_checked == 0) {
-                                    $('#wc_notification_new_comment-' + uniqueID).val('0').prop("checked", false);
-                                }
-                            }
-
-                            notify_on_new_comment(wc_comment_post_ID, wc_new_comment_id, wc_email, notification_type);
-                        }
-                    }
+                    notify_on_new_comment(wc_comment_post_ID, wc_new_comment_id, wc_email, notification_type);
                 } catch (e) {
                     $('#wc_captcha-' + uniqueID).val('');
                     $('.wc_tooltipster').tooltipster({offsetY: 2});
@@ -336,13 +337,6 @@ jQuery(document).ready(function ($) {
             }
         });
     });
-
-
-//    $(document).delegate('.wc-comment', 'mouseenter', function () {        
-//        $('.wc-comment').animate({
-//            backgroundColor: "rgb( 20, 20, 20 )"
-//        }, 1500);
-//    });
 
     // MUST BE CHANGED IN NEXT VERSION OF PLUGIN
     $(document).delegate('.wc_new_reply', 'click', function () {

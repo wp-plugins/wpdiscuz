@@ -188,14 +188,27 @@ class WC_Comment_Template_Builder {
         $output_form .= '<div class="wc-field-submit"><input type="button" name="submit" value="' . $this->wc_options->wc_options_serialized->wc_phrases['wc_submit_text'] . '" id="wc_comm-' . $unique_id . '" class="wc_comm_submit button alt"/></div>';
         $output_form .= '<div style="clear:both"></div>';
         $output_form .= '<div class="wc_notification_checkboxes">';
-        
-        $wc_notification_state = ($this->wc_options->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) ? 'checked="checked" value="1"' : 'value="0"';
-        if ($this->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox) {
-            $output_form .= '<input class="wc-label-reply-notify wc_notification_new_reply" id="wc_notification_new_reply-' . $unique_id . '" ' . $wc_notification_state . ' type="checkbox" name="wc_notification_new_reply"/> <label class="wc-label-comment-notify" for="wc_notification_new_reply-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] . '</label><br />';
+
+        global $current_user;
+        get_currentuserinfo();
+//        $output_form .= $current_user->ID . ' -  ' . $current_user->user_email . ' stugum : ' . $current_user->ID && $this->wc_db_helper->wc_has_post_notification($comment->comment_post_ID, $current_user->user_email);
+
+        if ($current_user->ID && $this->wc_db_helper->wc_has_post_notification($comment->comment_post_ID, $current_user->user_email)) {
+            $output_form .= '<label class="wc-label-comment-notify" style="cursor: default;">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_post'] . ' | <a href="' . $this->wc_db_helper->wc_unsubscribe_link($comment->comment_post_ID, $current_user->user_email, 'post') . '" rel="nofollow" class="unsubscribe">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe'] . '</a></label>';
+        } else {
+            $wc_notification_state = ($this->wc_options->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) ? 'checked="checked" value="1"' : 'value="0"';
+            if ($current_user->ID && $this->wc_db_helper->wc_has_comment_notification($comment->comment_post_ID, $comment->comment_ID, $current_user->user_email)) {
+                $output_form .= '<label class="wc-label-reply-notify" style="cursor: default;">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_comment'] . ' | <a href="' . $this->wc_db_helper->wc_unsubscribe_link($comment->comment_ID, $current_user->user_email, 'comment') . '" rel="nofollow" class="unsubscribe">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe'] . '</a></label><br/>';
+//                echo 'subscribed reply';
+            } else if ($this->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox) {
+                $output_form .= '<input class="wc-label-reply-notify wc_notification_new_reply" id="wc_notification_new_reply-' . $unique_id . '" ' . $wc_notification_state . ' type="checkbox" name="wc_notification_new_reply"/> <label class="wc-label-comment-notify" for="wc_notification_new_reply-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] . '</label><br />';
+//                echo 'not subscribed reply';
+            }
+            if ($this->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) {
+                $output_form .= '<input class="wc-label-comment-notify wc_notification_new_comment" id="wc_notification_new_comment-' . $unique_id . '" ' . $wc_notification_state . ' type="checkbox" name="wc_notification_new_comment"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_comment'] . '</label>';
+            }
         }
-        if ($this->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) {
-            $output_form .= '<input class="wc-label-comment-notify wc_notification_new_comment" id="wc_notification_new_comment-' . $unique_id . '" ' . $wc_notification_state . ' type="checkbox" name="wc_notification_new_comment"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_comment'] . '</label><br />';
-        }
+
         $output_form .= '</div>';
         $output_form .= '</div>';
         $output_form .= '</div>';

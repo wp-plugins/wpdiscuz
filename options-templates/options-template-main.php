@@ -229,7 +229,7 @@
 <tr valign="top">
     <th scope="row">
         <span><?php _e('Show "Notify of all new follow-up comments"', 'wpdiscuz'); ?></span><br />
-        <span style="line-height:22px;"><?php _e('Show "Notify of new replies to my comments"', 'wpdiscuz'); ?></span><br />
+        <span style="line-height:22px;"><?php _e('Show "Notify of new replies to this comment"', 'wpdiscuz'); ?></span><br />
 		<p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;">
 		<?php _e('Please keep the both or at least one of those options ON, otherwise users will not have any option for email notifications and they\'ll not get any messages.', 'wpdiscuz') ?></p>
 </th>

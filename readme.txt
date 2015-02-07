@@ -115,6 +115,7 @@ IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz u
 * Added : Language translation support with .mo and .po files
 * Added : Hebrew (he_IL) language, thanks to Ahrale Shrem
 * Fixed Bug: Duplication of "New Comment" email notifications for post authors
+* Fixed Bug: Problem with large space between the paragraphs
 
 IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
 

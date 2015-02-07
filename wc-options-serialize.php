@@ -75,6 +75,14 @@ class WC_Options_Serialize {
     /**
      * Type - Checkbox
      * Available Values - Checked/Unchecked
+     * Description - If checked show logged-in user name top of the main form
+     * Default Value - Checked
+     */
+    public $wc_show_hide_loggedin_username;
+
+    /**
+     * Type - Checkbox
+     * Available Values - Checked/Unchecked
      * Description - If checked held the comment to approve manually    
      * Default Value - Unchecked
      */
@@ -111,7 +119,7 @@ class WC_Options_Serialize {
      * Default Value - 5
      */
     public $wc_comment_count;
-          
+
     /**
      * Type - Dropdown menu
      * Available Values - 1, 2, 3, 4, 5
@@ -127,7 +135,7 @@ class WC_Options_Serialize {
      * Default Value - Checked
      */
     public $wc_simple_comment_date;
-    
+
     /**
      * Type - Checkbox
      * Available Values - Checked/Unchecked
@@ -144,6 +152,14 @@ class WC_Options_Serialize {
      */
     public $wc_show_hide_comment_checkbox;
 
+    /**
+     * Type - Checkbox
+     * Available Values - Checked/Unchecked
+     * Description - Show all new reply notification checkbox below the form
+     * Default Value - Checked
+     */
+    public $wc_show_hide_all_reply_checkbox;
+    
     /**
      * Type - Checkbox
      * Available Values - Checked/Unchecked
@@ -207,8 +223,8 @@ class WC_Options_Serialize {
      * Default Value - #666666
      */
     public $wc_vote_reply_color;
-    
-        /**
+
+    /**
      * Type - Input
      * Available Values - color codes
      * Description - New Comments background color
@@ -236,7 +252,7 @@ class WC_Options_Serialize {
      * helper class for database operations
      */
     public $wc_db_helper;
-    
+
     function __construct($wc_db_helper) {
         $this->wc_db_helper = $wc_db_helper;
         $this->init_phrases();
@@ -255,6 +271,7 @@ class WC_Options_Serialize {
         $this->wc_share_buttons_show_hide = $options['wc_share_buttons_show_hide'];
         $this->wc_captcha_show_hide = $options['wc_captcha_show_hide'];
         $this->wc_user_must_be_registered = $options['wc_user_must_be_registered'];
+        $this->wc_show_hide_loggedin_username = $options['wc_show_hide_loggedin_username'];
         $this->wc_held_comment_to_moderate = $options['wc_held_comment_to_moderate'];
         $this->wc_reply_button_guests_show_hide = $options['wc_reply_button_guests_show_hide'];
         $this->wc_reply_button_members_show_hide = $options['wc_reply_button_members_show_hide'];
@@ -264,6 +281,7 @@ class WC_Options_Serialize {
         $this->wc_simple_comment_date = isset($options['wc_simple_comment_date']) ? $options['wc_simple_comment_date'] : 0;
         $this->wc_comment_reply_checkboxes_default_checked = isset($options['wc_comment_reply_checkboxes_default_checked']) ? $options['wc_comment_reply_checkboxes_default_checked'] : 0;
         $this->wc_show_hide_comment_checkbox = isset($options['wc_show_hide_comment_checkbox']) ? $options['wc_show_hide_comment_checkbox'] : 0;
+        $this->wc_show_hide_all_reply_checkbox = isset($options['wc_show_hide_all_reply_checkbox']) ? $options['wc_show_hide_all_reply_checkbox'] : 0;
         $this->wc_show_hide_reply_checkbox = isset($options['wc_show_hide_reply_checkbox']) ? $options['wc_show_hide_reply_checkbox'] : 0;
         $this->wc_comment_text_size = isset($options['wc_comment_text_size']) ? $options['wc_comment_text_size'] : '14px';
         $this->wc_form_bg_color = isset($options['wc_form_bg_color']) ? $options['wc_form_bg_color'] : '#f9f9f9';
@@ -290,9 +308,11 @@ class WC_Options_Serialize {
             'wc_email_text' => 'Email',
             'wc_name_text' => 'Name',
             'wc_captcha_text' => 'Please insert the code above to comment',
-            'wc_submit_text' => 'Post Comment',            
+            'wc_submit_text' => 'Post Comment',
+            'wc_manage_subscribtions' => 'Manage Subscriptions',
             'wc_notify_on_new_comment' => 'Notify of all new follow-up comments',
-            'wc_notify_on_new_reply' => 'Notify of new replies to this comment',            
+            'wc_notify_on_all_new_reply' => 'Notify of new replies to all my comments',
+            'wc_notify_on_new_reply' => 'Notify of new replies to this comment',
             'wc_load_more_submit_text' => 'Load More Comments',
             'wc_reply_text' => 'Reply',
             'wc_share_text' => 'Share',
@@ -306,12 +326,13 @@ class WC_Options_Serialize {
             'wc_user_title_author_text' => 'Author',
             'wc_user_title_admin_text' => 'Admin',
             'wc_email_subject' => 'New Comment',
-            'wc_email_message' => 'New comment on the discussion section you\'ve been interested in',            
+            'wc_email_message' => 'New comment on the discussion section you\'ve been interested in',
             'wc_new_reply_email_subject' => 'New Reply',
-            'wc_new_reply_email_message' => 'New reply on the discussion section you\'ve been interested in',            
+            'wc_new_reply_email_message' => 'New reply on the discussion section you\'ve been interested in',
             'wc_subscribed_on_comment' => 'You\'re subscribed for new replies on this comment',
+            'wc_subscribed_on_all_comment' => 'You\'re subscribed for new replies on all your comments',
             'wc_subscribed_on_post' => 'You\'re subscribed for new follow-up comments on this post',
-            'wc_unsubscribe' => 'Unsubscribe',            
+            'wc_unsubscribe' => 'Unsubscribe',
             'wc_unsubscribe_message' => 'You\'ve successfully unsubscribed.',
             'wc_error_empty_text' => 'please fill out this field to comment',
             'wc_error_email_text' => 'email address is invalid',
@@ -326,6 +347,8 @@ class WC_Options_Serialize {
             'wc_ago_text' => 'ago',
             'wc_posted_today_text' => 'Today',
             'wc_you_must_be_text' => 'You must be',
+            'wc_logged_in_as' => 'You are logged in as',            
+            'wc_log_out' => 'Log out',            
             'wc_logged_in_text' => 'logged in',
             'wc_to_post_comment_text' => 'to post a comment.',
             'wc_vote_up' => 'Vote Up',
@@ -356,6 +379,7 @@ class WC_Options_Serialize {
             'wc_share_buttons_show_hide' => $this->wc_share_buttons_show_hide,
             'wc_captcha_show_hide' => $this->wc_captcha_show_hide,
             'wc_user_must_be_registered' => $this->wc_user_must_be_registered,
+            'wc_show_hide_loggedin_username' => $this->wc_show_hide_loggedin_username,
             'wc_held_comment_to_moderate' => $this->wc_held_comment_to_moderate,
             'wc_reply_button_guests_show_hide' => $this->wc_reply_button_guests_show_hide,
             'wc_reply_button_members_show_hide' => $this->wc_reply_button_members_show_hide,
@@ -365,6 +389,7 @@ class WC_Options_Serialize {
             'wc_simple_comment_date' => $this->wc_simple_comment_date,
             'wc_comment_reply_checkboxes_default_checked' => $this->wc_comment_reply_checkboxes_default_checked,
             'wc_show_hide_comment_checkbox' => $this->wc_show_hide_comment_checkbox,
+            'wc_show_hide_all_reply_checkbox' => $this->wc_show_hide_all_reply_checkbox,
             'wc_show_hide_reply_checkbox' => $this->wc_show_hide_reply_checkbox,
             'wc_comment_text_size' => $this->wc_comment_text_size,
             'wc_form_bg_color' => $this->wc_form_bg_color,
@@ -394,6 +419,7 @@ class WC_Options_Serialize {
             'wc_share_buttons_show_hide' => '0',
             'wc_captcha_show_hide' => '0',
             'wc_user_must_be_registered' => '0',
+            'wc_show_hide_loggedin_username' => '1',
             'wc_held_comment_to_moderate' => '1',
             'wc_reply_button_guests_show_hide' => '0',
             'wc_reply_button_members_show_hide' => '0',
@@ -403,6 +429,7 @@ class WC_Options_Serialize {
             'wc_simple_comment_date' => '0',
             'wc_comment_reply_checkboxes_default_checked' => '0',
             'wc_show_hide_comment_checkbox' => '1',
+            'wc_show_hide_all_reply_checkbox' => '1',
             'wc_show_hide_reply_checkbox' => '1',
             'wc_comment_text_size' => '14px',
             'wc_form_bg_color' => '#f9f9f9',

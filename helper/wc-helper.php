@@ -226,16 +226,18 @@ class WC_Helper {
         $email = $matches[2] . '@' . $matches[3];
         return $matches[1] . "<a href=\"mailto:$email\">$email</a>";
     }
-
-    public function make_clickable($ret) {
+    
+      public function make_clickable($ret) {
         $ret = ' ' . $ret;
+        $ret = preg_replace('#[^\"|\'](https?:\/\/[^\s]+(\.jpe?g|\.png|\.gif|\.bmp))#i', '<a href="$1"><img src="$1" /></a>', $ret);
         // in testing, using arrays here was found to be faster
         $ret = preg_replace_callback('#([\s>])([\w]+?://[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]*)#is', array(&$this, 'make_url_clickable'), $ret);
         $ret = preg_replace_callback('#([\s>])((www|ftp)\.[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]*)#is', array(&$this, 'make_web_ftp_clickable'), $ret);
         $ret = preg_replace_callback('#([\s>])([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})#i', array(&$this, 'make_email_clickable'), $ret);
-
+                
         // this one is not in an array because we need it to run last, for cleanup of accidental links within links
         $ret = preg_replace("#(<a( [^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i", "$1$3</a>", $ret);
+        
         $ret = trim($ret);
         return $ret;
     }

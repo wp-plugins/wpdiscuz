@@ -1,5 +1,7 @@
-<?php global $post, $wc_core; ?>
 <?php
+global $post, $wc_core, $current_user;
+get_currentuserinfo();
+
 if ($wc_core->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
     $wc_core->wc_options->wc_options_serialized->wc_phrases = $wc_core->wc_db_helper->get_phrases();
 }
@@ -52,6 +54,8 @@ $header_text .= ' "' . get_the_title($post) . '"';
 ?>
 <div style="clear:both"></div>
 <div class="comments-area">
+    
+
     <?php
     if (isset($_GET['wpdiscuzSubscribeID']) && isset($_GET['key'])) {
         $wc_core->wc_unsubscribe($_GET['wpdiscuzSubscribeID'], $_GET['key']);
@@ -63,93 +67,134 @@ $header_text .= ' "' . get_the_title($post) . '"';
     }
     ?>
 
-    <h3 id="wc-comment-header"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_leave_a_reply_text']; ?></h3>
+    <?php if (comments_open($post->ID)) { ?>
+        <h3 id="wc-comment-header"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_leave_a_reply_text']; ?></h3>    
+    <?php } ?>
     <?php do_action('comment_form_before'); ?>
+    
+    
+    <?php
+    if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_loggedin_username) {
+        if (is_user_logged_in()) {
+            global $current_user;
+            get_currentuserinfo();
+            $user_url = get_author_posts_url($current_user->ID); 
+			?>
+            <div id="wc_show_hide_loggedin_username">
+                <span class="wc_show_hide_loggedin_username">
+                    <?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_logged_in_as'] . ' <a href="'.$user_url.'">' . $current_user->display_name . '</a> | <a href="' . wp_logout_url() . '">' . $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_log_out'] . '</a>'; ?> 
+                </span>
+            </div>
+            <?php
+        }
+    }
+    ?>
+    
+    
     <div id="wpcomm">    
         <p class="wc-comment-title">
             <?php echo ($post->comment_count) ? $header_text : $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_be_the_first_text']; ?>
         </p>
         <?php do_action('comment_form_top'); ?>
-        <div class="wc-form-wrapper">
-            <?php
-            if ($wc_core->is_guest_can_comment()) {
-                ?>
+        <?php if (comments_open($post->ID)) { ?>
+            <div class="wc-form-wrapper">
+                <?php
+                if ($wc_core->is_guest_can_comment()) {
+                    ?>
 
-                <form action="" method="post" id="wc_comm_form-<?php echo $unique_id; ?>" class="wc_comm_form wc_main_comm_form">
-                    <div class="wc-field-comment">
-                        <div style="width:60px; float:left; position:absolute;">
-                            <?php echo $wc_core->wc_helper->get_comment_author_avatar(); ?>                        
-                        </div>
-                        <div style="margin-left:65px;" class="item"><textarea id="wc_comment-<?php echo $unique_id; ?>" class="wc_comment wc_field_input" name="wc_comment" required="required" placeholder="<?php echo $textarea_placeholder; ?>"></textarea></div>
-                        <div style="clear:both"></div>
-                    </div>
-                    <div id="wc-form-footer-<?php echo $unique_id; ?>" class="wc-form-footer">
-                        <?php if (!is_user_logged_in()) { ?>
-                            <div class="wc-author-data">
-                                <div class="wc-field-name item"><input id="wc_name-<?php echo $unique_id; ?>" class="wc_name wc_field_input" name="wc_name" required="required" value="" type="text" placeholder="<?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_name_text'] ?>"/></div>
-                                <div class="wc-field-email item"><input id="wc_email-<?php echo $unique_id; ?>" class="wc_email wc_field_input email" name="wc_email" required="required" value="" type="email" placeholder="<?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_email_text']; ?>"/></div>
-                                <div style="clear:both"></div>
+                    <form action="" method="post" id="wc_comm_form-<?php echo $unique_id; ?>" class="wc_comm_form wc_main_comm_form">
+                        <div class="wc-field-comment">
+                            <div style="width:60px; float:left; position:absolute;">
+                                <?php echo $wc_core->wc_helper->get_comment_author_avatar(); ?>                        
                             </div>
-                        <?php } ?>
-                        <div class="wc-form-submit">
-                            <?php if (!$wc_core->wc_options->wc_options_serialized->wc_captcha_show_hide) { ?>
-                                <?php if (!is_user_logged_in()) { ?>
-                                    <div class="wc-field-captcha item">
-                                        <input id="wc_captcha-<?php echo $unique_id; ?>" class="wc_field_input wc_field_captcha" name="wc_captcha" required="required" value="" type="text" />
-                                        <span class="wc-label wc-captcha-label">
-                                            <img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/captcha/captcha.php?comm_id=' . $post->ID . '-' . 0); ?>" id="wc_captcha_img-<?php echo $unique_id; ?>" rel="nofollow"/>
-                                            <img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/refresh-16x16.png'); ?>" id="wc_captcha_refresh_img-<?php echo $unique_id; ?>" class="wc_captcha_refresh_img" rel="nofollow"/>
-                                        </span>
-                                        <span class="captcha_msg"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_captcha_text']; ?></span>
-                                    </div>
-                                <?php } ?>
-                            <?php } ?>
-                            <div class="wc-field-submit"><input type="button" name="submit" value="<?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_submit_text']; ?>" id="wc_comm-<?php echo $unique_id; ?>" class="wc_comm_submit button alt"/></div>
+                            <div style="margin-left:65px;" class="item"><textarea id="wc_comment-<?php echo $unique_id; ?>" class="wc_comment wc_field_input" name="wc_comment" required="required" placeholder="<?php echo $textarea_placeholder; ?>"></textarea></div>
                             <div style="clear:both"></div>
                         </div>
-                        <div class="wc_notification_checkboxes">
-                            <?php
-                            global $current_user;
-                            get_currentuserinfo();
-                            if ($current_user->ID && $wc_core->wc_db_helper->wc_has_post_notification($post->ID, $current_user->user_email)) {
-                                ?>
-                                <label class="wc-label-comment-notify" style="cursor: default;"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_post']; ?> | <a href="<?php echo $wc_core->wc_db_helper->wc_unsubscribe_link($post->ID, $current_user->user_email, 'post'); ?>" rel="nofollow" class="unsubscribe"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe']; ?></a></label>
+                        <div id="wc-form-footer-<?php echo $unique_id; ?>" class="wc-form-footer">
+                            <?php if (!is_user_logged_in()) { ?>
+                                <div class="wc-author-data">
+                                    <div class="wc-field-name item"><input id="wc_name-<?php echo $unique_id; ?>" class="wc_name wc_field_input" name="wc_name" required="required" value="" type="text" placeholder="<?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_name_text'] ?>"/></div>
+                                    <div class="wc-field-email item"><input id="wc_email-<?php echo $unique_id; ?>" class="wc_email wc_field_input email" name="wc_email" required="required" value="" type="email" placeholder="<?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_email_text']; ?>"/></div>
+                                    <div style="clear:both"></div>
+                                </div>
+                            <?php } ?>
+                            <div class="wc-form-submit">
+                                <?php if (!$wc_core->wc_options->wc_options_serialized->wc_captcha_show_hide) { ?>
+                                    <?php if (!is_user_logged_in()) { ?>
+                                        <div class="wc-field-captcha item">
+                                            <input id="wc_captcha-<?php echo $unique_id; ?>" class="wc_field_input wc_field_captcha" name="wc_captcha" required="required" value="" type="text" />
+                                            <span class="wc-label wc-captcha-label">
+                                                <img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/captcha/captcha.php?comm_id=' . $post->ID . '-' . 0); ?>" id="wc_captcha_img-<?php echo $unique_id; ?>" rel="nofollow"/>
+                                                <img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/refresh-16x16.png'); ?>" id="wc_captcha_refresh_img-<?php echo $unique_id; ?>" class="wc_captcha_refresh_img" rel="nofollow"/>
+                                            </span>
+                                            <span class="captcha_msg"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_captcha_text']; ?></span>
+                                        </div>
+                                    <?php } ?>
+                                <?php } ?>
+                                <div class="wc-field-submit"><input type="button" name="submit" value="<?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_submit_text']; ?>" id="wc_comm-<?php echo $unique_id; ?>" class="wc_comm_submit button alt"/></div>
+                                <div style="clear:both"></div>
+                            </div>
+                            <?php if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox || $wc_core->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox || $wc_core->wc_options->wc_options_serialized->wc_show_hide_all_reply_checkbox) { ?>
+                                <span class="wc_manage_subscribtions"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_manage_subscribtions']; ?></span>
+                            <?php } ?>
+                            <div class="wc_notification_checkboxes">
                                 <?php
-                            } else {
-                                $wc_notification_state = ($wc_core->wc_options->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) ? 'checked="checked" value="1"' : 'value="0"';
-                                if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox) {
+                                if ($current_user->ID && $wc_core->wc_db_helper->wc_has_post_notification($post->ID, $current_user->user_email)) {
                                     ?>
-                                    <input id="wc_notification_new_reply-<?php echo $unique_id; ?>" class="wc_notification_new_reply" <?php echo $wc_notification_state; ?> type="checkbox" name="wp_comment_reply_notification"/> <label class="wc-label-reply-notify" for="wc_notification_new_reply-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_reply']; ?></label><br />
+                                    <label class="wc-label-comment-notify" style="cursor: default;"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_post']; ?> | <a href="<?php echo $wc_core->wc_db_helper->wc_unsubscribe_link($post->ID, $current_user->user_email, 'post'); ?>" rel="nofollow" class="unsubscribe"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe']; ?></a></label>
                                     <?php
-                                }
-                                if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) {
-                                    ?>                                
-                                    <input id="wc_notification_new_comment-<?php echo $unique_id; ?>" class="wc_notification_new_comment" <?php echo $wc_notification_state; ?> type="checkbox" name="wp_post_comment_notification"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_comment']; ?></label><br />
-                                    <?php
-                                }
-                            }
-                            ?>
+                                } else {
+                                    $wc_notification_state = ($wc_core->wc_options->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) ? 'checked="checked" value="1"' : 'value="0"';
 
-                        </div>
+                                    if ($current_user->ID && $wc_core->wc_db_helper->wc_has_all_comments_notification($post->ID, $current_user->user_email)) {
+                                        ?>
+                                        <label class="wc-label-all-reply-notify" style="cursor: default;"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_all_comment']; ?> | <a href="<?php echo $wc_core->wc_db_helper->wc_unsubscribe_link($post->ID, $current_user->user_email, 'all_comment'); ?>" rel="nofollow" class="unsubscribe"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe']; ?></a></label><br/>
+                                        <?php
+                                    } else {
 
-                    </div> 
-                    <input type="hidden" name="wc_comment_post_ID" value="<?php echo $post->ID; ?>" id="wc_comment_post_ID-<?php echo $unique_id; ?>" />
-                    <input type="hidden" name="wc_comment_parent"  value="0" id="wc_comment_parent-<?php echo $unique_id; ?>" />
-                </form>
-            <?php } else { ?>
-                <p class="wc-must-login"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_you_must_be_text']; ?> <a href="<?php echo wp_login_url(); ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_logged_in_text']; ?></a> <?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_to_post_comment_text']; ?></p>
-            <?php } ?>
-        </div>
-        <hr/>
-        <?php if ($wc_comment_list_update_type == 2) { ?>
-            <div class="wc_new_comment_and_replies">
-                <div class="wc_new_comment"><span class="wc_new_comment_button_text"></span></div>
-                <div class="wc_new_reply"><span class="wc_new_reply_button_text"></span></div>
-                <div style="clear:both"></div>
+                                        if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox) {
+                                            ?>
+                                            <input id="wc_notification_new_reply-<?php echo $unique_id; ?>" class="wc_notification_new_reply" <?php echo $wc_notification_state; ?> type="checkbox" name="wp_comment_reply_notification"/> <label class="wc-label-reply-notify" for="wc_notification_new_reply-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_reply']; ?></label><br />
+                                            <?php
+                                        }
+
+                                        if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_all_reply_checkbox) {
+                                            ?>
+                                            <input id="wc_notification_all_new_reply-<?php echo $unique_id; ?>" class="wc_notification_all_new_reply" <?php echo $wc_notification_state; ?> type="checkbox" name="wc_notification_all_new_reply"/> <label class="wc-label-all-reply-notify" for="wc_notification_all_new_reply-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_all_new_reply']; ?></label><br />
+                                            <?php
+                                        }
+                                    }
+
+                                    if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) {
+                                        ?>                                
+                                        <input id="wc_notification_new_comment-<?php echo $unique_id; ?>" class="wc_notification_new_comment" <?php echo $wc_notification_state; ?> type="checkbox" name="wp_post_comment_notification"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_comment']; ?></label><br />
+                                        <?php
+                                    }
+                                }
+                                ?>
+
+                            </div>
+
+                        </div> 
+                        <input type="hidden" name="wc_comment_post_ID" value="<?php echo $post->ID; ?>" id="wc_comment_post_ID-<?php echo $unique_id; ?>" />
+                        <input type="hidden" name="wc_comment_parent"  value="0" id="wc_comment_parent-<?php echo $unique_id; ?>" />
+                    </form>
+                <?php } else { ?>
+                    <p class="wc-must-login"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_you_must_be_text']; ?> <a href="<?php echo wp_login_url(); ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_logged_in_text']; ?></a> <?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_to_post_comment_text']; ?></p>
+                    <?php
+                }
+                ?>
             </div>
-            <div style="clear:both"></div>
+            <hr/>
+            <?php if ($wc_comment_list_update_type == 2) { ?>
+                <div class="wc_new_comment_and_replies">
+                    <div class="wc_new_comment"><span class="wc_new_comment_button_text"></span></div>
+                    <div class="wc_new_reply"><span class="wc_new_reply_button_text"></span></div>
+                    <div style="clear:both"></div>
+                </div>
+                <div style="clear:both"></div>
+            <?php } ?>
         <?php } ?>
-
 
         <div class="wc-thread-wrapper">
             <?php
@@ -183,7 +228,7 @@ $header_text .= ' "' . get_the_title($post) . '"';
 
         <div style="clear:both"></div>
         <div class="by-wpdiscuz"><span id="awpdiscuz" onclick='javascript:document.getElementById("bywpdiscuz").style.display = "inline";
-                document.getElementById("awpdiscuz").style.display = "none";'><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/icon_info.png'); ?>" align="absmiddle" class="wpdimg"/></span>&nbsp;<a href="http://gvectors.com/wpdiscuz/" id="bywpdiscuz" title="wpDiscuz - Interactive Comment System">wpDiscuz</a></div>
+                document.getElementById("awpdiscuz").style.display = "none";'><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/icon_info.png'); ?>" align="absmiddle" class="wpdimg"/></span>&nbsp;<a href="http://gvectors.com/wpdiscuz/" id="bywpdiscuz" title="wpDiscuz (<?php echo get_option($wc_core->wc_version_slug); ?>) - Interactive Comment System">wpDiscuz</a></div>
 
         <div id="wc_openModalFormAction" class="modalDialog">
             <div id="wc_response_info" class="wc_modal">

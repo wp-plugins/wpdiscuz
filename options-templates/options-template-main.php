@@ -1,8 +1,8 @@
-<th colspan="4" scope="col" style="margin-bottom: 5px;"><h2><?php _e('General settings', 'wpdiscuz'); ?></h2></th>
+<th colspan="4" scope="col" style="margin-bottom: 5px;"><h2><?php _e('General settings', WC_Core::$TEXT_DOMAIN); ?></h2></th>
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Display comment form for post types:', 'wpdiscuz'); ?>
+        <?php _e('Display comment form for post types:', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <?php
@@ -23,17 +23,17 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Show the latest comments on', 'wpdiscuz'); ?>
+        <?php _e('Show the latest comments on', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">
         <fieldset class="comment_list_order">
-            <label title="<?php _e('the top of the list', 'wpdiscuz') ?>">
+            <label title="<?php _e('the top of the list', WC_Core::$TEXT_DOMAIN) ?>">
                 <input type="radio" value="desc" <?php checked('desc' == $this->wc_options_serialized->wc_comment_list_order); ?> name="wc_comment_list_order" id="wc_comment_list_order" /> 
-                <span><?php _e('top of the threads', 'wpdiscuz') ?></span>
+                <span><?php _e('top of the threads', WC_Core::$TEXT_DOMAIN) ?></span>
             </label> &nbsp;<br/>
-            <label title="<?php _e('bottom of the threads', 'wpdiscuz') ?>">
+            <label title="<?php _e('bottom of the threads', WC_Core::$TEXT_DOMAIN) ?>">
                 <input type="radio" value="asc" <?php checked('asc' == $this->wc_options_serialized->wc_comment_list_order); ?> name="wc_comment_list_order" id="wc_comment_list_order" /> 
-                <span><?php _e('the bottom of the list', 'wpdiscuz') ?></span>
+                <span><?php _e('the bottom of the list', WC_Core::$TEXT_DOMAIN) ?></span>
             </label><br>                                    
         </fieldset>
     </td>
@@ -41,23 +41,23 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Live update options', 'wpdiscuz'); ?>
+        <?php _e('Live update options', WC_Core::$TEXT_DOMAIN); ?>
 <p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;">If you use Shared Web Hosting you should make sure the "Live Update" function doesn't overload your server resources. This function is good for VPS and Dedicated Hosting Plans.</p>
 </th>
 <td colspan="3">
     <fieldset class="wc_comment_list_update_type">
         <?php $wc_comment_list_update_type = isset($this->wc_options_serialized->wc_comment_list_update_type) ? $this->wc_options_serialized->wc_comment_list_update_type : 1; ?>
-        <label title="<?php _e('Never update', 'wpdiscuz') ?>">
+        <label title="<?php _e('Never update', WC_Core::$TEXT_DOMAIN) ?>">
             <input type="radio" value="0" <?php checked('0' == $wc_comment_list_update_type); ?> name="wc_comment_list_update_type" id="wc_comment_list_update_never" /> 
-            <span><?php _e('Turn off "Live Update" function', 'wpdiscuz') ?></span>
+            <span><?php _e('Turn off "Live Update" function', WC_Core::$TEXT_DOMAIN) ?></span>
         </label> &nbsp;<br/>
-        <label title="<?php _e('Show new comment/reply buttons to update manualy', 'wpdiscuz') ?>">
+        <label title="<?php _e('Show new comment/reply buttons to update manualy', WC_Core::$TEXT_DOMAIN) ?>">
             <input type="radio" value="2" <?php checked('2' == $wc_comment_list_update_type); ?> name="wc_comment_list_update_type" id="wc_comment_list_update_new" /> 
-            <span><?php _e('Always check for new comments and show update buttons', 'wpdiscuz') ?></span>
+            <span><?php _e('Always check for new comments and show update buttons', WC_Core::$TEXT_DOMAIN) ?></span>
         </label><br>    
-        <label title="<?php _e('Always update', 'wpdiscuz') ?>">
+        <label title="<?php _e('Always update', WC_Core::$TEXT_DOMAIN) ?>">
             <input type="radio" value="1" <?php checked('1' == $wc_comment_list_update_type); ?> name="wc_comment_list_update_type" id="wc_comment_list_update_always" /> 
-            <span><?php _e('Always check for new comments and update automatically', 'wpdiscuz') ?></span>
+            <span><?php _e('Always check for new comments and update automatically', WC_Core::$TEXT_DOMAIN) ?></span>
         </label> &nbsp;<br/>          
     </fieldset>
 </td>
@@ -65,25 +65,25 @@
 
 <tr valign="top">
     <th scope="row">
-        <label for="wc_comment_list_update_timer"><?php _e('Update comment list every', 'wpdiscuz'); ?></label>
+        <label for="wc_comment_list_update_timer"><?php _e('Update comment list every', WC_Core::$TEXT_DOMAIN); ?></label>
     </th>
     <td colspan="3">
         <select id="wc_comment_list_update_timer" name="wc_comment_list_update_timer">
             <?php $wc_comment_list_update_timer = isset($this->wc_options_serialized->wc_comment_list_update_timer) ? $this->wc_options_serialized->wc_comment_list_update_timer : 30; ?>
-            <option value="10" <?php selected($wc_comment_list_update_timer, '10'); ?>>10 <?php _e('Seconds', 'wpdiscuz'); ?></option>
-            <option value="20" <?php selected($wc_comment_list_update_timer, '20'); ?>>20 <?php _e('Seconds', 'wpdiscuz'); ?></option>
-            <option value="30" <?php selected($wc_comment_list_update_timer, '30'); ?>>30 <?php _e('Seconds', 'wpdiscuz'); ?></option>
-            <option value="60" <?php selected($wc_comment_list_update_timer, '60'); ?>>1 <?php _e('Minute', 'wpdiscuz'); ?></option>
-            <option value="180" <?php selected($wc_comment_list_update_timer, '180'); ?>>3 <?php _e('Minutes', 'wpdiscuz'); ?></option>
-            <option value="300" <?php selected($wc_comment_list_update_timer, '300'); ?>>5 <?php _e('Minutes', 'wpdiscuz'); ?></option>
-            <option value="600" <?php selected($wc_comment_list_update_timer, '600'); ?>>10 <?php _e('Minutes', 'wpdiscuz'); ?></option>
+            <option value="10" <?php selected($wc_comment_list_update_timer, '10'); ?>>10 <?php _e('Seconds', WC_Core::$TEXT_DOMAIN); ?></option>
+            <option value="20" <?php selected($wc_comment_list_update_timer, '20'); ?>>20 <?php _e('Seconds', WC_Core::$TEXT_DOMAIN); ?></option>
+            <option value="30" <?php selected($wc_comment_list_update_timer, '30'); ?>>30 <?php _e('Seconds', WC_Core::$TEXT_DOMAIN); ?></option>
+            <option value="60" <?php selected($wc_comment_list_update_timer, '60'); ?>>1 <?php _e('Minute', WC_Core::$TEXT_DOMAIN); ?></option>
+            <option value="180" <?php selected($wc_comment_list_update_timer, '180'); ?>>3 <?php _e('Minutes', WC_Core::$TEXT_DOMAIN); ?></option>
+            <option value="300" <?php selected($wc_comment_list_update_timer, '300'); ?>>5 <?php _e('Minutes', WC_Core::$TEXT_DOMAIN); ?></option>
+            <option value="600" <?php selected($wc_comment_list_update_timer, '600'); ?>>10 <?php _e('Minutes', WC_Core::$TEXT_DOMAIN); ?></option>
         </select>
     </td>
 </tr>
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Hide Voting buttons', 'wpdiscuz'); ?>
+        <?php _e('Hide Voting buttons', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_voting_buttons_show_hide">
@@ -94,7 +94,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Hide Share Button', 'wpdiscuz'); ?>
+        <?php _e('Hide Share Button', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_share_buttons_show_hide">
@@ -105,7 +105,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Hide the  CAPTCHA field', 'wpdiscuz'); ?>
+        <?php _e('Hide the  CAPTCHA field', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_captcha_show_hide">
@@ -116,7 +116,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('User Must be registered to comment', 'wpdiscuz'); ?>
+        <?php _e('User Must be registered to comment', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">
         <fieldset>
@@ -134,7 +134,18 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Held new comments for moderation', 'wpdiscuz'); ?>
+        <?php _e('Show logged-in user name and logout link on top of main form', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_show_hide_loggedin_username">
+            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_show_hide_loggedin_username == 1) ?> value="1" name="wc_show_hide_loggedin_username" id="wc_show_hide_loggedin_username" />
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Held new comments for moderation', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_held_comment_to_moderate">
@@ -145,7 +156,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Hide Reply button for Guests', 'wpdiscuz'); ?>
+        <?php _e('Hide Reply button for Guests', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_reply_button_guests_show_hide">
@@ -156,7 +167,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Hide Reply button for Members', 'wpdiscuz'); ?> 
+        <?php _e('Hide Reply button for Members', WC_Core::$TEXT_DOMAIN); ?> 
     </th>
     <td colspan="3">                                
         <label for="wc_reply_button_members_show_hide">
@@ -167,7 +178,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Hide Author Titles', 'wpdiscuz'); ?>
+        <?php _e('Hide Author Titles', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_author_titles_show_hide">
@@ -178,7 +189,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Comment Threads Per Page', 'wpdiscuz'); ?> 
+        <?php _e('Comment Threads Per Page', WC_Core::$TEXT_DOMAIN); ?> 
     </th>
     <td colspan="3">
         <label for="wc_comment_count">
@@ -189,24 +200,24 @@
 
 <tr valign="top">
     <th scope="row">
-        <label for="wc_comments_max_depth"><?php _e('Comments max depth', 'wpdiscuz'); ?></label>
+        <label for="wc_comments_max_depth"><?php _e('Comments max depth', WC_Core::$TEXT_DOMAIN); ?></label>
     </th>
     <td colspan="3">
         <select id="wc_comments_max_depth" name="wc_comments_max_depth">
             <?php $wc_comments_max_depth = isset($this->wc_options_serialized->wc_comments_max_depth) ? $this->wc_options_serialized->wc_comments_max_depth : 3; ?>
-            <option value="1" <?php selected($wc_comments_max_depth, '1'); ?>>1 <?php _e('Level', 'wpdiscuz'); ?></option>
-            <option value="2" <?php selected($wc_comments_max_depth, '2'); ?>>2 <?php _e('Levels', 'wpdiscuz'); ?></option>
-            <option value="3" <?php selected($wc_comments_max_depth, '3'); ?>>3 <?php _e('Levels', 'wpdiscuz'); ?></option>
-            <option value="4" <?php selected($wc_comments_max_depth, '4'); ?>>4 <?php _e('Levels', 'wpdiscuz'); ?></option>
-            <option value="5" <?php selected($wc_comments_max_depth, '5'); ?>>5 <?php _e('Levels', 'wpdiscuz'); ?></option>            
+            <option value="1" <?php selected($wc_comments_max_depth, '1'); ?>>1 <?php _e('Level', WC_Core::$TEXT_DOMAIN); ?></option>
+            <option value="2" <?php selected($wc_comments_max_depth, '2'); ?>>2 <?php _e('Levels', WC_Core::$TEXT_DOMAIN); ?></option>
+            <option value="3" <?php selected($wc_comments_max_depth, '3'); ?>>3 <?php _e('Levels', WC_Core::$TEXT_DOMAIN); ?></option>
+            <option value="4" <?php selected($wc_comments_max_depth, '4'); ?>>4 <?php _e('Levels', WC_Core::$TEXT_DOMAIN); ?></option>
+            <option value="5" <?php selected($wc_comments_max_depth, '5'); ?>>5 <?php _e('Levels', WC_Core::$TEXT_DOMAIN); ?></option>            
         </select>
     </td>
 </tr>
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Use WordPress Date/Time format', 'wpdiscuz'); ?> 
-<p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;"><?php _e('wpDiscuz shows Human Readable date format. If you check this option it\'ll show the date/time format set in WordPress General Settings.', 'wpdiscuz'); ?></p>
+        <?php _e('Use WordPress Date/Time format', WC_Core::$TEXT_DOMAIN); ?> 
+<p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;"><?php _e('wpDiscuz shows Human Readable date format. If you check this option it\'ll show the date/time format set in WordPress General Settings.', WC_Core::$TEXT_DOMAIN); ?></p>
 </th>
 <td colspan="3">                                
     <label for="wc_simple_comment_date">
@@ -217,27 +228,32 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Keep checked-on the email notification checkboxes on comment form by default', 'wpdiscuz'); ?> 
-</th>
-<td colspan="3">                                
-    <label for="wc_comment_reply_checkboxes_default_checked">
-        <input type="checkbox" <?php checked($this->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) ?> value="1" name="wc_comment_reply_checkboxes_default_checked" id="wc_comment_reply_checkboxes_default_checked" />
-    </label>
-</td>
+        <?php _e('Keep checked-on the email notification checkboxes on comment form by default', WC_Core::$TEXT_DOMAIN); ?> 
+    </th>
+    <td colspan="3">                                
+        <label for="wc_comment_reply_checkboxes_default_checked">
+            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) ?> value="1" name="wc_comment_reply_checkboxes_default_checked" id="wc_comment_reply_checkboxes_default_checked" />
+        </label>
+    </td>
 </tr>
 
 <tr valign="top">
     <th scope="row">
-        <span><?php _e('Show "Notify of all new follow-up comments"', 'wpdiscuz'); ?></span><br />
-        <span style="line-height:22px;"><?php _e('Show "Notify of new replies to this comment"', 'wpdiscuz'); ?></span><br />
-		<p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;">
-		<?php _e('Please keep the both or at least one of those options ON, otherwise users will not have any option for email notifications and they\'ll not get any messages.', 'wpdiscuz') ?></p>
+        <span><?php _e('Show "Notify of all new follow-up comments"', WC_Core::$TEXT_DOMAIN); ?></span><br />
+        <span style="line-height:22px;"><?php _e('Show "Notify of new replies to all my comments"', WC_Core::$TEXT_DOMAIN); ?></span><br />
+        <span style="line-height:22px;"><?php _e('Show "Notify of new replies to this comment"', WC_Core::$TEXT_DOMAIN); ?></span><br />
+<p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;">
+    <?php _e('Please keep all three or at least one of those options ON, otherwise users will not have any option for email notifications and they\'ll not get any messages.', WC_Core::$TEXT_DOMAIN) ?>
+</p>
 </th>
 <td colspan="3">   
-	<label for="wc_show_hide_comment_checkbox">
+    <label for="wc_show_hide_comment_checkbox">
         <input type="checkbox" <?php checked($this->wc_options_serialized->wc_show_hide_comment_checkbox == 1) ?> value="1" name="wc_show_hide_comment_checkbox" id="wc_show_hide_comment_checkbox" />
     </label>
     <br />
+    <label for="wc_show_hide_all_reply_checkbox" style="line-height:22px;">
+        <input type="checkbox" <?php checked($this->wc_options_serialized->wc_show_hide_all_reply_checkbox == 1) ?> value="1" name="wc_show_hide_all_reply_checkbox" id="wc_show_hide_all_reply_checkbox" />
+    </label><br />
     <label for="wc_show_hide_reply_checkbox" style="line-height:22px;">
         <input type="checkbox" <?php checked($this->wc_options_serialized->wc_show_hide_reply_checkbox == 1) ?> value="1" name="wc_show_hide_reply_checkbox" id="wc_show_hide_reply_checkbox" />
     </label>
@@ -245,7 +261,7 @@
 </tr>
 <tr valign="top">
     <th scope="row">
-        <label for="wc_comment_text_size"><?php _e('Comment text size in pixels', 'wpdiscuz'); ?></label>
+        <label for="wc_comment_text_size"><?php _e('Comment text size in pixels', WC_Core::$TEXT_DOMAIN); ?></label>
     </th>
     <td colspan="3">
         <select id="wc_comment_text_size" name="wc_comment_text_size">
@@ -261,10 +277,10 @@
 
 <tr valign="top">
     <th scope="row">
-        <label for="wc_form_bg_color"><?php _e('Comment Form Background Color', 'wpdiscuz'); ?></label>
+        <label for="wc_form_bg_color"><?php _e('Comment Form Background Color', WC_Core::$TEXT_DOMAIN); ?></label>
     </th>
     <td width="1">
-        <input type="text" class="regular-text" value="<?php echo isset($this->wc_options_serialized->wc_form_bg_color) ? $this->wc_options_serialized->wc_form_bg_color : '#f9f9f9'; ?>" id="wc_form_bg_color" name="wc_form_bg_color" placeholder="<?php _e('Example: #00ff00', 'wpdiscuz'); ?>"/>
+        <input type="text" class="regular-text" value="<?php echo isset($this->wc_options_serialized->wc_form_bg_color) ? $this->wc_options_serialized->wc_form_bg_color : '#f9f9f9'; ?>" id="wc_form_bg_color" name="wc_form_bg_color" placeholder="<?php _e('Example: #00ff00', WC_Core::$TEXT_DOMAIN); ?>"/>
     </td>
 
     <td class="picker_img_cell">
@@ -285,10 +301,10 @@
 
 <tr valign="top">
     <th scope="row">
-        <label for="wc_comment_bg_color"><?php _e('Comment Background Color', 'wpdiscuz'); ?></label>
+        <label for="wc_comment_bg_color"><?php _e('Comment Background Color', WC_Core::$TEXT_DOMAIN); ?></label>
     </th>
     <td width="1">
-        <input type="text" class="regular-text" value="<?php echo $this->wc_options_serialized->wc_comment_bg_color; ?>" id="wc_comment_bg_color" name="wc_comment_bg_color" placeholder="<?php _e('Example: #00ff00', 'wpdiscuz'); ?>"/>
+        <input type="text" class="regular-text" value="<?php echo $this->wc_options_serialized->wc_comment_bg_color; ?>" id="wc_comment_bg_color" name="wc_comment_bg_color" placeholder="<?php _e('Example: #00ff00', WC_Core::$TEXT_DOMAIN); ?>"/>
     </td>
 
     <td class="picker_img_cell">
@@ -309,10 +325,10 @@
 
 <tr valign="top">
     <th scope="row">
-        <label for="wc_reply_bg_color"><?php _e('Reply Background Color', 'wpdiscuz'); ?></label>
+        <label for="wc_reply_bg_color"><?php _e('Reply Background Color', WC_Core::$TEXT_DOMAIN); ?></label>
     </th>
     <td>
-        <input type="text" class="regular-text" value="<?php echo $this->wc_options_serialized->wc_reply_bg_color; ?>" id="wc_reply_bg_color" name="wc_reply_bg_color" placeholder="<?php _e('Example: #00ff00', 'wpdiscuz'); ?>"/>
+        <input type="text" class="regular-text" value="<?php echo $this->wc_options_serialized->wc_reply_bg_color; ?>" id="wc_reply_bg_color" name="wc_reply_bg_color" placeholder="<?php _e('Example: #00ff00', WC_Core::$TEXT_DOMAIN); ?>"/>
     </td>
 
     <td class="picker_img_cell">
@@ -333,10 +349,10 @@
 
 <tr valign="top">
     <th scope="row">
-        <label for="wc_comment_text_color"><?php _e('Comment Text Color', 'wpdiscuz'); ?></label>
+        <label for="wc_comment_text_color"><?php _e('Comment Text Color', WC_Core::$TEXT_DOMAIN); ?></label>
     </th>
     <td>
-        <input type="text" class="regular-text" value="<?php echo $this->wc_options_serialized->wc_comment_text_color; ?>" id="wc_comment_text_color" name="wc_comment_text_color" placeholder="<?php _e('Example: #00ff00', 'wpdiscuz'); ?>"/>
+        <input type="text" class="regular-text" value="<?php echo $this->wc_options_serialized->wc_comment_text_color; ?>" id="wc_comment_text_color" name="wc_comment_text_color" placeholder="<?php _e('Example: #00ff00', WC_Core::$TEXT_DOMAIN); ?>"/>
     </td>
 
     <td class="picker_img_cell">
@@ -358,10 +374,10 @@
 
 <tr valign="top">
     <th scope="row">
-        <label for="wc_author_title_color"><?php _e('Author title color', 'wpdiscuz'); ?></label>
+        <label for="wc_author_title_color"><?php _e('Author title color', WC_Core::$TEXT_DOMAIN); ?></label>
     </th>
     <td>
-        <input type="text" class="regular-text" value="<?php echo $this->wc_options_serialized->wc_author_title_color; ?>" id="wc_author_title_color" name="wc_author_title_color" placeholder="<?php _e('Example: #00ff00', 'wpdiscuz'); ?>"/>
+        <input type="text" class="regular-text" value="<?php echo $this->wc_options_serialized->wc_author_title_color; ?>" id="wc_author_title_color" name="wc_author_title_color" placeholder="<?php _e('Example: #00ff00', WC_Core::$TEXT_DOMAIN); ?>"/>
     </td>
 
     <td class="picker_img_cell">
@@ -383,10 +399,10 @@
 
 <tr valign="top">
     <th scope="row">
-        <label for="wc_vote_reply_color"><?php _e('Vote, Reply, Share, Edit links text colors', 'wpdiscuz'); ?></label>
+        <label for="wc_vote_reply_color"><?php _e('Vote, Reply, Share, Edit links text colors', WC_Core::$TEXT_DOMAIN); ?></label>
     </th>
     <td>
-        <input type="text" class="regular-text" value="<?php echo $this->wc_options_serialized->wc_vote_reply_color; ?>" id="wc_vote_reply_color" name="wc_vote_reply_color" placeholder="<?php _e('Example: #00ff00', 'wpdiscuz'); ?>"/>
+        <input type="text" class="regular-text" value="<?php echo $this->wc_options_serialized->wc_vote_reply_color; ?>" id="wc_vote_reply_color" name="wc_vote_reply_color" placeholder="<?php _e('Example: #00ff00', WC_Core::$TEXT_DOMAIN); ?>"/>
     </td>
 
     <td class="picker_img_cell">
@@ -407,10 +423,10 @@
 
 <tr valign="top">
     <th scope="row">
-        <label for="wc_new_loaded_comment_bg_color"><?php _e('New loaded comments\' background color', 'wpdiscuz'); ?></label>
+        <label for="wc_new_loaded_comment_bg_color"><?php _e('New loaded comments\' background color', WC_Core::$TEXT_DOMAIN); ?></label>
     </th>
     <td>
-        <input type="text" class="regular-text" value="<?php echo isset($this->wc_options_serialized->wc_new_loaded_comment_bg_color) ? $this->wc_options_serialized->wc_new_loaded_comment_bg_color : 'rgb(254,254,254)'; ?>" id="wc_new_loaded_comment_bg_color" name="wc_new_loaded_comment_bg_color" placeholder="<?php _e('Example: #00ff00', 'wpdiscuz'); ?>"/>
+        <input type="text" class="regular-text" value="<?php echo isset($this->wc_options_serialized->wc_new_loaded_comment_bg_color) ? $this->wc_options_serialized->wc_new_loaded_comment_bg_color : 'rgb(254,254,254)'; ?>" id="wc_new_loaded_comment_bg_color" name="wc_new_loaded_comment_bg_color" placeholder="<?php _e('Example: #00ff00', WC_Core::$TEXT_DOMAIN); ?>"/>
     </td>
 
     <td class="picker_img_cell">
@@ -431,7 +447,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <label for="wc_custom_css"><?php _e('Custom CSS Code', 'wpdiscuz'); ?></label>
+        <label for="wc_custom_css"><?php _e('Custom CSS Code', WC_Core::$TEXT_DOMAIN); ?></label>
     </th>
     <td>
         <textarea cols="50" rows="10" class="regular-text" id="wc_custom_css" name="wc_custom_css" placeholder=""><?php echo stripslashes($this->wc_options_serialized->wc_custom_css); ?></textarea>

@@ -1,8 +1,8 @@
-<th colspan="3" scope="col" style="margin-bottom: 5px;"><h2><?php _e('Front-end phrases', 'wpdiscuz'); ?></h2></th>
+<th colspan="3" scope="col" style="margin-bottom: 5px;"><h2><?php _e('Front-end phrases', WC_Core::$TEXT_DOMAIN); ?></h2></th>
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Leave a Reply', 'wpdiscuz'); ?>
+        <?php _e('Leave a Reply', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_leave_a_reply_text">
@@ -13,7 +13,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Be the first to comment', 'wpdiscuz'); ?>
+        <?php _e('Be the first to comment', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_be_the_first_text">
@@ -24,7 +24,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Comment', 'wpdiscuz'); ?>
+        <?php _e('Comment', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_header_text">
@@ -35,7 +35,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('On', 'wpdiscuz'); ?>
+        <?php _e('On', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_header_on_text">
@@ -46,7 +46,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Comment Field Start', 'wpdiscuz'); ?>
+        <?php _e('Comment Field Start', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_comment_start_text">
@@ -57,7 +57,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Comment Field Join', 'wpdiscuz'); ?>
+        <?php _e('Comment Field Join', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_comment_join_text">
@@ -68,7 +68,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Email Field', 'wpdiscuz'); ?>
+        <?php _e('Email Field', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_email_text">
@@ -79,7 +79,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Name Field', 'wpdiscuz'); ?>
+        <?php _e('Name Field', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_name_text">
@@ -90,7 +90,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('CAPTCHA Field', 'wpdiscuz'); ?>
+        <?php _e('CAPTCHA Field', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_captcha_text">
@@ -101,7 +101,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Submit Button', 'wpdiscuz'); ?>
+        <?php _e('Submit Button', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_submit_text">
@@ -110,31 +110,53 @@
     </td>
 </tr>
 
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Manage Subscriptions', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_manage_subscribtions">
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_manage_subscribtions']) ? $this->wc_options_serialized->wc_phrases['wc_manage_subscribtions'] : _e('Manage Subscriptions', WC_Core::$TEXT_DOMAIN); ?>" name="wc_manage_subscribtions" id="wc_manage_subscribtions" />
+        </label>
+    </td>
+</tr>
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Notify on new comments (checkbox)', 'wpdiscuz'); ?>
+        <?php _e('Notify on new comments (checkbox)', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_notify_on_new_comment">
-            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_notify_on_new_comment']) ? $this->wc_options_serialized->wc_phrases['wc_notify_on_new_comment'] : _e('Notify of all new follow-up comments', 'wpdiscuz'); ?>" name="wc_notify_on_new_comment" id="wc_notify_on_new_comment" />
-        </label>
-    </td>
-</tr>
-<tr valign="top">
-    <th scope="row">
-        <?php _e('Notify on new replies (checkbox)', 'wpdiscuz'); ?>
-    </th>
-    <td colspan="3">                                
-        <label for="wc_notify_on_new_reply">
-            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply']) ? $this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] : _e('Notify of new replies to this comment', 'wpdiscuz'); ?>" name="wc_notify_on_new_reply" id="wc_notify_on_new_reply" />
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_notify_on_new_comment']) ? $this->wc_options_serialized->wc_phrases['wc_notify_on_new_comment'] : _e('Notify of all new follow-up comments', WC_Core::$TEXT_DOMAIN); ?>" name="wc_notify_on_new_comment" id="wc_notify_on_new_comment" />
         </label>
     </td>
 </tr>
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Load More Button', 'wpdiscuz'); ?>
+        <?php _e('Notify on all new replies (checkbox)', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_notify_on_all_new_reply">
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_notify_on_all_new_reply']) ? $this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] : _e('Notify of new replies to all my comments', WC_Core::$TEXT_DOMAIN); ?>" name="wc_notify_on_all_new_reply" id="wc_notify_on_all_new_reply" />
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Notify on new replies (checkbox)', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_notify_on_new_reply">
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply']) ? $this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] : _e('Notify of new replies to this comment', WC_Core::$TEXT_DOMAIN); ?>" name="wc_notify_on_new_reply" id="wc_notify_on_new_reply" />
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Load More Button', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_load_more_submit_text">
@@ -145,7 +167,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Reply', 'wpdiscuz'); ?>
+        <?php _e('Reply', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_reply_text">
@@ -156,7 +178,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Share', 'wpdiscuz'); ?>
+        <?php _e('Share', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_share_text">
@@ -167,7 +189,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Share On Facebook', 'wpdiscuz'); ?>
+        <?php _e('Share On Facebook', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_share_facebook">
@@ -178,7 +200,7 @@
 
 <tr valign="top" >
     <th scope="row">
-        <?php _e('Share On Twitter', 'wpdiscuz'); ?>
+        <?php _e('Share On Twitter', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_share_twitter">
@@ -189,7 +211,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Share On Google', 'wpdiscuz'); ?>
+        <?php _e('Share On Google', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_share_google">
@@ -200,7 +222,7 @@
 
 <tr valign="top" >
     <th scope="row">
-        <?php _e('Hide Replies', 'wpdiscuz'); ?>
+        <?php _e('Hide Replies', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_hide_replies_text">
@@ -211,7 +233,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Show Replies', 'wpdiscuz'); ?>
+        <?php _e('Show Replies', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_show_replies_text">
@@ -222,7 +244,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Title For Guests', 'wpdiscuz'); ?>
+        <?php _e('Title For Guests', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_user_title_guest_text">
@@ -233,7 +255,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Title For Members', 'wpdiscuz'); ?>
+        <?php _e('Title For Members', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_user_title_member_text">
@@ -247,7 +269,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Title For Authors', 'wpdiscuz'); ?>
+        <?php _e('Title For Authors', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_user_title_author_text">
@@ -258,7 +280,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Title For Admins', 'wpdiscuz'); ?>
+        <?php _e('Title For Admins', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_user_title_admin_text">
@@ -269,7 +291,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Email Subject', 'wpdiscuz'); ?>
+        <?php _e('Email Subject', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_email_subject">
@@ -280,7 +302,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Email Message', 'wpdiscuz'); ?>
+        <?php _e('Email Message', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_email_message">
@@ -291,18 +313,18 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('New Reply Subject', 'wpdiscuz'); ?>
+        <?php _e('New Reply Subject', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_new_reply_email_subject">
-            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_new_reply_email_subject']) ? $this->wc_options_serialized->wc_phrases['wc_new_reply_email_subject'] : _e('New Reply', 'wpdiscuz'); ?>" name="wc_new_reply_email_subject" id="wc_new_reply_email_subject" />
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_new_reply_email_subject']) ? $this->wc_options_serialized->wc_phrases['wc_new_reply_email_subject'] : _e('New Reply', WC_Core::$TEXT_DOMAIN); ?>" name="wc_new_reply_email_subject" id="wc_new_reply_email_subject" />
         </label>
     </td>
 </tr>
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('New Reply Message', 'wpdiscuz'); ?>
+        <?php _e('New Reply Message', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_new_reply_email_message">
@@ -313,7 +335,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Subscribed on this comment replies', 'wpdiscuz'); ?>
+        <?php _e('Subscribed on this comment replies', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_subscribed_on_comment">
@@ -324,7 +346,18 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Subscribed on this post', 'wpdiscuz'); ?>
+        <?php _e('Subscribed on all your comments replies', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_subscribed_on_all_comment">
+            <textarea name="wc_subscribed_on_all_comment" id="wc_subscribed_on_all_comment"><?php echo $this->wc_options_serialized->wc_phrases['wc_subscribed_on_all_comment']; ?></textarea>
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Subscribed on this post', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_subscribed_on_post">
@@ -335,18 +368,18 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('New Reply Message', 'wpdiscuz'); ?>
+        <?php _e('New Reply Message', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_unsubscribe">
-            <input type="text" name="wc_unsubscribe" id="wc_unsubscribe" class="wc_unsubscribe" value="<?php echo $this->wc_options_serialized->wc_phrases['wc_unsubscribe']; ?>" placeholder="<?php echo _e('Unsubscribe', 'wpdiscuz'); ?>"/>
+            <input type="text" name="wc_unsubscribe" id="wc_unsubscribe" class="wc_unsubscribe" value="<?php echo $this->wc_options_serialized->wc_phrases['wc_unsubscribe']; ?>" placeholder="<?php echo _e('Unsubscribe', WC_Core::$TEXT_DOMAIN); ?>"/>
         </label>
     </td>
 </tr>
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('You\'ve successfully unsubscribed.', 'wpdiscuz'); ?>
+        <?php _e('You\'ve successfully unsubscribed.', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_unsubscribe_message">
@@ -357,7 +390,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Error message for empty field', 'wpdiscuz'); ?>
+        <?php _e('Error message for empty field', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_error_empty_text">
@@ -368,7 +401,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Error message for invalid email field', 'wpdiscuz'); ?>
+        <?php _e('Error message for invalid email field', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_error_email_text">
@@ -379,7 +412,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Year', 'wpdiscuz'); ?>
+        <?php _e('Year', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_year_text">
@@ -390,7 +423,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Month', 'wpdiscuz'); ?>
+        <?php _e('Month', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_month_text">
@@ -401,7 +434,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Day', 'wpdiscuz'); ?>
+        <?php _e('Day', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_day_text">
@@ -412,7 +445,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Hour', 'wpdiscuz'); ?>
+        <?php _e('Hour', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_hour_text">
@@ -423,7 +456,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Minute', 'wpdiscuz'); ?>
+        <?php _e('Minute', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_minute_text">
@@ -434,7 +467,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Second', 'wpdiscuz'); ?>
+        <?php _e('Second', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_second_text">
@@ -445,7 +478,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Plural (Ex. user -> user + s)', 'wpdiscuz'); ?>
+        <?php _e('Plural (Ex. user -> user + s)', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_plural_text">
@@ -456,7 +489,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Commented "right now" text', 'wpdiscuz'); ?>
+        <?php _e('Commented "right now" text', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_right_now_text">
@@ -467,7 +500,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Ago text', 'wpdiscuz'); ?>
+        <?php _e('Ago text', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_ago_text">
@@ -478,18 +511,18 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('"Today" text', 'wpdiscuz'); ?>
+        <?php _e('"Today" text', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_posted_today_text">
-            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_posted_today_text']) ? $this->wc_options_serialized->wc_phrases['wc_posted_today_text'] : _e('Today', 'wpdiscuz'); ?>" name="wc_posted_today_text" id="wc_posted_today_text" placeholder="<?php _e('Today', 'wpdiscuz'); ?> 9:26 PM"/>
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_posted_today_text']) ? $this->wc_options_serialized->wc_phrases['wc_posted_today_text'] : _e('Today', WC_Core::$TEXT_DOMAIN); ?>" name="wc_posted_today_text" id="wc_posted_today_text" placeholder="<?php _e('Today', WC_Core::$TEXT_DOMAIN); ?> 9:26 PM"/>
         </label>
     </td>
 </tr>
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('You must be', 'wpdiscuz'); ?>
+        <?php _e('You must be', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_you_must_be_text">
@@ -498,9 +531,34 @@
     </td>
 </tr>
 
+
 <tr valign="top">
     <th scope="row">
-        <?php _e('Logged In', 'wpdiscuz'); ?>
+        <?php _e('Logged in as', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_logged_in_as">
+            <input type="text" value="<?php echo $this->wc_options_serialized->wc_phrases['wc_logged_in_as']; ?>" name="wc_logged_in_as" id="wc_logged_in_as" />
+        </label>
+    </td>
+</tr>
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Log out', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_log_out">
+            <input type="text" value="<?php echo $this->wc_options_serialized->wc_phrases['wc_log_out']; ?>" name="wc_log_out" id="wc_log_out" />
+        </label>
+    </td>
+</tr>
+
+
+
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Logged In', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_logged_in_text">
@@ -511,7 +569,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('To post a comment', 'wpdiscuz'); ?>
+        <?php _e('To post a comment', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_to_post_comment_text">
@@ -522,7 +580,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Vote Up', 'wpdiscuz'); ?>
+        <?php _e('Vote Up', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_vote_up">
@@ -533,7 +591,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Vote Down', 'wpdiscuz'); ?>
+        <?php _e('Vote Down', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_vote_down">
@@ -544,7 +602,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Vote Counted', 'wpdiscuz'); ?>
+        <?php _e('Vote Counted', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_vote_counted">
@@ -555,7 +613,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('You can vote only 1 time', 'wpdiscuz'); ?>
+        <?php _e('You can vote only 1 time', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_vote_only_one_time">
@@ -566,7 +624,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Voting Error', 'wpdiscuz'); ?>
+        <?php _e('Voting Error', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_voting_error">
@@ -577,7 +635,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Login To Vote', 'wpdiscuz'); ?>
+        <?php _e('Login To Vote', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_login_to_vote">
@@ -588,7 +646,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('You Cannot Vote On Your Comment', 'wpdiscuz'); ?>
+        <?php _e('You Cannot Vote On Your Comment', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_self_vote">
@@ -599,7 +657,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Invalid Captcha Code', 'wpdiscuz'); ?>
+        <?php _e('Invalid Captcha Code', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_invalid_captcha">
@@ -610,7 +668,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Some of field value is invalid', 'wpdiscuz'); ?>
+        <?php _e('Some of field value is invalid', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_invalid_field">
@@ -621,7 +679,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Comment waiting moderation', 'wpdiscuz'); ?>
+        <?php _e('Comment waiting moderation', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_held_for_moderate">
@@ -632,7 +690,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Button text if has new comment', 'wpdiscuz'); ?>
+        <?php _e('Button text if has new comment', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_new_comment_button_text">
@@ -643,7 +701,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Button text if has new comments', 'wpdiscuz'); ?>
+        <?php _e('Button text if has new comments', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_new_comments_button_text">
@@ -654,7 +712,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Button text if has new reply', 'wpdiscuz'); ?>
+        <?php _e('Button text if has new reply', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_new_reply_button_text">
@@ -665,7 +723,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Button text if has new replies', 'wpdiscuz'); ?>
+        <?php _e('Button text if has new replies', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_new_replies_button_text">
@@ -676,7 +734,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Text on load more button if has new comment(s)', 'wpdiscuz'); ?>
+        <?php _e('Text on load more button if has new comment(s)', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_new_comments_text">

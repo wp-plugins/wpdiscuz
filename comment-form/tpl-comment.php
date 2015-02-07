@@ -26,12 +26,12 @@ class WC_Comment_Template_Builder {
             'b' => array(),
             'u' => array(),
             'strong' => array(),
-            'p' => array()
+            'p' => array(),
+            'img' => array('src' => array(), 'width' => array(), 'height' => array(), 'alt' => array())
         ));
 
         $comment_content = $this->wc_helper->make_clickable($comment_content);
         $comment_content = apply_filters('comment_text', $comment_content);
-        $comment_content = nl2br($comment_content);
 
         $vote_cls = '';
         $vote_title_text = '';
@@ -115,22 +115,23 @@ class WC_Comment_Template_Builder {
             $output .= '<span id="wc-up-' . $unique_id . '" class="wc-vote-link wc-up ' . $vote_cls . '" title="' . $vote_up . '">&and;</span> | <span id="wc-down-' . $unique_id . '" class="wc-vote-link wc-down ' . $vote_cls . '" title="' . $vote_down . '">&or;</span> &nbsp;&nbsp;';
         }
 
-
-        if ($this->wc_options->wc_options_serialized->wc_user_must_be_registered) {
-            if (!$this->wc_options->wc_options_serialized->wc_reply_button_members_show_hide && is_user_logged_in()) {
-                $output .= '&nbsp;&nbsp;<span id="wc-comm-reply-' . $unique_id . '" class="wc-reply-link" title="' . $reply_text . '">' . $reply_text . '</span> &nbsp;&nbsp;';
-            } else if ($this->is_user_can_reply_by_role('administrator')) {
-                $output .= '&nbsp;&nbsp;<span id="wc-comm-reply-' . $unique_id . '" class="wc-reply-link" title="' . $reply_text . '">' . $reply_text . '</span> &nbsp;&nbsp;';
-            }
-        } else {
-            if (!$this->wc_options->wc_options_serialized->wc_reply_button_members_show_hide && !$this->wc_options->wc_options_serialized->wc_reply_button_guests_show_hide) {
-                $output .= '&nbsp;&nbsp;<span id="wc-comm-reply-' . $unique_id . '" class="wc-reply-link" title="' . $reply_text . '">' . $reply_text . '</span> &nbsp;&nbsp;';
-            } else if (!$this->wc_options->wc_options_serialized->wc_reply_button_members_show_hide && is_user_logged_in()) {
-                $output .= '&nbsp;&nbsp;<span id="wc-comm-reply-' . $unique_id . '" class="wc-reply-link" title="' . $reply_text . '">' . $reply_text . '</span> &nbsp;&nbsp;';
-            } else if (!$this->wc_options->wc_options_serialized->wc_reply_button_guests_show_hide && !is_user_logged_in()) {
-                $output .= '&nbsp;&nbsp;<span id="wc-comm-reply-' . $unique_id . '" class="wc-reply-link" title="' . $reply_text . '">' . $reply_text . '</span> &nbsp;&nbsp;';
-            } else if ($this->is_user_can_reply_by_role('administrator')) {
-                $output .= '&nbsp;&nbsp;<span id="wc-comm-reply-' . $unique_id . '" class="wc-reply-link" title="' . $reply_text . '">' . $reply_text . '</span> &nbsp;&nbsp;';
+        if (comments_open($comment->comment_post_ID)) {
+            if ($this->wc_options->wc_options_serialized->wc_user_must_be_registered) {
+                if (!$this->wc_options->wc_options_serialized->wc_reply_button_members_show_hide && is_user_logged_in()) {
+                    $output .= '&nbsp;&nbsp;<span id="wc-comm-reply-' . $unique_id . '" class="wc-reply-link" title="' . $reply_text . '">' . $reply_text . '</span> &nbsp;&nbsp;';
+                } else if ($this->is_user_can_reply_by_role('administrator')) {
+                    $output .= '&nbsp;&nbsp;<span id="wc-comm-reply-' . $unique_id . '" class="wc-reply-link" title="' . $reply_text . '">' . $reply_text . '</span> &nbsp;&nbsp;';
+                }
+            } else {
+                if (!$this->wc_options->wc_options_serialized->wc_reply_button_members_show_hide && !$this->wc_options->wc_options_serialized->wc_reply_button_guests_show_hide) {
+                    $output .= '&nbsp;&nbsp;<span id="wc-comm-reply-' . $unique_id . '" class="wc-reply-link" title="' . $reply_text . '">' . $reply_text . '</span> &nbsp;&nbsp;';
+                } else if (!$this->wc_options->wc_options_serialized->wc_reply_button_members_show_hide && is_user_logged_in()) {
+                    $output .= '&nbsp;&nbsp;<span id="wc-comm-reply-' . $unique_id . '" class="wc-reply-link" title="' . $reply_text . '">' . $reply_text . '</span> &nbsp;&nbsp;';
+                } else if (!$this->wc_options->wc_options_serialized->wc_reply_button_guests_show_hide && !is_user_logged_in()) {
+                    $output .= '&nbsp;&nbsp;<span id="wc-comm-reply-' . $unique_id . '" class="wc-reply-link" title="' . $reply_text . '">' . $reply_text . '</span> &nbsp;&nbsp;';
+                } else if ($this->is_user_can_reply_by_role('administrator')) {
+                    $output .= '&nbsp;&nbsp;<span id="wc-comm-reply-' . $unique_id . '" class="wc-reply-link" title="' . $reply_text . '">' . $reply_text . '</span> &nbsp;&nbsp;';
+                }
             }
         }
 
@@ -148,7 +149,7 @@ class WC_Comment_Template_Builder {
         }
 
         if (current_user_can('edit_comment', $comment->comment_ID)) {
-            $output .= '-&nbsp;&nbsp; <a href="' . get_edit_comment_link($comment->comment_ID) . '">' . __('Edit', 'wpdiscuz') . '</a>';
+            $output .= '-&nbsp;&nbsp; <a href="' . get_edit_comment_link($comment->comment_ID) . '">' . __('Edit', WC_Core::$TEXT_DOMAIN) . '</a>';
         }
 
 
@@ -163,62 +164,75 @@ class WC_Comment_Template_Builder {
         $output .= '</div>';
         $output .= '<div style="clear:both"></div>';
 
-        $output_form = '<div class="wc-form-wrapper wc-secondary-forms-wrapper" id="wc-secondary-forms-wrapper-' . $unique_id . '">';
-        $output_form .= '<form action="" method="post" id="wc_comm_form-' . $unique_id . '" class="wc_comm_form wc_secondary_form">';
-        $output_form .= '<div class="wc-field-comment"><div style="width:60px; float:left; position:absolute;">' . $this->wc_helper->get_comment_author_avatar() . '</div><div style="margin-left:65px;" class="item"><textarea id="wc_comment-' . $unique_id . '" class="wc_comment wc_field_input" name="wc_comment" required="required" placeholder="' . $textarea_placeholder . '"></textarea></div><div style="clear:both"></div></div>';
+        $output_form = '';
 
-        $output_form .= '<div id="wc-form-footer-' . $unique_id . '" class="wc-form-footer">';
+        if (comments_open($comment->comment_post_ID)) {
+            $output_form = '<div class="wc-form-wrapper wc-secondary-forms-wrapper" id="wc-secondary-forms-wrapper-' . $unique_id . '">';
+            $output_form .= '<form action="" method="post" id="wc_comm_form-' . $unique_id . '" class="wc_comm_form wc_secondary_form">';
+            $output_form .= '<div class="wc-field-comment"><div style="width:60px; float:left; position:absolute;">' . $this->wc_helper->get_comment_author_avatar() . '</div><div style="margin-left:65px;" class="item"><textarea id="wc_comment-' . $unique_id . '" class="wc_comment wc_field_input" name="wc_comment" required="required" placeholder="' . $textarea_placeholder . '"></textarea></div><div style="clear:both"></div></div>';
 
-        if (!is_user_logged_in()) {
-            $output_form .= '<div class="wc-author-data"><div class="wc-field-name item"><input id="wc_name-' . $unique_id . '" name="wc_name" class="wc_name wc_field_input" required="required" value="" type="text" placeholder="' . $this->wc_options->wc_options_serialized->wc_phrases['wc_name_text'] . '"/></div><div class="wc-field-email item"><input id="wc_email-' . $unique_id . '" class="wc_email wc_field_input email" name="wc_email" required="required" value="" type="email" placeholder="' . $this->wc_options->wc_options_serialized->wc_phrases['wc_email_text'] . '"/></div><div style="clear:both"></div></div>';
-        }
+            $output_form .= '<div id="wc-form-footer-' . $unique_id . '" class="wc-form-footer">';
 
-        $output_form .= '<div class="wc-form-submit">';
-
-        if (!$this->wc_options->wc_options_serialized->wc_captcha_show_hide) {
             if (!is_user_logged_in()) {
-                $output_form .= '<div class="wc-field-captcha item">';
-                $output_form .= '<input id="wc_captcha-' . $unique_id . '" class="wc_field_input wc_field_captcha" name="wc_captcha" required="required" value="" type="text" /><span class="wc-label wc-captcha-label">';
-                $output_form .= '<img rel="nofollow" src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/captcha/captcha.php?comm_id=' . $comment->comment_post_ID . '-' . $comment->comment_ID) . '" id="wc_captcha_img-' . $unique_id . '" />';
-                $output_form .= '<img rel="nofollow" src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/refresh-16x16.png') . '" id="wc_captcha_refresh_img-' . $unique_id . '" class="wc_captcha_refresh_img" />';
-                $output_form .= '</span><span class="captcha_msg">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_captcha_text'] . '</span></div>';
+                $output_form .= '<div class="wc-author-data"><div class="wc-field-name item"><input id="wc_name-' . $unique_id . '" name="wc_name" class="wc_name wc_field_input" required="required" value="" type="text" placeholder="' . $this->wc_options->wc_options_serialized->wc_phrases['wc_name_text'] . '"/></div><div class="wc-field-email item"><input id="wc_email-' . $unique_id . '" class="wc_email wc_field_input email" name="wc_email" required="required" value="" type="email" placeholder="' . $this->wc_options->wc_options_serialized->wc_phrases['wc_email_text'] . '"/></div><div style="clear:both"></div></div>';
             }
+
+            $output_form .= '<div class="wc-form-submit">';
+
+            if (!$this->wc_options->wc_options_serialized->wc_captcha_show_hide) {
+                if (!is_user_logged_in()) {
+                    $output_form .= '<div class="wc-field-captcha item">';
+                    $output_form .= '<input id="wc_captcha-' . $unique_id . '" class="wc_field_input wc_field_captcha" name="wc_captcha" required="required" value="" type="text" /><span class="wc-label wc-captcha-label">';
+                    $output_form .= '<img rel="nofollow" src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/captcha/captcha.php?comm_id=' . $comment->comment_post_ID . '-' . $comment->comment_ID) . '" id="wc_captcha_img-' . $unique_id . '" />';
+                    $output_form .= '<img rel="nofollow" src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/refresh-16x16.png') . '" id="wc_captcha_refresh_img-' . $unique_id . '" class="wc_captcha_refresh_img" />';
+                    $output_form .= '</span><span class="captcha_msg">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_captcha_text'] . '</span></div>';
+                }
+            }
+
+            $output_form .= '<div class="wc-field-submit"><input type="button" name="submit" value="' . $this->wc_options->wc_options_serialized->wc_phrases['wc_submit_text'] . '" id="wc_comm-' . $unique_id . '" class="wc_comm_submit button alt"/></div>';
+            $output_form .= '<div style="clear:both"></div>';
+
+            if ($this->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox || $this->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox || $this->wc_options->wc_options_serialized->wc_show_hide_all_reply_checkbox) {
+                $output_form .= '<span class="wc_manage_subscribtions">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_manage_subscribtions'] . '</span>';
+            }
+
+            $output_form .= '<div class="wc_notification_checkboxes">';
+
+            global $current_user;
+            get_currentuserinfo();
+
+            if ($current_user->ID && $this->wc_db_helper->wc_has_post_notification($comment->comment_post_ID, $current_user->user_email)) {
+                $output_form .= '<label class="wc-label-comment-notify" style="cursor: default;">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_post'] . ' | <a href="' . $this->wc_db_helper->wc_unsubscribe_link($comment->comment_post_ID, $current_user->user_email, 'post') . '" rel="nofollow" class="unsubscribe">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe'] . '</a></label>';
+            } else {
+                $wc_notification_state = ($this->wc_options->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) ? 'checked="checked" value="1"' : 'value="0"';
+                if ($current_user->ID && $this->wc_db_helper->wc_has_all_comments_notification($comment->comment_post_ID, $current_user->user_email) && $current_user->user_email == $comment->comment_author_email) {
+                    $output_form .= '<label class="wc-label-all-reply-notify" style="cursor: default;">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_all_comment'] . ' | <a href="' . $this->wc_db_helper->wc_unsubscribe_link($comment->comment_post_ID, $current_user->user_email, 'all_comment') . '" rel="nofollow" class="unsubscribe">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe'] . '</a></label><br/>';
+                } else {
+                    if ($current_user->ID && $this->wc_db_helper->wc_has_comment_notification($comment->comment_post_ID, $comment->comment_ID, $current_user->user_email) && $current_user->user_email == $comment->comment_author_email) {
+                        $output_form .= '<label class="wc-label-reply-notify" style="cursor: default;">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_comment'] . ' | <a href="' . $this->wc_db_helper->wc_unsubscribe_link($comment->comment_ID, $current_user->user_email, 'comment') . '" rel="nofollow" class="unsubscribe">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe'] . '</a></label><br/>';
+                    } else if ($this->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox) {
+                        $output_form .= '<input class="wc-label-reply-notify wc_notification_new_reply" id="wc_notification_new_reply-' . $unique_id . '" ' . $wc_notification_state . ' type="checkbox" name="wc_notification_new_reply"/> <label class="wc-label-comment-notify" for="wc_notification_new_reply-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] . '</label><br />';
+                    }
+                    if ($this->wc_options->wc_options_serialized->wc_show_hide_all_reply_checkbox) {
+                        $output_form .= '<input id="wc_notification_all_new_reply-' . $unique_id . '" class="wc_notification_all_new_reply" ' . $wc_notification_state . ' type="checkbox" name="wc_notification_all_new_reply"/> <label class="wc-label-all-reply-notify" for="wc_notification_all_new_reply-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_all_new_reply'] . '</label><br />';
+                    }
+                }
+                if ($this->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) {
+                    $output_form .= '<input class="wc-label-comment-notify wc_notification_new_comment" id="wc_notification_new_comment-' . $unique_id . '" ' . $wc_notification_state . ' type="checkbox" name="wc_notification_new_comment"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_comment'] . '</label>';
+                }
+            }
+
+            $output_form .= '</div>';
+            $output_form .= '</div>';
+            $output_form .= '</div>';
+
+            $output_form .= '<input type="hidden" name="wc_home_url" value="' . plugins_url() . '" id="wc_home_url-' . $unique_id . '" />';
+            $output_form .= '<input type="hidden" name="wc_comment_post_ID" value="' . $comment->comment_post_ID . '" id="wc_comment_post_ID-' . $unique_id . '" />';
+            $output_form .= '<input type="hidden" name="wc_comment_parent" value="' . $comment->comment_ID . '" id="wc_comment_parent-' . $unique_id . '" />';
+
+            $output_form .= '</form>';
+            $output_form .= '</div>';
         }
-
-        $output_form .= '<div class="wc-field-submit"><input type="button" name="submit" value="' . $this->wc_options->wc_options_serialized->wc_phrases['wc_submit_text'] . '" id="wc_comm-' . $unique_id . '" class="wc_comm_submit button alt"/></div>';
-        $output_form .= '<div style="clear:both"></div>';
-        $output_form .= '<div class="wc_notification_checkboxes">';
-
-        global $current_user;
-        get_currentuserinfo();
-//        $output_form .= $current_user->ID . ' -  ' . $current_user->user_email . ' stugum : ' . $current_user->ID && $this->wc_db_helper->wc_has_post_notification($comment->comment_post_ID, $current_user->user_email);
-
-        if ($current_user->ID && $this->wc_db_helper->wc_has_post_notification($comment->comment_post_ID, $current_user->user_email)) {
-            $output_form .= '<label class="wc-label-comment-notify" style="cursor: default;">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_post'] . ' | <a href="' . $this->wc_db_helper->wc_unsubscribe_link($comment->comment_post_ID, $current_user->user_email, 'post') . '" rel="nofollow" class="unsubscribe">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe'] . '</a></label>';
-        } else {
-            $wc_notification_state = ($this->wc_options->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) ? 'checked="checked" value="1"' : 'value="0"';
-            if ($current_user->ID && $this->wc_db_helper->wc_has_comment_notification($comment->comment_post_ID, $comment->comment_ID, $current_user->user_email)) {
-                $output_form .= '<label class="wc-label-reply-notify" style="cursor: default;">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_comment'] . ' | <a href="' . $this->wc_db_helper->wc_unsubscribe_link($comment->comment_ID, $current_user->user_email, 'comment') . '" rel="nofollow" class="unsubscribe">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe'] . '</a></label><br/>';
-//                echo 'subscribed reply';
-            } else if ($this->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox) {
-                $output_form .= '<input class="wc-label-reply-notify wc_notification_new_reply" id="wc_notification_new_reply-' . $unique_id . '" ' . $wc_notification_state . ' type="checkbox" name="wc_notification_new_reply"/> <label class="wc-label-comment-notify" for="wc_notification_new_reply-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] . '</label><br />';
-//                echo 'not subscribed reply';
-            }
-            if ($this->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) {
-                $output_form .= '<input class="wc-label-comment-notify wc_notification_new_comment" id="wc_notification_new_comment-' . $unique_id . '" ' . $wc_notification_state . ' type="checkbox" name="wc_notification_new_comment"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_comment'] . '</label>';
-            }
-        }
-
-        $output_form .= '</div>';
-        $output_form .= '</div>';
-        $output_form .= '</div>';
-
-        $output_form .= '<input type="hidden" name="wc_home_url" value="' . plugins_url() . '" id="wc_home_url-' . $unique_id . '" />';
-        $output_form .= '<input type="hidden" name="wc_comment_post_ID" value="' . $comment->comment_post_ID . '" id="wc_comment_post_ID-' . $unique_id . '" />';
-        $output_form .= '<input type="hidden" name="wc_comment_parent" value="' . $comment->comment_ID . '" id="wc_comment_parent-' . $unique_id . '" />';
-
-        $output_form .= '</form>';
-        $output_form .= '</div>';
 
         if ($this->wc_options->wc_options_serialized->wc_user_must_be_registered) {
             if (!$this->wc_options->wc_options_serialized->wc_reply_button_members_show_hide && is_user_logged_in()) {

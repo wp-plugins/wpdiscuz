@@ -218,10 +218,13 @@ class WC_DB_Helper {
     }
 
     public function wc_add_email_notification($id, $post_id, $email, $is_all) {
-        if ($is_all) {
+        if ($is_all == 1) {
             $subscribtion_type = 'post';
             $this->wc_delete_comment_notifications($id, $email);
-        } else {
+        } else if ($is_all == 2) {
+            $subscribtion_type = 'all_comment';
+            $this->wc_delete_comment_notifications($id, $email);
+        } else if ($is_all == 3) {
             $subscribtion_type = 'comment';
         }
         $activation_key = md5($email . uniqid() . time());
@@ -234,19 +237,31 @@ class WC_DB_Helper {
         return $this->db->get_results($sql, ARRAY_A);
     }
 
+    public function wc_get_post_all_new_comment_notification($post_id, $email) {
+        $sql = $this->db->prepare("SELECT `id`,`email`,`activation_key` FROM `" . $this->email_notification . "` WHERE `subscribtion_type` = 'all_comment' AND `subscribtion_id` = %d  AND `email` = %s;", $post_id, $email);
+        return $this->db->get_results($sql, ARRAY_A);
+    }
+
     public function wc_get_post_new_reply_notification($comment_id, $email) {
         $sql = $this->db->prepare("SELECT  `id`,`email`,`activation_key` FROM `" . $this->email_notification . "` WHERE `subscribtion_type` = 'comment' AND `subscribtion_id` = %d  AND `email` != %s;", $comment_id, $email);
         return $this->db->get_results($sql, ARRAY_A);
     }
 
     public function wc_has_post_notification($post_id, $email) {
-        $sql = $this->db->prepare("SELECT `id` FROM `" . $this->email_notification . "` WHERE `subscribtion_type` = 'post' AND `subscribtion_id` = %d AND `email` = %s", $post_id, $email);        
+        $sql = $this->db->prepare("SELECT `id` FROM `" . $this->email_notification . "` WHERE `subscribtion_type` = 'post' AND `subscribtion_id` = %d AND `email` = %s", $post_id, $email);
+        $result = $this->db->get_results($sql, ARRAY_N);
+        return count($result);
+    }
+
+    public function wc_has_all_comments_notification($post_id, $email) {
+        $sql = $this->db->prepare("SELECT `id` FROM `" . $this->email_notification . "` WHERE `subscribtion_type` IN('post', 'all_comment') AND `subscribtion_id` = %d AND `email` = %s", $post_id, $email);
+//        echo $sql;
         $result = $this->db->get_results($sql, ARRAY_N);
         return count($result);
     }
 
     public function wc_has_comment_notification($post_id, $comment_id, $email) {
-        $sql_comments_notifications = $this->db->prepare("SELECT count(*) FROM `" . $this->email_notification . "` WHERE `email` LIKE %s AND `subscribtion_type` LIKE 'post' AND `subscribtion_id` = %d", $email, $post_id);
+        $sql_comments_notifications = $this->db->prepare("SELECT count(*) FROM `" . $this->email_notification . "` WHERE `email` LIKE %s AND `subscribtion_type` IN('post', 'all_comment') AND `subscribtion_id` = %d", $email, $post_id);
         if ($this->db->get_var($sql_comments_notifications)) {
             return 1;
         }
@@ -260,10 +275,11 @@ class WC_DB_Helper {
      * delete comment thread subscribtions if new subscribtion type is post
      */
     public function wc_delete_comment_notifications($post_id, $email) {
-        $sql_delete_comment_notifications = $this->db->prepare("DELETE FROM `" . $this->email_notification . "` WHERE `subscribtion_type` = 'comment' AND `post_id` = %d AND `email` LIKE %s;", $post_id, $email);
+        $sql_delete_comment_notifications = $this->db->prepare("DELETE FROM `" . $this->email_notification . "` WHERE `subscribtion_type` != 'post' AND `post_id` = %d AND `email` LIKE %s;", $post_id, $email);
+//        exit($sql_delete_comment_notifications);
         $this->db->query($sql_delete_comment_notifications);
     }
-    
+
     /**
      * create unsubscribe link 
      */
@@ -271,11 +287,11 @@ class WC_DB_Helper {
         $sql_subscriber_data = $this->db->prepare("SELECT `id`, `post_id`, `activation_key` FROM `" . $this->email_notification . "` WHERE `subscribtion_type` = %s AND `subscribtion_id` = %d  AND `email` LIKE %s", $subscribtion_type, $id, $email);
         $wc_unsubscribe = $this->db->get_row($sql_subscriber_data, ARRAY_A);
         $post_id = $wc_unsubscribe['post_id'];
-        
+
         $wc_unsubscribe_link = get_permalink($post_id) . "?wpdiscuzSubscribeID=" . $wc_unsubscribe['id'] . "&key=" . $wc_unsubscribe['activation_key'] . '&#wc_unsubscribe_message';
         return $wc_unsubscribe_link;
     }
-    
+
     /**
      * delete subscribtion
      */

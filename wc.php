@@ -3,7 +3,7 @@
 /*
   Plugin Name: wpDiscuz - Wordpress Comments
   Description: Better comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share.
-  Version: 2.0.4
+  Version: 2.0.5
   Author: gVectors Team (A. Chakhoyan, G. Zakaryan, H. Martirosyan)
   Author URI: http://www.gvectors.com/
   Plugin URI: http://www.gvectors.com/wpdiscuz/
@@ -29,10 +29,12 @@ class WC_Core {
     public $commetns_count = 0;
     public $comment_count_text;
     public static $PLUGIN_DIRECTORY;
+    public static $TEXT_DOMAIN = 'wpdiscuz';
     public $post_type;
-    private $wc_version_slug = 'wc_plugin_version';
+    public $wc_version_slug = 'wc_plugin_version';
 
     function __construct() {
+        add_action('plugins_loaded', array(&$this, 'load_wpdiscuz_text_domain'));
         add_action('init', array(&$this, 'init_plugin_dir_name'), 1);
 
         $this->wc_options = new WC_Options();
@@ -72,8 +74,16 @@ class WC_Core {
         add_action('wp_ajax_nopriv_wc_list_new_comments', array(&$this, 'wc_list_new_comments'));
 
         add_filter('preprocess_comment', array(&$this, 'wc_new_comment'));
+        add_action('transition_comment_status', array(&$this, 'wc_notify_to_subscriber'), 265, 3);
+
+        $plugin = plugin_basename(__FILE__);
+        add_filter("plugin_action_links_$plugin", array(&$this, 'wc_add_plugin_settings_link'));
 
         add_action('wp_head', array(&$this, 'init_current_post_type'));
+    }
+
+    public function load_wpdiscuz_text_domain() {
+        load_plugin_textdomain('wpdiscuz', false, dirname(plugin_basename(__FILE__)) . '/languages/');
     }
 
     /**
@@ -104,6 +114,7 @@ class WC_Core {
         $wc_new_options = $this->wc_options->wc_options_serialized->to_array();
         $wc_new_options['wc_show_hide_comment_checkbox'] = '1';
         $wc_new_options['wc_show_hide_reply_checkbox'] = '1';
+        $wc_new_options['wc_show_hide_all_reply_checkbox'] = '1';
         update_option($this->wc_options->wc_options_serialized->wc_options_slug, serialize($wc_new_options));
     }
 
@@ -130,7 +141,7 @@ class WC_Core {
     /**
      * change comment type 
      */
-    // MUST BE CHANGED IN NEXT VERSION OF PLUGIN
+// MUST BE CHANGED IN NEXT VERSION OF PLUGIN
     public function wc_new_comment($commentdata) {
 
         $commentdata['comment_type'] = isset($commentdata['comment_type']) ? $commentdata['comment_type'] : '';
@@ -187,7 +198,7 @@ class WC_Core {
         wp_register_style('validator-style', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/css/fv.css'));
         wp_enqueue_style('validator-style');
 
-        wp_enqueue_script('wc-ajax-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-ajax.js'), array('jquery'), '2.0.1', false);
+        wp_enqueue_script('wc-ajax-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-ajax.js'), array('jquery'), '2.0.5', false);
         wp_localize_script('wc-ajax-js', 'wc_ajax_obj', array('url' => admin_url('admin-ajax.php')));
 
         wp_enqueue_script('wc-cookie-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/jquery.cookie.js'), array('jquery'), '1.4.1', false);
@@ -278,11 +289,11 @@ class WC_Core {
             'b' => array(),
             'u' => array(),
             'strong' => array(),
-            'p' => array()
+            'p' => array(),
+            'img' => array('src' => array(), 'width' => array(), 'height' => array(), 'alt' => array())
         ));
 
         $comment = $this->wc_helper->make_clickable($comment);
-        $comment = nl2br($comment);
 
         if ($name && filter_var($email, FILTER_VALIDATE_EMAIL) && $comment && filter_var($comment_post_ID)) {
 
@@ -313,8 +324,10 @@ class WC_Core {
 
             if ($notification_type == 'post' && !$this->wc_db_helper->wc_has_post_notification($comment_post_ID, $email)) {
                 $this->wc_db_helper->wc_add_email_notification($comment_post_ID, $comment_post_ID, $email, 1);
+            } else if ($notification_type == 'all_comment' && !$this->wc_db_helper->wc_has_all_comments_notification($comment_post_ID, $email)) {
+                $this->wc_db_helper->wc_add_email_notification($comment_post_ID, $comment_post_ID, $email, 2);
             } else if ($notification_type == 'reply' && !$this->wc_db_helper->wc_has_comment_notification($comment_post_ID, $new_comment_id, $email)) {
-                $this->wc_db_helper->wc_add_email_notification($new_comment_id, $comment_post_ID, $email, 0);
+                $this->wc_db_helper->wc_add_email_notification($new_comment_id, $comment_post_ID, $email, 3);
             }
 
             $new_comment = new WC_Comment(get_comment($new_comment_id, OBJECT));
@@ -341,7 +354,7 @@ class WC_Core {
     /**
      * vote on comment via ajax
      */
-    // MUST BE CHANGED IN NEXT VERSION OF PLUGIN
+// MUST BE CHANGED IN NEXT VERSION OF PLUGIN
     public function vote_on_comment() {
         if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
             $this->wc_options->wc_options_serialized->wc_phrases = $this->wc_db_helper->get_phrases();
@@ -398,7 +411,7 @@ class WC_Core {
         exit();
     }
 
-    // MUST BE CHANGED IN NEXT VERSION OF PLUGIN
+// MUST BE CHANGED IN NEXT VERSION OF PLUGIN
     public function live_update() {
         global $current_user;
         get_currentuserinfo();
@@ -460,7 +473,7 @@ class WC_Core {
     /**
      * list new comments 
      */
-    // MUST BE CHANGED IN NEXT VERSION OF PLUGIN
+// MUST BE CHANGED IN NEXT VERSION OF PLUGIN
     public function wc_list_new_comments() {
         global $current_user;
         get_currentuserinfo();
@@ -587,7 +600,7 @@ class WC_Core {
         return false;
     }
 
-    // MUST BE CHANGED IN NEXT VERSION OF PLUGIN
+// MUST BE CHANGED IN NEXT VERSION OF PLUGIN
     public function get_invisible_comment_count($wc_new_comments, $wc_author_email = null, $visible_parent_comment_ids = array(), $wc_last_new_comment_id = 0, $wc_last_new_reply_id = 0) {
         $wc_new_comments_data = array();
         $wc_new_comments_count = 0;
@@ -633,7 +646,7 @@ class WC_Core {
     /**
      * get comments by comment type
      */
-    // MUST BE CHANGED IN NEXT VERSION OF PLUGIN
+// MUST BE CHANGED IN NEXT VERSION OF PLUGIN
     public function get_wp_comments($comments_offset, $post_id = null, $wc_curr_user_comment_count = 0, $wc_hidden_new_comment_count = 0) {
         global $post;
         if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
@@ -685,7 +698,7 @@ class WC_Core {
     /**
      * load more comments by offset
      */
-    // MUST BE CHANGED IN NEXT VERSION OF PLUGIN
+// MUST BE CHANGED IN NEXT VERSION OF PLUGIN
     public function load_more_comments() {
         $c_offset = intval($_POST['comments_offset']);
         $c_offset = ($c_offset) ? $c_offset : 1;
@@ -754,7 +767,7 @@ class WC_Core {
 
     public function init_current_post_type() {
         global $post;
-        if (in_array($post->post_type, $this->wc_options->wc_options_serialized->wc_post_types) && comments_open($post->ID)) {
+        if (in_array($post->post_type, $this->wc_options->wc_options_serialized->wc_post_types)) {
             add_filter('comments_template', array(&$this, 'remove_comments_template_on_pages'), 1);
         }
     }
@@ -780,15 +793,19 @@ class WC_Core {
             $email = isset($_POST['wc_email']) ? $_POST['wc_email'] : '';
         }
 
-
         if ($comment_id && $email && $post_id) {
             $comment = get_comment($comment_id);
-            $parrent_comment_id = $comment->comment_parent;
+            $parent_comment_id = $comment->comment_parent;
             if ($comment->comment_approved) {
                 $this->wc_notify_on_new_comments($post_id, $comment_id, $email);
             }
-            if ($comment->comment_approved && $parrent_comment_id) {
-                $this->wc_notify_on_new_reply($parrent_comment_id, $comment->comment_ID, $email);
+            if ($comment->comment_approved && $parent_comment_id) {
+                $this->wc_notify_on_new_reply($parent_comment_id, $comment->comment_ID, $email);
+                $parent_comment = get_comment($parent_comment_id);
+                $parent_comment_email = $parent_comment->comment_author_email;
+                if ($parent_comment_email != $email) {
+                    $this->wc_notify_on_all_new_reply($post_id, $comment_id, $parent_comment_email);
+                }
             }
         }
         exit();
@@ -809,6 +826,18 @@ class WC_Core {
     /**
      * notify on comment new replies
      */
+    public function wc_notify_on_all_new_reply($post_id, $new_comment_id, $email) {
+        $emails_array = $this->wc_db_helper->wc_get_post_all_new_comment_notification($post_id, $email);
+        $subject = ($this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_subject']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_subject'] : 'New Reply';
+        $message = ($this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_message']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_message'] : 'New reply on the discussion section you\'ve been interested in';
+        foreach ($emails_array as $e_row) {
+            $this->wc_email_sender($e_row, $new_comment_id, $subject, $message);
+        }
+    }
+
+    /**
+     * notify on comment new replies
+     */
     public function wc_notify_on_new_reply($parent_comment_id, $new_comment_id, $email) {
         $emails_array = $this->wc_db_helper->wc_get_post_new_reply_notification($parent_comment_id, $email);
         $subject = ($this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_subject']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_subject'] : 'New Reply';
@@ -823,6 +852,13 @@ class WC_Core {
      */
     public function wc_email_sender($email_data, $wc_new_comment_id, $subject, $message) {
         $comment = get_comment($wc_new_comment_id);
+        $curr_post = get_post($comment->comment_post_ID);
+        $curr_post_author = get_userdata($curr_post->post_author);
+
+        if ($email_data['email'] == $curr_post_author->user_email && (get_option('comments_notify') || get_option('moderation_notify'))) {
+            return;
+        }
+
         $wc_new_comment_content = $comment->comment_content;
         $permalink = get_comment_link($wc_new_comment_id);
         $unsubscribe_url = get_permalink($comment->comment_post_ID) . "?wpdiscuzSubscribeID=" . $email_data['id'] . "&key=" . $email_data['activation_key'] . '&#wc_unsubscribe_message';
@@ -835,8 +871,35 @@ class WC_Core {
         wp_mail($email_data['email'], $subject, $message, $headers);
     }
 
+    public function wc_notify_to_subscriber($new_status, $old_status, $comment) {
+        if ($old_status != $new_status) {
+            if ($new_status == 'approved') {
+                $post_id = $comment->comment_post_ID;
+                $comment_id = $comment->comment_ID;
+                $email = $comment->comment_author_email;
+                $parent_comment = get_comment($comment->comment_parent);
+                $this->wc_notify_on_new_comments($post_id, $comment_id, $email);
+                if ($parent_comment) {
+                    $this->wc_notify_on_new_reply($parent_comment->comment_ID, $comment_id, $email);
+                    $parent_comment_email = $parent_comment->comment_author_email;
+                    if ($parent_comment_email != $email) {
+                        $this->wc_notify_on_all_new_reply($post_id, $comment_id, $parent_comment_email);
+                    }
+                }
+            }
+        }
+    }
+
     public function wc_unsubscribe($id, $activation_key) {
         $this->wc_db_helper->wc_unsubscribe($id, $activation_key);
+    }
+
+// Add settings link on plugin page
+    public function wc_add_plugin_settings_link($links) {
+        $settings_link = '<a href="' . admin_url() . 'admin.php?page=wpdiscuz_options_page">' . __('Settings', 'default') . '</a> |';
+        $settings_link .= '<a href="' . admin_url() . 'admin.php?page=wpdiscuz_phrases_page">' . __('Phrases', 'default') . '</a>';
+        array_unshift($links, $settings_link);
+        return $links;
     }
 
 }

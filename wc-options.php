@@ -28,7 +28,7 @@ class WC_Options {
         if (isset($_POST['wc_submit_options'])) {
 
             if (function_exists('current_user_can') && !current_user_can('manage_options')) {
-                die(_e('Hacker?', 'wpdiscuz'));
+                die(_e('Hacker?', WC_Core::$TEXT_DOMAIN));
             }
 
             if (function_exists('check_admin_referer')) {
@@ -43,6 +43,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_share_buttons_show_hide = isset($_POST['wc_share_buttons_show_hide']) ? $_POST['wc_share_buttons_show_hide'] : 0;
             $this->wc_options_serialized->wc_captcha_show_hide = isset($_POST['wc_captcha_show_hide']) ? $_POST['wc_captcha_show_hide'] : 0;
             $this->wc_options_serialized->wc_user_must_be_registered = isset($_POST['wc_user_must_be_registered']) ? $_POST['wc_user_must_be_registered'] : 0;
+            $this->wc_options_serialized->wc_show_hide_loggedin_username = isset($_POST['wc_show_hide_loggedin_username']) ? $_POST['wc_show_hide_loggedin_username'] : 0;
             $this->wc_options_serialized->wc_held_comment_to_moderate = isset($_POST['wc_held_comment_to_moderate']) ? $_POST['wc_held_comment_to_moderate'] : 0;
             $this->wc_options_serialized->wc_reply_button_guests_show_hide = isset($_POST['wc_reply_button_guests_show_hide']) ? $_POST['wc_reply_button_guests_show_hide'] : 0;
             $this->wc_options_serialized->wc_reply_button_members_show_hide = isset($_POST['wc_reply_button_members_show_hide']) ? $_POST['wc_reply_button_members_show_hide'] : 0;
@@ -52,6 +53,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_simple_comment_date = isset($_POST['wc_simple_comment_date']) ? $_POST['wc_simple_comment_date'] : 0;
             $this->wc_options_serialized->wc_comment_reply_checkboxes_default_checked = isset($_POST['wc_comment_reply_checkboxes_default_checked']) ? $_POST['wc_comment_reply_checkboxes_default_checked'] : 0;
             $this->wc_options_serialized->wc_show_hide_comment_checkbox = isset($_POST['wc_show_hide_comment_checkbox']) ? $_POST['wc_show_hide_comment_checkbox'] : 0;
+            $this->wc_options_serialized->wc_show_hide_all_reply_checkbox = isset($_POST['wc_show_hide_all_reply_checkbox']) ? $_POST['wc_show_hide_all_reply_checkbox'] : 0;            
             $this->wc_options_serialized->wc_show_hide_reply_checkbox = isset($_POST['wc_show_hide_reply_checkbox']) ? $_POST['wc_show_hide_reply_checkbox'] : 0;            
             $this->wc_options_serialized->wc_form_bg_color = isset($_POST['wc_form_bg_color']) ? $_POST['wc_form_bg_color'] : '#f9f9f9';
             $this->wc_options_serialized->wc_comment_text_size = isset($_POST['wc_comment_text_size']) ? $_POST['wc_comment_text_size'] : '14px';            
@@ -72,7 +74,7 @@ class WC_Options {
             <div style="float:left; width:50px; height:55px; margin:10px 10px 20px 0px;">
                 <img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/plugin-icon-48.png'); ?>"/>
             </div>
-            <h2 style="padding-bottom:20px; padding-top:15px;"><?php _e('wpDiscuz General Settings', 'wpdiscuz'); ?></h2>
+            <h2 style="padding-bottom:20px; padding-top:15px;"><?php _e('wpDiscuz General Settings', WC_Core::$TEXT_DOMAIN); ?></h2>
             <br style="clear:both" />
 
 
@@ -160,7 +162,7 @@ class WC_Options {
                         <tr valign="top">
                             <td colspan="4">
                                 <p class="submit">
-                                    <input type="submit" class="button button-primary" name="wc_submit_options" value="<?php _e('Save Changes', 'wpdiscuz'); ?>" />
+                                    <input type="submit" class="button button-primary" name="wc_submit_options" value="<?php _e('Save Changes', WC_Core::$TEXT_DOMAIN); ?>" />
                                 </p>
                             </td>
                         </tr>
@@ -179,7 +181,7 @@ class WC_Options {
         if (isset($_POST['wc_submit_phrases'])) {
 
             if (function_exists('current_user_can') && !current_user_can('manage_options')) {
-                die(_e('Hacker?', 'wpdiscuz'));
+                die(_e('Hacker?', WC_Core::$TEXT_DOMAIN));
             }
 
             if (function_exists('check_admin_referer')) {
@@ -196,7 +198,9 @@ class WC_Options {
             $this->wc_options_serialized->wc_phrases['wc_name_text'] = $_POST['wc_name_text'];
             $this->wc_options_serialized->wc_phrases['wc_captcha_text'] = $_POST['wc_captcha_text'];
             $this->wc_options_serialized->wc_phrases['wc_submit_text'] = $_POST['wc_submit_text'];            
+            $this->wc_options_serialized->wc_phrases['wc_manage_subscribtions'] = $_POST['wc_manage_subscribtions'];
             $this->wc_options_serialized->wc_phrases['wc_notify_on_new_comment'] = $_POST['wc_notify_on_new_comment'];
+            $this->wc_options_serialized->wc_phrases['wc_notify_on_all_new_reply'] = $_POST['wc_notify_on_all_new_reply'];
             $this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] = $_POST['wc_notify_on_new_reply'];                                    
             $this->wc_options_serialized->wc_phrases['wc_load_more_submit_text'] = $_POST['wc_load_more_submit_text'];
             $this->wc_options_serialized->wc_phrases['wc_reply_text'] = $_POST['wc_reply_text'];
@@ -215,6 +219,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_phrases['wc_new_reply_email_subject'] = $_POST['wc_new_reply_email_subject'];
             $this->wc_options_serialized->wc_phrases['wc_new_reply_email_message'] = $_POST['wc_new_reply_email_message'];           
             $this->wc_options_serialized->wc_phrases['wc_subscribed_on_comment'] = $_POST['wc_subscribed_on_comment'];
+            $this->wc_options_serialized->wc_phrases['wc_subscribed_on_all_comment'] = $_POST['wc_subscribed_on_all_comment'];
             $this->wc_options_serialized->wc_phrases['wc_subscribed_on_post'] = $_POST['wc_subscribed_on_post'];
             $this->wc_options_serialized->wc_phrases['wc_unsubscribe'] = $_POST['wc_unsubscribe'];            
             $this->wc_options_serialized->wc_phrases['wc_unsubscribe_message'] = $_POST['wc_unsubscribe_message'];
@@ -231,6 +236,8 @@ class WC_Options {
             $this->wc_options_serialized->wc_phrases['wc_ago_text'] = $_POST['wc_ago_text'];
             $this->wc_options_serialized->wc_phrases['wc_posted_today_text'] = $_POST['wc_posted_today_text'];
             $this->wc_options_serialized->wc_phrases['wc_you_must_be_text'] = $_POST['wc_you_must_be_text'];
+            $this->wc_options_serialized->wc_phrases['wc_logged_in_as'] = $_POST['wc_logged_in_as'];
+            $this->wc_options_serialized->wc_phrases['wc_log_out'] = $_POST['wc_log_out'];
             $this->wc_options_serialized->wc_phrases['wc_logged_in_text'] = $_POST['wc_logged_in_text'];
             $this->wc_options_serialized->wc_phrases['wc_to_post_comment_text'] = $_POST['wc_to_post_comment_text'];
             $this->wc_options_serialized->wc_phrases['wc_vote_counted'] = $_POST['wc_vote_counted'];
@@ -261,7 +268,7 @@ class WC_Options {
             <div style="float:left; width:50px; height:55px; margin:10px 10px 20px 0px;">
                 <img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/plugin-icon-48.png'); ?>" style="height:43px;"/>
             </div>
-            <h2 style="padding-bottom:20px; padding-top:15px;"><?php _e('WpDiscuz Front-end Phrases', 'wpdiscuz'); ?></h2>
+            <h2 style="padding-bottom:20px; padding-top:15px;"><?php _e('WpDiscuz Front-end Phrases', WC_Core::$TEXT_DOMAIN); ?></h2>
             <br style="clear:both" />
             <form action="<?php echo admin_url(); ?>admin.php?page=wpdiscuz_phrases_page&updated=true" method="post" name="wpdiscuz_phrases_page" class="wc-phrases-settings-form wc-form">
                 <?php
@@ -286,7 +293,7 @@ class WC_Options {
                         <tr valign="top">
                             <td colspan="4">
                                 <p class="submit">
-                                    <input type="submit" class="button button-primary" name="wc_submit_phrases" value="<?php _e('Save Changes', 'wpdiscuz'); ?>" />
+                                    <input type="submit" class="button button-primary" name="wc_submit_phrases" value="<?php _e('Save Changes', WC_Core::$TEXT_DOMAIN); ?>" />
                                 </p>
                             </td>
                         </tr>

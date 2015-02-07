@@ -15,6 +15,7 @@ jQuery(document).ready(function ($) {
     var wc_comment_list_update_type = parseInt($('#wc_comment_list_update_type').val());
     var wc_comment_list_update_timer = parseInt($('#wc_comment_list_update_timer').val());
     var wc_notification_new_comment;
+    var wc_notification_all_new_reply;
     var wc_notification_new_reply;
     var wc_all_comments_count_new;
 
@@ -63,6 +64,7 @@ jQuery(document).ready(function ($) {
         wc_comment_parent = $('#wc_comment_parent-' + uniqueID).val();
         wc_form = $('#wc_comm_form-' + uniqueID);
         wc_notification_new_comment = parseInt($('#wc_notification_new_comment-' + uniqueID).val());
+        wc_notification_all_new_reply = parseInt($('#wc_notification_all_new_reply-' + uniqueID).val());
         wc_notification_new_reply = parseInt($('#wc_notification_new_reply-' + uniqueID).val());
 
         var depth = '';
@@ -74,7 +76,7 @@ jQuery(document).ready(function ($) {
 
 
         var notification_type = '';
-        if ($('.wc_notification_new_comment').length || $('.wc_notification_new_reply').length) {
+        if ($('.wc_notification_new_comment').length || $('.wc_notification_all_new_reply').length || $('.wc_notification_new_reply').length) {
 //var wc_comment_reply_checkboxes_default_checked = $('#wc_comment_reply_checkboxes_default_checked').val();
             if (wc_notification_new_reply !== 0) {
                 notification_type = 'reply';
@@ -82,6 +84,12 @@ jQuery(document).ready(function ($) {
                 $('#wc_notification_new_reply-' + uniqueID).val('0').prop("checked", false);
 //                                }
             }
+
+            if (wc_notification_all_new_reply !== 0) {
+                notification_type = 'all_comment';
+                $('#wc_notification_all_new_reply-' + uniqueID).val('0').prop("checked", false);
+            }
+
             if (wc_notification_new_comment !== 0) {
                 notification_type = 'post';
 //if (wc_comment_reply_checkboxes_default_checked == 0) {

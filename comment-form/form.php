@@ -228,7 +228,7 @@ $header_text .= ' "' . get_the_title($post) . '"';
 
         <div style="clear:both"></div>
         <div class="by-wpdiscuz"><span id="awpdiscuz" onclick='javascript:document.getElementById("bywpdiscuz").style.display = "inline";
-                document.getElementById("awpdiscuz").style.display = "none";'><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/icon_info.png'); ?>" align="absmiddle" class="wpdimg"/></span>&nbsp;<a href="http://gvectors.com/wpdiscuz/" id="bywpdiscuz" title="wpDiscuz (<?php echo get_option($wc_core->wc_version_slug); ?>) - Interactive Comment System">wpDiscuz</a></div>
+                document.getElementById("awpdiscuz").style.display = "none";'><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/icon_info.png'); ?>" align="absmiddle" class="wpdimg"/></span>&nbsp;<a href="http://gvectors.com/wpdiscuz/" id="bywpdiscuz" title="wpDiscuz v<?php echo get_option($wc_core->wc_version_slug); ?> - Interactive Comment System">wpDiscuz</a></div>
 
         <div id="wc_openModalFormAction" class="modalDialog">
             <div id="wc_response_info" class="wc_modal">

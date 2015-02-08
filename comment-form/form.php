@@ -54,7 +54,7 @@ $header_text .= ' "' . get_the_title($post) . '"';
 ?>
 <div style="clear:both"></div>
 <div class="comments-area">
-    
+
 
     <?php
     if (isset($_GET['wpdiscuzSubscribeID']) && isset($_GET['key'])) {
@@ -71,32 +71,32 @@ $header_text .= ' "' . get_the_title($post) . '"';
         <h3 id="wc-comment-header"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_leave_a_reply_text']; ?></h3>    
     <?php } ?>
     <?php do_action('comment_form_before'); ?>
-    
-    
+
+
     <?php
     if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_loggedin_username) {
         if (is_user_logged_in()) {
             global $current_user;
             get_currentuserinfo();
-            $user_url = get_author_posts_url($current_user->ID); 
-			?>
+            $user_url = get_author_posts_url($current_user->ID);
+            ?>
             <div id="wc_show_hide_loggedin_username">
                 <span class="wc_show_hide_loggedin_username">
-                    <?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_logged_in_as'] . ' <a href="'.$user_url.'">' . $current_user->display_name . '</a> | <a href="' . wp_logout_url() . '">' . $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_log_out'] . '</a>'; ?> 
+                    <?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_logged_in_as'] . ' <a href="' . $user_url . '">' . $current_user->display_name . '</a> | <a href="' . wp_logout_url() . '">' . $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_log_out'] . '</a>'; ?> 
                 </span>
             </div>
             <?php
         }
     }
     ?>
-    
-    
+
+
     <div id="wpcomm">    
-        <p class="wc-comment-title">
-            <?php echo ($post->comment_count) ? $header_text : $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_be_the_first_text']; ?>
-        </p>
-        <?php do_action('comment_form_top'); ?>
         <?php if (comments_open($post->ID)) { ?>
+            <p class="wc-comment-title">
+                <?php echo ($post->comment_count) ? $header_text : $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_be_the_first_text']; ?>
+            </p>
+            <?php do_action('comment_form_top'); ?>
             <div class="wc-form-wrapper">
                 <?php
                 if ($wc_core->is_guest_can_comment()) {
@@ -240,4 +240,6 @@ $header_text .= ' "' . get_the_title($post) . '"';
         </div>
     </div>
 </div>
-<?php do_action('comment_form_after'); ?>
+<?php if (comments_open($post->ID)) { ?>
+    <?php do_action('comment_form_after'); ?>
+<?php } ?>

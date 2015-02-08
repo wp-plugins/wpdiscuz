@@ -27,6 +27,7 @@ New interactive, AJAX comment system. Responsive comment plugin with Live Update
 * | Ajax button "Load More Comments" instead of simple comments pagination
 * | Different comment date formats, reflects Wordpress date format settings
 * | Automatic URLs to link conversion in comment texts
+* | Automatic image source URLs to image (HTML) conversion in comment texts
 * | Multiple line-breaks (limited by Wordpress comment filter)
 * | Comment author notification options with special checkboxes on comment form
 * | Ability to add comment system on attachment pages if it's allowed by Wordpress
@@ -97,12 +98,13 @@ IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz u
 
 == Screenshots ==
 
-1. Ajax Form to add a new discussion thread Screenshot #1
-2. Discussion Threads with Reply Form Screenshot #2
-3. Live Update: checks for new comments and shows update buttons #3
-4. Front-End View with different colors Screenshot #4
-5. Full Front-End View Screenshot #5
-6. wpDiscuz General Settings #6
+1. wpDiscuz ajax comment form for Guests Screenshot #1
+2. wpDiscuz ajax comment form for logged in user Screenshot #2
+3. Discussion Threads with Reply Form Screenshot #3
+4. Live Update: checks for new comments and shows update buttons #4
+5. Front-End View with different colors Screenshot #5
+6. Full Front-End View Screenshot #6
+7. wpDiscuz General Settings #7
 
 
 
@@ -111,9 +113,11 @@ IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz u
 = 2.0.5 =
 * Added : Manage Subscriptions section on comment forms
 * Added : New subscribe option: Notify of new replies to all my comments
-* Added : Options to show/hide new subscription checkbox
+* Added : Show logged-in user name and logout link on top of the main form 
+* Added : Ability to insert image in comment content using image source URL
 * Added : Language translation support with .mo and .po files
 * Added : Hebrew (he_IL) language, thanks to Ahrale Shrem
+* Added : Options to show/hide new subscription checkbox
 * Fixed Bug: Duplication of "New Comment" email notifications for post authors
 * Fixed Bug: Problem with large space between the paragraphs
 

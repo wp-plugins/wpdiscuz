@@ -138,7 +138,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_notify_on_all_new_reply">
-            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_notify_on_all_new_reply']) ? $this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] : _e('Notify of new replies to all my comments', WC_Core::$TEXT_DOMAIN); ?>" name="wc_notify_on_all_new_reply" id="wc_notify_on_all_new_reply" />
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_notify_on_all_new_reply']) ? $this->wc_options_serialized->wc_phrases['wc_notify_on_all_new_reply'] : _e('Notify of new replies to all my comments', WC_Core::$TEXT_DOMAIN); ?>" name="wc_notify_on_all_new_reply" id="wc_notify_on_all_new_reply" />
         </label>
     </td>
 </tr>

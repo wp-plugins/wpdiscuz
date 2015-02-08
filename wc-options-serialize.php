@@ -271,7 +271,7 @@ class WC_Options_Serialize {
         $this->wc_share_buttons_show_hide = $options['wc_share_buttons_show_hide'];
         $this->wc_captcha_show_hide = $options['wc_captcha_show_hide'];
         $this->wc_user_must_be_registered = $options['wc_user_must_be_registered'];
-        $this->wc_show_hide_loggedin_username = $options['wc_show_hide_loggedin_username'];
+        $this->wc_show_hide_loggedin_username = isset($options['wc_show_hide_loggedin_username']) ? $options['wc_show_hide_loggedin_username'] : 0;
         $this->wc_held_comment_to_moderate = $options['wc_held_comment_to_moderate'];
         $this->wc_reply_button_guests_show_hide = $options['wc_reply_button_guests_show_hide'];
         $this->wc_reply_button_members_show_hide = $options['wc_reply_button_members_show_hide'];

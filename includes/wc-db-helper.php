@@ -255,7 +255,6 @@ class WC_DB_Helper {
 
     public function wc_has_all_comments_notification($post_id, $email) {
         $sql = $this->db->prepare("SELECT `id` FROM `" . $this->email_notification . "` WHERE `subscribtion_type` IN('post', 'all_comment') AND `subscribtion_id` = %d AND `email` = %s", $post_id, $email);
-//        echo $sql;
         $result = $this->db->get_results($sql, ARRAY_N);
         return count($result);
     }

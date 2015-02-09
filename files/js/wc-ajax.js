@@ -334,9 +334,16 @@ jQuery(document).ready(function ($) {
                     $('#wc_last_new_comment_id').val(obj.wc_last_comment_id);
                     $('.wc_new_comment').hide();
                     $(document).delegate('.wc_new_loaded_comment', 'mouseenter', function () {
-                        $(this, '.wc-comment-right').animate({
-                            backgroundColor: "#fefefe"
-                        }, 1500);
+                        if ($(this).parent('.wc-comment').hasClass('wc-reply')) {
+                            $(this, '.wc-comment-right').animate({
+                                backgroundColor: "#f8f8f8"
+                            }, 1500);
+                        } else {
+                            $(this, '.wc-comment-right').animate({
+                                backgroundColor: "#fefefe"
+                            }, 1500);
+                        }
+
                         $(this, '.wc-comment-right').removeClass('wc_new_loaded_comment');
                     });
                 }

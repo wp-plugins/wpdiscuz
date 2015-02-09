@@ -111,7 +111,7 @@ IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz u
 == Changelog ==
 
 = 2.0.7 =
-* Fixed Bug: Remove extra lines when comments were closed
+* Fixed Bug: Comment system hiding problem on posts with disabled discussion option.
 
 = 2.0.6 =
 * Fixed Bug: Problem with saving new pharses (Same text on checboxes)

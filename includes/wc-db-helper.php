@@ -1,7 +1,5 @@
 <?php
 
-require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-
 class WC_DB_Helper {
 
     private $db;
@@ -23,6 +21,7 @@ class WC_DB_Helper {
      * create table in db on activation if not exists
      */
     public function create_tables() {
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         if (!$this->wc_is_table_exists($this->users_voted)) {
             $sql = "CREATE TABLE `" . $this->users_voted . "`(`id` INT(11) NOT NULL AUTO_INCREMENT,`user_id` INT(11) NOT NULL, `comment_id` INT(11) NOT NULL, `vote_type` INT(11) DEFAULT NULL, PRIMARY KEY (`id`), KEY `user_id` (`user_id`), KEY `comment_id` (`comment_id`),  KEY `vote_type` (`vote_type`)) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci AUTO_INCREMENT=1;";
             dbDelta($sql);
@@ -43,6 +42,7 @@ class WC_DB_Helper {
     }
 
     public function wc_create_email_notification_table() {
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         $wc_old_notification_table_name = $this->dbprefix . 'wc_email_notfication';
         if (!$this->wc_is_table_exists($this->email_notification)) {
             $sql = "CREATE TABLE `" . $this->email_notification . "`(`id` INT(11) NOT NULL AUTO_INCREMENT, `email` VARCHAR(255) NOT NULL, `subscribtion_id` INT(11) NOT NULL, `post_id` INT(11) NOT NULL, `subscribtion_type` VARCHAR(255) NOT NULL, `activation_key` VARCHAR(255) NOT NULL, PRIMARY KEY (`id`), KEY `subscribtion_id` (`subscribtion_id`), KEY `post_id` (`post_id`)) ENGINE=MYISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci AUTO_INCREMENT=1;";
@@ -275,7 +275,6 @@ class WC_DB_Helper {
      */
     public function wc_delete_comment_notifications($post_id, $email) {
         $sql_delete_comment_notifications = $this->db->prepare("DELETE FROM `" . $this->email_notification . "` WHERE `subscribtion_type` != 'post' AND `post_id` = %d AND `email` LIKE %s;", $post_id, $email);
-//        exit($sql_delete_comment_notifications);
         $this->db->query($sql_delete_comment_notifications);
     }
 

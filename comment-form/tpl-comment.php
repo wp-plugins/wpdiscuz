@@ -52,8 +52,8 @@ class WC_Comment_Template_Builder {
         if ($this->wc_options->wc_options_serialized->wc_simple_comment_date) {
             $date_format = get_option('date_format');
             $time_format = get_option('time_format');
-            if (WC_Helper::isPostedToday(strtotime($comment->comment_date_gmt))) {
-                $posted_date = $this->wc_options->wc_options_serialized->wc_phrases['wc_posted_today_text'] . ' ' . mysql2date($time_format, $comment->comment_date_gmt);
+            if (WC_Helper::isPostedToday(strtotime($comment->comment_date))) {
+                $posted_date = $this->wc_options->wc_options_serialized->wc_phrases['wc_posted_today_text'] . ' ' . mysql2date($time_format, $comment->comment_date);
             } else {
                 $posted_date = get_comment_date($date_format, $comment->comment_ID);
             }

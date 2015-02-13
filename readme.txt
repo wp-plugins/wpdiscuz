@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: wordpress comments, ajax comments, ajax, live update, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system
 Requires at least: 2.7
 Tested up to: 4.1
-Stable tag: 2.0.8
+Stable tag: 2.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -115,12 +115,18 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 
 == Changelog ==
 
+= 2.0.9 =
+* Fixed Bug: Adapted with some themes ( Fatal error: Cannot redeclare add_user() )
+* Fixed Bug: Incorrect comment date/time if the default Wordpress date format is on
+
+IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
+
+
 = 2.0.8 =
 * Fixed Bug: Disabled comment issues (missing comment form)
 * If wpDiscuz comment form is missing please read this support topic: 
 http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 
-IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
 
 = 2.0.7 =
 * Fixed Bug: Comment system hiding problem on posts with disabled discussion option.

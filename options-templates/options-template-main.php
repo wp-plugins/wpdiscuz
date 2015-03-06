@@ -83,6 +83,23 @@
 
 <tr valign="top">
     <th scope="row">
+        <label for="wc_comment_editable_time"><?php _e('Allow comment editing for', WC_Core::$TEXT_DOMAIN); ?></label>
+    </th>
+    <td colspan="3">
+        <select id="wc_comment_editable_time" name="wc_comment_editable_time">
+            <?php $wc_comment_editable_time = isset($this->wc_options_serialized->wc_comment_editable_time) ? $this->wc_options_serialized->wc_comment_editable_time : 0; ?>
+            <option value="0" <?php selected($wc_comment_editable_time, '0'); ?>><?php _e('Not Allow', WC_Core::$TEXT_DOMAIN); ?></option>
+            <option value="900" <?php selected($wc_comment_editable_time, '900'); ?>>15 <?php _e('Minutes', WC_Core::$TEXT_DOMAIN); ?></option>
+            <option value="1800" <?php selected($wc_comment_editable_time, '1800'); ?>>30 <?php _e('Minutes', WC_Core::$TEXT_DOMAIN); ?></option>
+            <option value="3600" <?php selected($wc_comment_editable_time, '3600'); ?>>1 <?php _e('Hour', WC_Core::$TEXT_DOMAIN); ?></option>
+            <option value="10800" <?php selected($wc_comment_editable_time, '10800'); ?>>3 <?php _e('Hours', WC_Core::$TEXT_DOMAIN); ?></option>
+            <option value="86400" <?php selected($wc_comment_editable_time, '86400'); ?>>24 <?php _e('Hours', WC_Core::$TEXT_DOMAIN); ?></option>
+        </select>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
         <?php _e('Hide Voting buttons', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
@@ -259,6 +276,19 @@
     </label>
 </td>
 </tr>
+<?php if (class_exists('Prompt_Comment_Form_Handling')) { ?>
+    <tr valign="top">
+        <th scope="row">
+            <?php _e('Use Postmatic for subscriptions and commenting by email', WC_Core::$TEXT_DOMAIN); ?> 
+            <p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;"><?php  _e('Postmatic allows your users subscribe to comments. Instead of just being notified, they add a reply right from their inbox.', WC_Core::$TEXT_DOMAIN);  ?></p>
+        </th>
+        <td colspan="3">                                
+            <label for="wc_use_postmatic_for_comment_notification">
+                <input type="checkbox" <?php checked($this->wc_options_serialized->wc_use_postmatic_for_comment_notification == 1) ?> value="1" name="wc_use_postmatic_for_comment_notification" id="wc_use_postmatic_for_comment_notification" />
+            </label>
+        </td>
+    </tr>
+<?php } ?>
 <tr valign="top">
     <th scope="row">
         <label for="wc_comment_text_size"><?php _e('Comment text size in pixels', WC_Core::$TEXT_DOMAIN); ?></label>

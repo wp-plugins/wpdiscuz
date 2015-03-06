@@ -55,8 +55,7 @@ $header_text .= ' "' . get_the_title($post) . '"';
 <div style="clear:both"></div>
 
 <?php if (comments_open($post->ID)): ?>
-    <div class="comments-area">
-
+	<div id="comments" class="comments-area">
         <?php
         if (isset($_GET['wpdiscuzSubscribeID']) && isset($_GET['key'])) {
             $wc_core->wc_unsubscribe($_GET['wpdiscuzSubscribeID'], $_GET['key']);
@@ -68,12 +67,23 @@ $header_text .= ' "' . get_the_title($post) . '"';
         }
         ?>
 
+        <?php
+        if (isset($_GET['wpdiscuzConfirmID']) && isset($_GET['wpdiscuzConfirmKey']) && isset($_GET['wpDiscuzComfirm'])) {
+            $wc_core->wc_db_helper->wc_notification_confirm($_GET['wpdiscuzConfirmID'], $_GET['wpdiscuzConfirmKey']);
+            ?>
+            <div id="wc_unsubscribe_message">
+                <span class="wc_unsubscribe_message"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_comfirm_success_message']; ?></span>
+            </div>
+            <?php
+        }
+        ?>
+
         <?php if (comments_open($post->ID)) { ?>
             <h3 id="wc-comment-header"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_leave_a_reply_text']; ?></h3>    
         <?php } ?>
         <?php do_action('comment_form_before'); ?>
 
-        <?php
+		<?php
         if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_loggedin_username) {
             if (is_user_logged_in()) {
                 global $current_user;
@@ -89,7 +99,6 @@ $header_text .= ' "' . get_the_title($post) . '"';
             }
         }
         ?>
-
         <div id="wpcomm">    
             <p class="wc-comment-title">
                 <?php echo ($post->comment_count) ? $header_text : $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_be_the_first_text']; ?>
@@ -142,31 +151,41 @@ $header_text .= ' "' . get_the_title($post) . '"';
                                     <label class="wc-label-comment-notify" style="cursor: default;"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_post']; ?> | <a href="<?php echo $wc_core->wc_db_helper->wc_unsubscribe_link($post->ID, $current_user->user_email, 'post'); ?>" rel="nofollow" class="unsubscribe"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe']; ?></a></label>
                                     <?php
                                 } else {
-                                    $wc_notification_state = ($wc_core->wc_options->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) ? 'checked="checked" value="1"' : 'value="0"';
+                                    if ($wc_core->wc_options->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) {
+                                        $none_status = '';
+                                        $post_sub_status = 'checked="checked"';
+                                    } else {
+                                        $none_status = 'checked="checked"';
+                                        $post_sub_status = '';
+                                    }
 
                                     if ($current_user->ID && $wc_core->wc_db_helper->wc_has_all_comments_notification($post->ID, $current_user->user_email)) {
                                         ?>
                                         <label class="wc-label-all-reply-notify" style="cursor: default;"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_all_comment']; ?> | <a href="<?php echo $wc_core->wc_db_helper->wc_unsubscribe_link($post->ID, $current_user->user_email, 'all_comment'); ?>" rel="nofollow" class="unsubscribe"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe']; ?></a></label><br/>
                                         <?php
                                     } else {
-
+                                        if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox || $wc_core->wc_options->wc_options_serialized->wc_show_hide_all_reply_checkbox || $wc_core->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) {
+                                            ?>
+                                            <input id="wc_notification_none-<?php echo $unique_id; ?>" class="wc_notification_none" <?php echo $none_status; ?> value="wc_notification_none" type="radio" name="wp_comment_reply_notification-<?php echo $unique_id; ?>"/> <label class="wc-notification-none" for="wc_notification_none-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_none']; ?></label><br />
+                                            <?php
+                                        }
                                         if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox) {
                                             ?>
-                                            <input id="wc_notification_new_reply-<?php echo $unique_id; ?>" class="wc_notification_new_reply" <?php echo $wc_notification_state; ?> type="checkbox" name="wp_comment_reply_notification"/> <label class="wc-label-reply-notify" for="wc_notification_new_reply-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_reply']; ?></label><br />
+                                            <input id="wc_notification_new_reply-<?php echo $unique_id; ?>" class="wc_notification_new_reply" value="wc_notification_new_reply" type="radio" name="wp_comment_reply_notification-<?php echo $unique_id; ?>"/> <label class="wc-label-reply-notify" for="wc_notification_new_reply-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_reply']; ?></label><br />
                                             <?php
                                         }
 
                                         if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_all_reply_checkbox) {
                                             ?>
-                                            <input id="wc_notification_all_new_reply-<?php echo $unique_id; ?>" class="wc_notification_all_new_reply" <?php echo $wc_notification_state; ?> type="checkbox" name="wc_notification_all_new_reply"/> <label class="wc-label-all-reply-notify" for="wc_notification_all_new_reply-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_all_new_reply']; ?></label><br />
+                                            <input id="wc_notification_all_new_reply-<?php echo $unique_id; ?>" class="wc_notification_all_new_reply" value="wc_notification_all_new_reply" type="radio" name="wp_comment_reply_notification-<?php echo $unique_id; ?>"/> <label class="wc-label-all-reply-notify" for="wc_notification_all_new_reply-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_all_new_reply']; ?></label><br />
                                             <?php
                                         }
-                                    }
 
-                                    if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) {
-                                        ?>                                
-                                        <input id="wc_notification_new_comment-<?php echo $unique_id; ?>" class="wc_notification_new_comment" <?php echo $wc_notification_state; ?> type="checkbox" name="wp_post_comment_notification"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_comment']; ?></label><br />
-                                        <?php
+                                        if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) {
+                                            ?>                                
+                                            <input id="wc_notification_new_comment-<?php echo $unique_id; ?>" class="wc_notification_new_comment" value="wc_notification_new_comment" <?php echo $post_sub_status; ?> type="radio" name="wp_comment_reply_notification-<?php echo $unique_id; ?>"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-<?php echo $unique_id; ?>"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_comment']; ?></label><br />
+                                            <?php
+                                        }
                                     }
                                 }
                                 ?>
@@ -192,15 +211,14 @@ $header_text .= ' "' . get_the_title($post) . '"';
                 </div>
                 <div style="clear:both"></div>
             <?php } ?>
-        <?php else: ?>
-            <?php if ($post->comment_count > 0): ?>
-                <div class="comments-area" style="border:none;">
-                <?php else: ?>
-                    <div class="comments-area" style="display:none">
-                    <?php endif; ?>
-                    <div id="wpcomm" style="border:none;">    
-                    <?php endif; ?>
-
+<?php else: ?>
+	<?php if ($post->comment_count > 0): ?>
+    <div class="comments-area" style="border:none;">
+    <?php else: ?>
+    <div class="comments-area" style="display:none">
+    <?php endif; ?>
+    	<div id="wpcomm" style="border:none;">    
+<?php endif; ?>
                     <div class="wc-thread-wrapper">
                         <?php
                         $wc_wp_comments = $wc_core->get_wp_comments(1);
@@ -208,7 +226,6 @@ $header_text .= ' "' . get_the_title($post) . '"';
                         echo $wc_wp_comments['wc_list'];
                         ?>
                     </div>
-
                     <span style="display: none;">
                         <input type="hidden" name="wc_home_url" value="<?php echo plugins_url(); ?>" id="wc_home_url" />
                         <input type="hidden" name="wc_plugin_dir_url" value="<?php echo WC_Core::$PLUGIN_DIRECTORY; ?>" id="wc_plugin_dir_url" />
@@ -230,12 +247,10 @@ $header_text .= ' "' . get_the_title($post) . '"';
                         <input type="hidden" name="wc_last_new_reply_id" value="<?php echo $wc_last_comment_id; ?>" id="wc_last_new_reply_id" />
                         <input type="hidden" name="wc_comment_reply_checkboxes_default_checked" value="<?php echo $wc_core->wc_options->wc_options_serialized->wc_comment_reply_checkboxes_default_checked; ?>" id="wc_comment_reply_checkboxes_default_checked" />
                     </span>
-
                     <div style="clear:both"></div>
-                    <?php if (comments_open($post->ID)): ?>
-                        <div class="by-wpdiscuz"><span id="awpdiscuz" onclick='javascript:document.getElementById("bywpdiscuz").style.display = "inline";
-                                document.getElementById("awpdiscuz").style.display = "none";'><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/icon_info.png'); ?>" align="absmiddle" class="wpdimg"/></span>&nbsp;<a href="http://gvectors.com/wpdiscuz/" id="bywpdiscuz" title="wpDiscuz v<?php echo get_option($wc_core->wc_version_slug); ?> - Interactive Comment System">wpDiscuz</a></div>
-<?php endif; ?>
+                    <?php if (comments_open($post->ID)) { ?>
+                        <div class="by-wpdiscuz"><span id="awpdiscuz" onclick='javascript:document.getElementById("bywpdiscuz").style.display = "inline"; document.getElementById("awpdiscuz").style.display = "none";'><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/icon_info.png'); ?>" align="absmiddle" class="wpdimg"/></span>&nbsp;<a href="http://gvectors.com/wpdiscuz/" id="bywpdiscuz" title="wpDiscuz v<?php echo get_option($wc_core->wc_version_slug); ?> - Interactive Comment System">wpDiscuz</a></div>
+                    <?php } ?>
                     <div id="wc_openModalFormAction" class="modalDialog">
                         <div id="wc_response_info" class="wc_modal">
                             <div id="wc_response_info_box">
@@ -244,8 +259,8 @@ $header_text .= ' "' . get_the_title($post) . '"';
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <?php if (comments_open($post->ID)) { ?>
-                <?php do_action('comment_form_after'); ?>
+   		</div><!-- wpcomm -->
+	</div><!-- comments-area -->      
+<?php if (comments_open($post->ID)) { ?>
+	<?php do_action('comment_form_after'); ?>
 <?php } ?>

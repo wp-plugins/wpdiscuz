@@ -3,8 +3,8 @@ Contributors: gVectors Team
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UC44WQM5XJFPA
 Tags: wordpress comments, ajax comments, ajax, live update, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system
 Requires at least: 2.7
-Tested up to: 4.1
-Stable tag: 2.0.9
+Tested up to: 4.1.1
+Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,19 +26,28 @@ New interactive, AJAX comment system. Responsive comment plugin with Live Update
 * | Allows to create a new discussion thread and reply to existing comment
 * | Ajax button "Load More Comments" instead of simple comments pagination
 * | Different comment date formats, reflects Wordpress date format settings
+* | Users can edit their comments (time-frame can be limited by admin)
 * | Automatic URLs to link conversion in comment texts
 * | Automatic image source URLs to image (HTML) conversion in comment texts
 * | Multiple line-breaks (limited by Wordpress comment filter)
 * | Comment author notification options with special checkboxes on comment form
+* | Subscription activation via additional "Confirm Subscription" email
+* | Integration with Postmatic for subscriptions and commenting by email
 * | Ability to add comment system on attachment pages if it's allowed by Wordpress
 * | Fast and easy comment form with ajax validation and data submitting 
 * | Fully integrated and compatible with Wordpress 
 * | Uses Wordpress Comment system with all managing functions and features
-* | Uses WP Avatar System, fully compatible with BuddyPress and other profiling plugins
 * | Secure and Anti-Spam features will not allow spammers to comment
 * | Comment voting with positive and negative result
 * | Smart voting system with tracking by logged-in user and cookies
 * | Post sharing options: Facebook, Twitter and Google+
+
+
+**Integration with User Profile Plugins**
+
+* BuddyPress - Avatar, Profile page
+* Users Ultra - Avatar, Profile page
+* UserPro - Avatar, Badges, Profile page
 
 
 **Dashboard** 
@@ -51,11 +60,11 @@ New interactive, AJAX comment system. Responsive comment plugin with Live Update
 * | Option for "User Must be registered to comment"
 * | Option to held new comments for moderation 
 * | Option to hide user labels/titles
-* | Option to set number of comment threads per page (for "load more comments" button) 
+* | Option to set number of comment threads per page 
 * | Option to set nested comments maximum depth level
 * | Option to manage (hide/show) email notification checkboxes
 * | Option to notify administrators and comment authors on new comment/reply
-* | Option to keep checked-on the email notification checkboxes on comment form by default
+* | Option to keep ON the email notification options on comment form by default
 * | Option to manage font color
 * | Option to manage comment/reply background colors
 * | Option to manage author name and label color
@@ -115,11 +124,29 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 
 == Changelog ==
 
+= 2.1.0 =
+* Added : Users can edit their comments (time-frame can be limited by admin)
+* Added : Email notification options with radio selector instead of checkboxes
+* Added : Subscription activation via additional "Confirm Subscription" email
+* Added : Thumb-up and thumb-down voting icons
+* Added : Integration with UserPro - Comment author profile picture
+* Added : Integration with UserPro - Comment author name is linked to profile page
+* Added : Integration with UserPro - User badges under comment author avatar
+* Added : Integration with Postmatic for subscriptions and commenting by email
+* Added : Persian (fa_IR) language, thanks to Vahid (VSG24)
+* Added : Russian (ru_RU) language, thanks to OlafKS
+* Added : Close pop-up messages by clicking outside of message-box
+* Added : Scroll-down to comment are on clicking comments/replies link
+* Added : Filter hooks on email fields
+* Added : Filter hooks on comment form fields
+* Fixed Bug: Image source URL to image conversion in comment content
+
+IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
+
+
 = 2.0.9 =
 * Fixed Bug: Adapted with some themes ( Fatal error: Cannot redeclare add_user() )
 * Fixed Bug: Incorrect comment date/time if the default Wordpress date format is on
-
-IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
 
 
 = 2.0.8 =

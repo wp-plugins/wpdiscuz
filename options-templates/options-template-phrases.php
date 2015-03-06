@@ -116,7 +116,18 @@
     </th>
     <td colspan="3">                                
         <label for="wc_manage_subscribtions">
-            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_manage_subscribtions']) ? $this->wc_options_serialized->wc_phrases['wc_manage_subscribtions'] : _e('Manage Subscriptions', WC_Core::$TEXT_DOMAIN); ?>" name="wc_manage_subscribtions" id="wc_manage_subscribtions" />
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_manage_subscribtions']) ? $this->wc_options_serialized->wc_phrases['wc_manage_subscribtions'] : __('Manage Subscriptions', WC_Core::$TEXT_DOMAIN); ?>" name="wc_manage_subscribtions" id="wc_manage_subscribtions" />
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Notify "None"', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_notify_none">
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_notify_none']) ? $this->wc_options_serialized->wc_phrases['wc_notify_none'] : __('None', WC_Core::$TEXT_DOMAIN); ?>" name="wc_notify_none" id="wc_notify_none" />
         </label>
     </td>
 </tr>
@@ -127,7 +138,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_notify_on_new_comment">
-            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_notify_on_new_comment']) ? $this->wc_options_serialized->wc_phrases['wc_notify_on_new_comment'] : _e('Notify of all new follow-up comments', WC_Core::$TEXT_DOMAIN); ?>" name="wc_notify_on_new_comment" id="wc_notify_on_new_comment" />
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_notify_on_new_comment']) ? $this->wc_options_serialized->wc_phrases['wc_notify_on_new_comment'] : __('Notify of all new follow-up comments', WC_Core::$TEXT_DOMAIN); ?>" name="wc_notify_on_new_comment" id="wc_notify_on_new_comment" />
         </label>
     </td>
 </tr>
@@ -138,7 +149,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_notify_on_all_new_reply">
-            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_notify_on_all_new_reply']) ? $this->wc_options_serialized->wc_phrases['wc_notify_on_all_new_reply'] : _e('Notify of new replies to all my comments', WC_Core::$TEXT_DOMAIN); ?>" name="wc_notify_on_all_new_reply" id="wc_notify_on_all_new_reply" />
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_notify_on_all_new_reply']) ? $this->wc_options_serialized->wc_phrases['wc_notify_on_all_new_reply'] : __('Notify of new replies to all my comments', WC_Core::$TEXT_DOMAIN); ?>" name="wc_notify_on_all_new_reply" id="wc_notify_on_all_new_reply" />
         </label>
     </td>
 </tr>
@@ -149,7 +160,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_notify_on_new_reply">
-            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply']) ? $this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] : _e('Notify of new replies to this comment', WC_Core::$TEXT_DOMAIN); ?>" name="wc_notify_on_new_reply" id="wc_notify_on_new_reply" />
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply']) ? $this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] : __('Notify of new replies to this comment', WC_Core::$TEXT_DOMAIN); ?>" name="wc_notify_on_new_reply" id="wc_notify_on_new_reply" />
         </label>
     </td>
 </tr>
@@ -264,9 +275,6 @@
     </td>
 </tr>
 
-
-
-
 <tr valign="top">
     <th scope="row">
         <?php _e('Title For Authors', WC_Core::$TEXT_DOMAIN); ?>
@@ -377,6 +385,58 @@
     </td>
 </tr>
 
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Ignore Subscription', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_ignore_subscription">
+            <input type="text" name="wc_ignore_subscription" id="wc_ignore_subscription" class="wc_ignore_subscription" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_ignore_subscription']) ? $this->wc_options_serialized->wc_phrases['wc_ignore_subscription'] : __('Ignore Subscription', 'wpdiscuz'); ?>" placeholder="<?php echo _e('Ignore Subscription', WC_Core::$TEXT_DOMAIN); ?>"/>
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Confirm your subscribtion', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_confirm_email">
+            <input type="text" name="wc_confirm_email" id="wc_confirm_email" class="wc_confirm_email" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_confirm_email']) ? $this->wc_options_serialized->wc_phrases['wc_confirm_email'] : __('Confirm your subscribtion', WC_Core::$TEXT_DOMAIN); ?>" placeholder="<?php echo _e('Confirm your subscribtion', WC_Core::$TEXT_DOMAIN); ?>"/>
+        </label>
+    </td>
+</tr>
+<tr valign="top">
+    <th scope="row">
+        <?php _e('You\'ve successfully confirmed your subscription.', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_comfirm_success_message">
+            <textarea name="wc_comfirm_success_message" id="wc_comfirm_success_message"><?php echo isset($this->wc_options_serialized->wc_phrases['wc_comfirm_success_message']) ? $this->wc_options_serialized->wc_phrases['wc_comfirm_success_message'] : __('You\'ve successfully confirmed your subscription.', WC_Core::$TEXT_DOMAIN); ?></textarea>
+        </label>
+    </td>
+</tr>
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Subscribe Confirmation Email Subject', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_confirm_email_subject">
+            <input type="text" name="wc_confirm_email_subject" id="wc_confirm_email_subject" class="wc_confirm_email_subject" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_confirm_email_subject']) ? $this->wc_options_serialized->wc_phrases['wc_confirm_email_subject'] : __('Subscribe Confirmation', WC_Core::$TEXT_DOMAIN); ?>" placeholder="<?php echo _e('Subscribe Confirmation', WC_Core::$TEXT_DOMAIN); ?>"/>
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Subscribe Confirmation Email Content', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_confirm_email_message">
+            <textarea name="wc_confirm_email_message" id="wc_confirm_email_message"><?php echo isset($this->wc_options_serialized->wc_phrases['wc_confirm_email_message']) ? $this->wc_options_serialized->wc_phrases['wc_confirm_email_message'] : __('Hi, <br/> You just subscribed for new comments on our website. This means you will receive an email when new comments are posted according to subscription option you\'ve chosen. <br/> To activate, click confirm below. If you believe this is an error, ignore this message and we\'ll never bother you again.', WC_Core::$TEXT_DOMAIN); ?></textarea>
+        </label>
+    </td>
+</tr>
 <tr valign="top">
     <th scope="row">
         <?php _e('You\'ve successfully unsubscribed.', WC_Core::$TEXT_DOMAIN); ?>
@@ -515,7 +575,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_posted_today_text">
-            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_posted_today_text']) ? $this->wc_options_serialized->wc_phrases['wc_posted_today_text'] : _e('Today', WC_Core::$TEXT_DOMAIN); ?>" name="wc_posted_today_text" id="wc_posted_today_text" placeholder="<?php _e('Today', WC_Core::$TEXT_DOMAIN); ?> 9:26 PM"/>
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_posted_today_text']) ? $this->wc_options_serialized->wc_phrases['wc_posted_today_text'] : __('Today', WC_Core::$TEXT_DOMAIN); ?>" name="wc_posted_today_text" id="wc_posted_today_text" placeholder="<?php _e('Today', WC_Core::$TEXT_DOMAIN); ?> 9:26 PM"/>
         </label>
     </td>
 </tr>
@@ -694,7 +754,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_new_comment_button_text">
-            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_new_comment_button_text']) ? $this->wc_options_serialized->wc_phrases['wc_new_comment_button_text'] : _e('New Comment', 'wpdisucz'); ?>" name="wc_new_comment_button_text" id="wc_new_comment_button_text" placeholder="<?php _e("New Comment", "wpdiscuz"); ?>"/>
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_new_comment_button_text']) ? $this->wc_options_serialized->wc_phrases['wc_new_comment_button_text'] : __('New Comment', 'wpdisucz'); ?>" name="wc_new_comment_button_text" id="wc_new_comment_button_text" placeholder="<?php _e("New Comment", "wpdiscuz"); ?>"/>
         </label>
     </td>
 </tr>
@@ -705,7 +765,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_new_comments_button_text">
-            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_new_comments_button_text']) ? $this->wc_options_serialized->wc_phrases['wc_new_comments_button_text'] : _e('New Comments', 'wpdisucz'); ?>" name="wc_new_comments_button_text" id="wc_new_comments_button_text" placeholder="<?php _e("New Comments", "wpdiscuz"); ?>"/>
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_new_comments_button_text']) ? $this->wc_options_serialized->wc_phrases['wc_new_comments_button_text'] : __('New Comments', 'wpdisucz'); ?>" name="wc_new_comments_button_text" id="wc_new_comments_button_text" placeholder="<?php _e("New Comments", "wpdiscuz"); ?>"/>
         </label>
     </td>
 </tr>
@@ -716,7 +776,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_new_reply_button_text">
-            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_new_reply_button_text']) ? $this->wc_options_serialized->wc_phrases['wc_new_reply_button_text'] : _e('New Reply', 'wpdisucz'); ?>" name="wc_new_reply_button_text" id="wc_new_reply_button_text" placeholder="<?php _e("New Reply", "wpdiscuz"); ?>"/>
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_new_reply_button_text']) ? $this->wc_options_serialized->wc_phrases['wc_new_reply_button_text'] : __('New Reply', 'wpdisucz'); ?>" name="wc_new_reply_button_text" id="wc_new_reply_button_text" placeholder="<?php _e("New Reply", "wpdiscuz"); ?>"/>
         </label>
     </td>
 </tr>
@@ -727,7 +787,7 @@
     </th>
     <td colspan="3">                                
         <label for="wc_new_replies_button_text">
-            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_new_replies_button_text']) ? $this->wc_options_serialized->wc_phrases['wc_new_replies_button_text'] : _e('New Replies', 'wpdisucz'); ?>" name="wc_new_replies_button_text" id="wc_new_replies_button_text" placeholder="<?php _e("New Replies", "wpdiscuz"); ?>"/>
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_new_replies_button_text']) ? $this->wc_options_serialized->wc_phrases['wc_new_replies_button_text'] : __('New Replies', 'wpdisucz'); ?>" name="wc_new_replies_button_text" id="wc_new_replies_button_text" placeholder="<?php _e("New Replies", "wpdiscuz"); ?>"/>
         </label>
     </td>
 </tr>
@@ -738,7 +798,60 @@
     </th>
     <td colspan="3">                                
         <label for="wc_new_comments_text">
-            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_new_comments_text']) ? $this->wc_options_serialized->wc_phrases['wc_new_comments_text'] : _e('New', 'wpdisucz'); ?>" name="wc_new_comments_text" id="wc_new_comments_text" />
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_new_comments_text']) ? $this->wc_options_serialized->wc_phrases['wc_new_comments_text'] : __('New', 'wpdisucz'); ?>" name="wc_new_comments_text" id="wc_new_comments_text" />
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Message if comment was not updated', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_comment_not_updated">
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_comment_not_updated']) ? $this->wc_options_serialized->wc_phrases['wc_comment_not_updated'] : __('Sorry, the comment was not updated', 'wpdisucz'); ?>" name="wc_comment_not_updated" id="wc_comment_not_updated" />
+        </label>
+    </td>
+</tr>
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Message if comment no longer possible to edit', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_comment_edit_not_possible">
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_comment_edit_not_possible']) ? $this->wc_options_serialized->wc_phrases['wc_comment_edit_not_possible'] : __('Sorry, this comment no longer possible to edit', 'wpdisucz'); ?>" name="wc_comment_edit_not_possible" id="wc_comment_edit_not_possible" />
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Message if comment text not changed', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_comment_not_edited">
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_comment_not_edited']) ? $this->wc_options_serialized->wc_phrases['wc_comment_not_edited'] : __('TYou\'ve not made any changes', 'wpdisucz'); ?>" name="wc_comment_not_edited" id="wc_comment_not_edited" />
+        </label>
+    </td>
+</tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Save edited comment button text', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_comment_edit_save_button">
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_comment_edit_save_button']) ? $this->wc_options_serialized->wc_phrases['wc_comment_edit_save_button'] : __('Save', 'wpdisucz'); ?>" name="wc_comment_edit_save_button" id="wc_comment_edit_save_button" />
+        </label>
+    </td>
+</tr>
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Cancel comment editing button text', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_comment_edit_cancel_button">
+            <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_comment_edit_cancel_button']) ? $this->wc_options_serialized->wc_phrases['wc_comment_edit_cancel_button'] : __('Cancel', 'wpdisucz'); ?>" name="wc_comment_edit_cancel_button" id="wc_comment_edit_cancel_button" />
         </label>
     </td>
 </tr>

@@ -39,6 +39,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_comment_list_order = isset($_POST['wc_comment_list_order']) ? $_POST['wc_comment_list_order'] : 'desc';
             $this->wc_options_serialized->wc_comment_list_update_type = isset($_POST['wc_comment_list_update_type']) ? $_POST['wc_comment_list_update_type'] : 0;
             $this->wc_options_serialized->wc_comment_list_update_timer = isset($_POST['wc_comment_list_update_timer']) ? $_POST['wc_comment_list_update_timer'] : 30;
+            $this->wc_options_serialized->wc_comment_editable_time = isset($_POST['wc_comment_editable_time']) ? $_POST['wc_comment_editable_time'] : 900;
             $this->wc_options_serialized->wc_voting_buttons_show_hide = isset($_POST['wc_voting_buttons_show_hide']) ? $_POST['wc_voting_buttons_show_hide'] : 0;
             $this->wc_options_serialized->wc_share_buttons_show_hide = isset($_POST['wc_share_buttons_show_hide']) ? $_POST['wc_share_buttons_show_hide'] : 0;
             $this->wc_options_serialized->wc_captcha_show_hide = isset($_POST['wc_captcha_show_hide']) ? $_POST['wc_captcha_show_hide'] : 0;
@@ -55,6 +56,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_show_hide_comment_checkbox = isset($_POST['wc_show_hide_comment_checkbox']) ? $_POST['wc_show_hide_comment_checkbox'] : 0;
             $this->wc_options_serialized->wc_show_hide_all_reply_checkbox = isset($_POST['wc_show_hide_all_reply_checkbox']) ? $_POST['wc_show_hide_all_reply_checkbox'] : 0;            
             $this->wc_options_serialized->wc_show_hide_reply_checkbox = isset($_POST['wc_show_hide_reply_checkbox']) ? $_POST['wc_show_hide_reply_checkbox'] : 0;            
+            $this->wc_options_serialized->wc_use_postmatic_for_comment_notification = isset($_POST['wc_use_postmatic_for_comment_notification']) ? $_POST['wc_use_postmatic_for_comment_notification'] : 0;            
             $this->wc_options_serialized->wc_form_bg_color = isset($_POST['wc_form_bg_color']) ? $_POST['wc_form_bg_color'] : '#f9f9f9';
             $this->wc_options_serialized->wc_comment_text_size = isset($_POST['wc_comment_text_size']) ? $_POST['wc_comment_text_size'] : '14px';            
             $this->wc_options_serialized->wc_comment_bg_color = isset($_POST['wc_comment_bg_color']) ? $_POST['wc_comment_bg_color'] : '#fefefe';
@@ -63,7 +65,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_author_title_color = isset($_POST['wc_author_title_color']) ? $_POST['wc_author_title_color'] : '#00B38F';
             $this->wc_options_serialized->wc_vote_reply_color = isset($_POST['wc_vote_reply_color']) ? $_POST['wc_vote_reply_color'] : '#666666';
             $this->wc_options_serialized->wc_new_loaded_comment_bg_color = isset($_POST['wc_new_loaded_comment_bg_color']) ? $_POST['wc_new_loaded_comment_bg_color'] : 'rgb(254,254,254)';
-            $this->wc_options_serialized->wc_custom_css = isset($_POST['wc_custom_css']) ? $_POST['wc_custom_css'] : '.comments-area{width: 100%;margin: 0 auto;}';
+            $this->wc_options_serialized->wc_custom_css = isset($_POST['wc_custom_css']) ? $_POST['wc_custom_css'] : '.comments-area{width:auto; margin: 0 auto;}';
 
             $this->wc_options_serialized->update_options();
         }
@@ -199,6 +201,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_phrases['wc_captcha_text'] = $_POST['wc_captcha_text'];
             $this->wc_options_serialized->wc_phrases['wc_submit_text'] = $_POST['wc_submit_text'];            
             $this->wc_options_serialized->wc_phrases['wc_manage_subscribtions'] = $_POST['wc_manage_subscribtions'];
+            $this->wc_options_serialized->wc_phrases['wc_notify_none'] = $_POST['wc_notify_none'];
             $this->wc_options_serialized->wc_phrases['wc_notify_on_new_comment'] = $_POST['wc_notify_on_new_comment'];
             $this->wc_options_serialized->wc_phrases['wc_notify_on_all_new_reply'] = $_POST['wc_notify_on_all_new_reply'];
             $this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] = $_POST['wc_notify_on_new_reply'];                                    
@@ -223,6 +226,10 @@ class WC_Options {
             $this->wc_options_serialized->wc_phrases['wc_subscribed_on_post'] = $_POST['wc_subscribed_on_post'];
             $this->wc_options_serialized->wc_phrases['wc_unsubscribe'] = $_POST['wc_unsubscribe'];            
             $this->wc_options_serialized->wc_phrases['wc_unsubscribe_message'] = $_POST['wc_unsubscribe_message'];
+            $this->wc_options_serialized->wc_phrases['wc_confirm_email'] = $_POST['wc_confirm_email'];
+            $this->wc_options_serialized->wc_phrases['wc_comfirm_success_message'] = $_POST['wc_comfirm_success_message'];
+            $this->wc_options_serialized->wc_phrases['wc_confirm_email_subject'] = $_POST['wc_confirm_email_subject'];
+            $this->wc_options_serialized->wc_phrases['wc_confirm_email_message'] = $_POST['wc_confirm_email_message'];
             $this->wc_options_serialized->wc_phrases['wc_error_empty_text'] = $_POST['wc_error_empty_text'];
             $this->wc_options_serialized->wc_phrases['wc_error_email_text'] = $_POST['wc_error_email_text'];
             $this->wc_options_serialized->wc_phrases['wc_year_text']['datetime'][0] = $_POST['wc_year_text'];
@@ -253,9 +260,13 @@ class WC_Options {
             $this->wc_options_serialized->wc_phrases['wc_new_comment_button_text'] = $_POST['wc_new_comment_button_text'];
             $this->wc_options_serialized->wc_phrases['wc_new_comments_button_text'] = $_POST['wc_new_comments_button_text'];
             $this->wc_options_serialized->wc_phrases['wc_new_reply_button_text'] = $_POST['wc_new_reply_button_text'];
-            $this->wc_options_serialized->wc_phrases['wc_new_replies_button_text'] = $_POST['wc_new_replies_button_text'];
-            
+            $this->wc_options_serialized->wc_phrases['wc_new_replies_button_text'] = $_POST['wc_new_replies_button_text'];            
             $this->wc_options_serialized->wc_phrases['wc_new_comments_text'] = $_POST['wc_new_comments_text'];
+            $this->wc_options_serialized->wc_phrases['wc_comment_not_updated'] = $_POST['wc_comment_not_updated'];
+            $this->wc_options_serialized->wc_phrases['wc_comment_edit_not_possible'] = $_POST['wc_comment_edit_not_possible'];
+            $this->wc_options_serialized->wc_phrases['wc_comment_not_edited'] = $_POST['wc_comment_not_edited'];
+            $this->wc_options_serialized->wc_phrases['wc_comment_edit_save_button'] = $_POST['wc_comment_edit_save_button'];
+            $this->wc_options_serialized->wc_phrases['wc_comment_edit_cancel_button'] = $_POST['wc_comment_edit_cancel_button'];
 
             $this->wc_db_helper->update_phrases($this->wc_options_serialized->wc_phrases);
         }

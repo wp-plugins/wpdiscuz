@@ -18,8 +18,14 @@ jQuery(document).ready(function ($) {
     var wc_notification_all_new_reply;
     var wc_notification_new_reply;
     var wc_all_comments_count_new;
+    var wc_comment_text_before_editting;
 
     $(".wc_comment").autoGrow();
+
+    $(document).delegate('#wc_openModalFormAction', 'click', function () {
+        $('#wc_openModalFormAction').css('opacity', '0');
+        $('#wc_openModalFormAction').css('pointer-events', 'none');
+    });
 
     $(document).delegate('#wc_openModalFormAction .close', 'click', function () {
         $('#wc_openModalFormAction').css('opacity', '0');
@@ -63,9 +69,7 @@ jQuery(document).ready(function ($) {
         wc_comment_post_ID = $('#wc_comment_post_ID-' + uniqueID).val();
         wc_comment_parent = $('#wc_comment_parent-' + uniqueID).val();
         wc_form = $('#wc_comm_form-' + uniqueID);
-        wc_notification_new_comment = parseInt($('#wc_notification_new_comment-' + uniqueID).val());
-        wc_notification_all_new_reply = parseInt($('#wc_notification_all_new_reply-' + uniqueID).val());
-        wc_notification_new_reply = parseInt($('#wc_notification_new_reply-' + uniqueID).val());
+        var notification_type_radio = $("input:radio[name='wp_comment_reply_notification-" + uniqueID + "']:checked").length ? $("input:radio[name='wp_comment_reply_notification-" + uniqueID + "']:checked").val() : '';
 
         var depth = '';
         if (isMainFormSubmit(wc_submitID, wc_comment_post_ID)) {
@@ -76,25 +80,18 @@ jQuery(document).ready(function ($) {
 
 
         var notification_type = '';
-        if ($('.wc_notification_new_comment').length || $('.wc_notification_all_new_reply').length || $('.wc_notification_new_reply').length) {
-//var wc_comment_reply_checkboxes_default_checked = $('#wc_comment_reply_checkboxes_default_checked').val();
-            if (wc_notification_new_reply !== 0) {
+        if (notification_type_radio.length && notification_type_radio != 'wc_notification_none') {
+            if (notification_type_radio == 'wc_notification_new_reply') {
                 notification_type = 'reply';
-//if (wc_comment_reply_checkboxes_default_checked == 0) {
-                $('#wc_notification_new_reply-' + uniqueID).val('0').prop("checked", false);
-//                                }
+                $('#wc_notification_new_reply-' + uniqueID).prop("checked", false);
             }
-
-            if (wc_notification_all_new_reply !== 0) {
+            if (notification_type_radio == 'wc_notification_all_new_reply') {
                 notification_type = 'all_comment';
-                $('#wc_notification_all_new_reply-' + uniqueID).val('0').prop("checked", false);
+                $('#wc_notification_all_new_reply-' + uniqueID).prop("checked", false);
             }
-
-            if (wc_notification_new_comment !== 0) {
+            if (notification_type_radio == 'wc_notification_new_comment') {
                 notification_type = 'post';
-//if (wc_comment_reply_checkboxes_default_checked == 0) {
-                $('#wc_notification_new_comment-' + uniqueID).val('0').prop("checked", false);
-//                                }
+                $('#wc_notification_new_comment-' + uniqueID).prop("checked", false);
             }
 
         }
@@ -616,6 +613,106 @@ jQuery(document).ready(function ($) {
                 action: 'wc_check_notification_type'
             }
         });
+    }
+
+    $(document).delegate('.wc_editable_comment', 'click', function () {
+        var uniqueID = getUniqueID($(this));
+        var commentID = getCommentID(uniqueID);
+
+        $.ajax({
+            type: 'POST',
+            url: wc_ajax_obj.url,
+            data: {
+                comment_id: commentID,
+                action: 'wc_get_editable_comment_content'
+            }
+        }).done(function (response) {
+            try {
+                var obj = $.parseJSON(response);
+                if (obj.code == 1) {
+                    wc_comment_text_before_editting = obj.message;
+                    var editableTextarea = '<textarea required="required" name="wc_comment" class="wc_comment wc_field_input wc_edit_comment" id="wc_edit_comment-' + uniqueID + '" style="min-height: 2em;">' + obj.message + '</textarea>';
+                    $('#wc-comm-' + uniqueID + ' .wc-comment-text').replaceWith(editableTextarea);
+                    document.getElementById('wc_edit_comment-' + uniqueID).focus();
+                    $('#wc_save_edited_comment-' + uniqueID).show();
+                    editableTextarea = '';
+                    $('#wc_editable_comment-' + uniqueID).hide();
+                    $('#wc_cancel_edit-' + uniqueID).show();
+                } else {
+                    var html = "<a href='#close' title='Close' class='close'>&nbsp;</a>";
+                    $('#wc_openModalFormAction').css('opacity', '1');
+                    $('#wc_openModalFormAction').css('pointer-events', 'auto');
+                    $('#wc_openModalFormAction .close').css('display', 'block');
+                    $('#wc_openModalFormAction > #wc_response_info').html(html + obj.phrase_message);
+                }
+            } catch (e) {
+
+            }
+        });
+    });
+
+    $(document).delegate('.wc_save_edited_comment', 'click', function () {
+        var uniqueID = getUniqueID($(this));
+        var commentID = getCommentID(uniqueID);
+        var editableTextarea = $('#wc-comm-' + uniqueID + ' textarea#wc_edit_comment-' + uniqueID);
+        var commentContent = editableTextarea.val();
+        var submit = true;
+        var depth = getCommentDepth($(this).parents('.wc-comment')) - 1;
+        if ($.trim(commentContent).length <= 0) {
+            submit = false;
+        }
+
+        if (submit) {
+            $('#wc_openModalFormAction .close').css('display', 'none');
+            $('#wc_openModalFormAction').css('opacity', '1');
+            $('#wc_openModalFormAction').css('pointer-events', 'auto');
+            $('#wc_openModalFormAction > #wc_response_info').html(wc_loading_image);
+
+            $.ajax({
+                type: 'POST',
+                url: wc_ajax_obj.url,
+                data: {
+                    comment_id: commentID,
+                    comment_content: commentContent,
+                    comment_depth: depth,
+                    action: 'wc_save_edited_comment'
+                }
+            }).done(function (response) {
+                try {
+                    var obj = $.parseJSON(response);
+                    if (obj.code == 1) {
+                        $('#wc_openModalFormAction').css('opacity', '0');
+                        $('#wc_openModalFormAction').css('pointer-events', 'none');
+                        $('#wc-comm-' + uniqueID).replaceWith(obj.message);
+                    } else {
+                        var html = "<a href='#close' title='Close' class='close'>&nbsp;</a>";
+                        $('#wc_openModalFormAction').css('opacity', '1');
+                        $('#wc_openModalFormAction').css('pointer-events', 'auto');
+                        $('#wc_openModalFormAction .close').css('display', 'block');
+                        $('#wc_openModalFormAction > #wc_response_info').html(html + obj.phrase_message);
+                    }
+                    editableTextarea = '';
+                    commentContent = '';
+                } catch (e) {
+
+                }
+            });
+        }
+    });
+
+    $(document).delegate('.wc_cancel_edit', 'click', function () {
+        var uniqueID = getUniqueID($(this));
+        $('#wc_editable_comment-' + uniqueID).show();
+        $('#wc_cancel_edit-' + uniqueID).hide();
+        $('#wc_save_edited_comment-' + uniqueID).hide();
+        var commentContentWrapper = '<div class="wc-comment-text">' + nl2br(wc_comment_text_before_editting) + '</div>';
+        $('#wc-comm-' + uniqueID + ' #wc_edit_comment-' + uniqueID).replaceWith(commentContentWrapper);
+    });
+
+    function nl2br(str, is_xhtml) {
+        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br/>' : '<br>';
+        var string = (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+        return string.replace('<br><br>', '<br/>');
     }
 
     $('.wc_tooltipster').tooltipster({offsetY: 2});

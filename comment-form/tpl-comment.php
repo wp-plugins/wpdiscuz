@@ -19,6 +19,10 @@ class WC_Comment_Template_Builder {
      * @return single comment template
      */
     public function get_comment_template($comment, $args, $depth) {
+        global $current_user;
+        get_currentuserinfo();
+
+
         $comment_content = wp_kses($comment->comment_content, array(
             'br' => array(),
             'a' => array('href' => array(), 'title' => array()),
@@ -31,7 +35,7 @@ class WC_Comment_Template_Builder {
         ));
 
         $comment_content = $this->wc_helper->make_clickable($comment_content);
-        $comment_content = apply_filters('comment_text', $comment_content);
+        $comment_content = apply_filters('comment_text', $comment_content, $comment, $args);
 
         $vote_cls = '';
         $vote_title_text = '';
@@ -52,7 +56,7 @@ class WC_Comment_Template_Builder {
         if ($this->wc_options->wc_options_serialized->wc_simple_comment_date) {
             $date_format = get_option('date_format');
             $time_format = get_option('time_format');
-            if (WC_Helper::isPostedToday(strtotime($comment->comment_date))) {
+            if (WC_Helper::is_posted_today($comment)) {
                 $posted_date = $this->wc_options->wc_options_serialized->wc_phrases['wc_posted_today_text'] . ' ' . mysql2date($time_format, $comment->comment_date);
             } else {
                 $posted_date = get_comment_date($date_format, $comment->comment_ID);
@@ -105,6 +109,9 @@ class WC_Comment_Template_Builder {
         if (!$this->wc_options->wc_options_serialized->wc_author_titles_show_hide) {
             $output .= '<div class="wc-comment-label">' . $author_title . '</div>';
         }
+        if (class_exists('userpro_api') && $comment->user_id) {
+            $output .= userpro_show_badges($comment->user_id, $inline = true);
+        }
         $output .= '</div>';
         $output .= '<div class="wc-comment-right ' . $comment_content_class . '">';
         $output .= '<div class="wc-comment-header"><div class="wc-comment-author">' . $wc_author_name . '</div><div class="wc-comment-date">' . $posted_date . '</div><div style="clear:both"></div></div>';
@@ -112,7 +119,7 @@ class WC_Comment_Template_Builder {
         $output .= '<div class="wc-comment-footer">';
         if (!$this->wc_options->wc_options_serialized->wc_voting_buttons_show_hide) {
             $output .= '<div id="vote-count-' . $unique_id . '" class="wc-vote-result">' . $vote_count . '</div>';
-            $output .= '<span id="wc-up-' . $unique_id . '" class="wc-vote-link wc-up ' . $vote_cls . '" title="' . $vote_up . '">&and;</span> | <span id="wc-down-' . $unique_id . '" class="wc-vote-link wc-down ' . $vote_cls . '" title="' . $vote_down . '">&or;</span> &nbsp;&nbsp;';
+            $output .= ' <span id="wc-up-' . $unique_id . '" class="wc-vote-link wc-up ' . $vote_cls . '" title="' . $vote_up . '"><img src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/thumbs-up.png').'"  align="absmiddle" class="wc-vote-img-up" /></span> &nbsp;|&nbsp; <span id="wc-down-' . $unique_id . '" class="wc-vote-link wc-down ' . $vote_cls . '" title="' . $vote_down . '"><img src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/thumbs-down.png').'"  align="absmiddle" class="wc-vote-img-down" /></span>&nbsp;';
         }
 
         if (comments_open($comment->comment_post_ID)) {
@@ -135,7 +142,6 @@ class WC_Comment_Template_Builder {
             }
         }
 
-
         if (!$this->wc_options->wc_options_serialized->wc_share_buttons_show_hide) {
             $output .= '-&nbsp;&nbsp; <span id="wc-comm-share-' . $unique_id . '" class="wc-share-link" title="' . $share_text . '">' . $share_text . '</span> &nbsp;&nbsp;';
 
@@ -149,10 +155,14 @@ class WC_Comment_Template_Builder {
         }
 
         if (current_user_can('edit_comment', $comment->comment_ID)) {
-            $output .= '-&nbsp;&nbsp; <a href="' . get_edit_comment_link($comment->comment_ID) . '">' . __('Edit', WC_Core::$TEXT_DOMAIN) . '</a>';
+            $output .= '-&nbsp;&nbsp; <a href="' . get_edit_comment_link($comment->comment_ID) . '">' . __('Edit', 'default') . '</a>';
+        } else {
+            if ($this->wc_helper->is_comment_editable($comment) && $current_user->ID && $current_user->ID == $comment->user_id) {
+                $output .= '<span id="wc_editable_comment-' . $unique_id . '" class="wc_editable_comment">-&nbsp;&nbsp;' . __('Edit', 'default') . '</span>';
+                $output .= '<span id="wc_cancel_edit-' . $unique_id . '" class="wc_cancel_edit">-&nbsp;&nbsp;' . $this->wc_options->wc_options_serialized->wc_phrases['wc_comment_edit_cancel_button'] . '</span>';
+                $output .= '<span id="wc_save_edited_comment-' . $unique_id . '" class="wc_save_edited_comment" style="display:none;">&nbsp;&nbsp;-&nbsp;&nbsp;' . $this->wc_options->wc_options_serialized->wc_phrases['wc_comment_edit_save_button'] . '</span>';
+            }
         }
-
-
 
         $visibility = 'none';
         if (!$comment->comment_parent && count($child_comments)) {
@@ -198,27 +208,38 @@ class WC_Comment_Template_Builder {
 
             $output_form .= '<div class="wc_notification_checkboxes">';
 
-            global $current_user;
-            get_currentuserinfo();
+
 
             if ($current_user->ID && $this->wc_db_helper->wc_has_post_notification($comment->comment_post_ID, $current_user->user_email)) {
                 $output_form .= '<label class="wc-label-comment-notify" style="cursor: default;">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_post'] . ' | <a href="' . $this->wc_db_helper->wc_unsubscribe_link($comment->comment_post_ID, $current_user->user_email, 'post') . '" rel="nofollow" class="unsubscribe">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe'] . '</a></label>';
             } else {
-                $wc_notification_state = ($this->wc_options->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) ? 'checked="checked" value="1"' : 'value="0"';
                 if ($current_user->ID && $this->wc_db_helper->wc_has_all_comments_notification($comment->comment_post_ID, $current_user->user_email) && $current_user->user_email == $comment->comment_author_email) {
                     $output_form .= '<label class="wc-label-all-reply-notify" style="cursor: default;">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_all_comment'] . ' | <a href="' . $this->wc_db_helper->wc_unsubscribe_link($comment->comment_post_ID, $current_user->user_email, 'all_comment') . '" rel="nofollow" class="unsubscribe">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe'] . '</a></label><br/>';
                 } else {
                     if ($current_user->ID && $this->wc_db_helper->wc_has_comment_notification($comment->comment_post_ID, $comment->comment_ID, $current_user->user_email) && $current_user->user_email == $comment->comment_author_email) {
                         $output_form .= '<label class="wc-label-reply-notify" style="cursor: default;">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_comment'] . ' | <a href="' . $this->wc_db_helper->wc_unsubscribe_link($comment->comment_ID, $current_user->user_email, 'comment') . '" rel="nofollow" class="unsubscribe">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe'] . '</a></label><br/>';
-                    } else if ($this->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox) {
-                        $output_form .= '<input class="wc-label-reply-notify wc_notification_new_reply" id="wc_notification_new_reply-' . $unique_id . '" ' . $wc_notification_state . ' type="checkbox" name="wc_notification_new_reply"/> <label class="wc-label-comment-notify" for="wc_notification_new_reply-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] . '</label><br />';
+                    } else {
+                        if ($this->wc_options->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) {
+                            $none_status = '';
+                            $post_sub_status = 'checked="checked"';
+                        } else {
+                            $none_status = 'checked="checked"';
+                            $post_sub_status = '';
+                        }
+                        if ($this->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox || $this->wc_options->wc_options_serialized->wc_show_hide_all_reply_checkbox || $this->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) {
+                            $output_form .= '<input id="wc_notification_none-' . $unique_id . '" class="wc_notification_none" ' . $none_status . ' value="wc_notification_none" type="radio" name="wp_comment_reply_notification-' . $unique_id . '"/> <label class="wc-notification-none" for="wc_notification_none-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_none'] . '</label><br />';
+                        }
+                        if ($this->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox) {
+                            $output_form .= '<input class="wc-label-reply-notify wc_notification_new_reply" id="wc_notification_new_reply-' . $unique_id . '" value="wc_notification_new_reply" type="radio" name="wp_comment_reply_notification-' . $unique_id . '"/> <label class="wc-label-comment-notify" for="wc_notification_new_reply-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] . '</label><br />';
+                        }
+                        if ($this->wc_options->wc_options_serialized->wc_show_hide_all_reply_checkbox) {
+                            $output_form .= '<input id="wc_notification_all_new_reply-' . $unique_id . '" class="wc_notification_all_new_reply" value="wc_notification_all_new_reply" type="radio" name="wp_comment_reply_notification-' . $unique_id . '"/> <label class="wc-label-all-reply-notify" for="wc_notification_all_new_reply-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_all_new_reply'] . '</label><br />';
+                        }
+
+                        if ($this->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) {
+                            $output_form .= '<input class="wc-label-comment-notify wc_notification_new_comment" id="wc_notification_new_comment-' . $unique_id . '" ' . $post_sub_status . ' value="wc_notification_new_comment" type="radio" name="wp_comment_reply_notification-' . $unique_id . '"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_comment'] . '</label>';
+                        }
                     }
-                    if ($this->wc_options->wc_options_serialized->wc_show_hide_all_reply_checkbox) {
-                        $output_form .= '<input id="wc_notification_all_new_reply-' . $unique_id . '" class="wc_notification_all_new_reply" ' . $wc_notification_state . ' type="checkbox" name="wc_notification_all_new_reply"/> <label class="wc-label-all-reply-notify" for="wc_notification_all_new_reply-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_all_new_reply'] . '</label><br />';
-                    }
-                }
-                if ($this->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) {
-                    $output_form .= '<input class="wc-label-comment-notify wc_notification_new_comment" id="wc_notification_new_comment-' . $unique_id . '" ' . $wc_notification_state . ' type="checkbox" name="wc_notification_new_comment"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-' . $unique_id . '">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_notify_on_new_comment'] . '</label>';
                 }
             }
 
@@ -282,19 +303,27 @@ class WC_Comment_Template_Builder {
      */
     private function get_profile_url($user) {
         $wc_profile_url = '';
+        $wc_profile_url_filter = '';
         if ($user) {
             if (class_exists('BuddyPress')) {
                 $wc_profile_url = bp_core_get_user_domain($user->ID);
             } else if (class_exists('XooUserUltra')) {
                 global $xoouserultra;
                 $wc_profile_url = $xoouserultra->userpanel->get_user_profile_permalink($user->ID);
+            } else if (class_exists('userpro_api')) {
+                global $userpro;
+                $wc_profile_url = $userpro->permalink($user->ID);
             } else {
                 if (count_user_posts($user->ID)) {
                     $wc_profile_url = get_author_posts_url($user->ID);
                 }
             }
+            $user_id = $user->ID;
+            $wc_profile_url_data = apply_filters('wpdiscuz_profil_url', array('user_id' => $user_id, 'permalink' => ''));
+            $wc_profile_url_filter = $wc_profile_url_data['permalink'];
         }
-        return $wc_profile_url;
+
+        return $wc_profile_url_filter ? $wc_profile_url_filter : $wc_profile_url;
     }
 
     /**

@@ -19,9 +19,9 @@ button[type=submit]{ font-size:1.1em; padding:5px 25px; }*/
 
 /* alerts (when validation fails) */
 .item .alert{ float:left; margin:0px; padding:2px 10px; color:#DD0000; border-radius:3px 4px 4px 3px; background-color:#FFE8E8; white-space:pre; position:relative; left:-15px; opacity:0; z-index:1; transition:0.15s ease-out; }
-.item .alert {max-width: 100%;position: absolute;top: -50%;font-size: 12px;}
+.item .alert {max-width: 100%;position: absolute;top: -15px;font-size: 12px;}
 /*.item .alert::after{ content:''; display:block; height:0; width:0; border-color:transparent #CE5454 transparent transparent; border-style:solid; border-width:11px 7px; position:absolute; left:-13px; top:1px; }*/
-.item.bad .alert{ left:0; opacity:1; }
+.item.bad .alert{ left:0; opacity:1; padding:2px 4px; line-height:14px; }
 
 
 @keyframes shake{

@@ -13,10 +13,10 @@ class WC_Helper {
     public static $hour = 'wc_hour_text';
     public static $minute = 'wc_minute_text';
     public static $second = 'wc_second_text';
-    private $wc_options_serialize;
+    private $wc_options_serialized;
 
     function __construct($wc_options_serialize) {
-        $this->wc_options_serialize = $wc_options_serialize;
+        $this->wc_options_serialized = $wc_options_serialize;
     }
 
 // Set timezone
@@ -41,12 +41,12 @@ class WC_Helper {
 
 // Set up intervals and diffs arrays
         $intervals = array(
-            $this->wc_options_serialize->wc_phrases['wc_year_text']['datetime'][1],
-            $this->wc_options_serialize->wc_phrases['wc_month_text']['datetime'][1],
-            $this->wc_options_serialize->wc_phrases['wc_day_text']['datetime'][1],
-            $this->wc_options_serialize->wc_phrases['wc_hour_text']['datetime'][1],
-            $this->wc_options_serialize->wc_phrases['wc_minute_text']['datetime'][1],
-            $this->wc_options_serialize->wc_phrases['wc_second_text']['datetime'][1]
+            $this->wc_options_serialized->wc_phrases['wc_year_text']['datetime'][1],
+            $this->wc_options_serialized->wc_phrases['wc_month_text']['datetime'][1],
+            $this->wc_options_serialized->wc_phrases['wc_day_text']['datetime'][1],
+            $this->wc_options_serialized->wc_phrases['wc_hour_text']['datetime'][1],
+            $this->wc_options_serialized->wc_phrases['wc_minute_text']['datetime'][1],
+            $this->wc_options_serialized->wc_phrases['wc_second_text']['datetime'][1]
         );
         $diffs = array();
 
@@ -84,7 +84,7 @@ class WC_Helper {
             if ($value > 0) {
 // Add s if value is not 1
                 if ($value != 1) {
-                    $interval .= $this->wc_options_serialize->wc_phrases['wc_plural_text'];
+                    $interval .= $this->wc_options_serialized->wc_phrases['wc_plural_text'];
                 }
 // Add value and interval to times array
                 $times[] = $value . " " . $interval;
@@ -93,7 +93,7 @@ class WC_Helper {
         }
 
 // Return string with times        
-        $ago = ($times) ? $this->wc_options_serialize->wc_phrases['wc_ago_text'] : $this->wc_options_serialize->wc_phrases['wc_right_now_text'];
+        $ago = ($times) ? $this->wc_options_serialized->wc_phrases['wc_ago_text'] : $this->wc_options_serialized->wc_phrases['wc_right_now_text'];
         return implode(" ", $times) . ' ' . $ago;
     }
 
@@ -157,17 +157,17 @@ class WC_Helper {
     private function date_text_by_index($index) {
         switch ($index) {
             case 'year':
-                return $this->wc_options_serialize->wc_phrases['wc_year_text']['datetime'][0];
+                return $this->wc_options_serialized->wc_phrases['wc_year_text']['datetime'][0];
             case 'month':
-                return $this->wc_options_serialize->wc_phrases['wc_month_text']['datetime'][0];
+                return $this->wc_options_serialized->wc_phrases['wc_month_text']['datetime'][0];
             case 'day':
-                return $this->wc_options_serialize->wc_phrases['wc_day_text']['datetime'][0];
+                return $this->wc_options_serialized->wc_phrases['wc_day_text']['datetime'][0];
             case 'hour':
-                return $this->wc_options_serialize->wc_phrases['wc_hour_text']['datetime'][0];
+                return $this->wc_options_serialized->wc_phrases['wc_hour_text']['datetime'][0];
             case 'minute':
-                return $this->wc_options_serialize->wc_phrases['wc_minute_text']['datetime'][0];
+                return $this->wc_options_serialized->wc_phrases['wc_minute_text']['datetime'][0];
             case 'second':
-                return $this->wc_options_serialize->wc_phrases['wc_second_text']['datetime'][0];
+                return $this->wc_options_serialized->wc_phrases['wc_second_text']['datetime'][0];
         }
     }
 
@@ -226,31 +226,48 @@ class WC_Helper {
         $email = $matches[2] . '@' . $matches[3];
         return $matches[1] . "<a href=\"mailto:$email\">$email</a>";
     }
-    
-      public function make_clickable($ret) {
+
+    public function make_clickable($ret) {
         $ret = ' ' . $ret;
         $ret = preg_replace('#[^\"|\'](https?:\/\/[^\s]+(\.jpe?g|\.png|\.gif|\.bmp))#i', '<a href="$1"><img src="$1" /></a>', $ret);
         // in testing, using arrays here was found to be faster
         $ret = preg_replace_callback('#([\s>])([\w]+?://[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]*)#is', array(&$this, 'make_url_clickable'), $ret);
         $ret = preg_replace_callback('#([\s>])((www|ftp)\.[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]*)#is', array(&$this, 'make_web_ftp_clickable'), $ret);
         $ret = preg_replace_callback('#([\s>])([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})#i', array(&$this, 'make_email_clickable'), $ret);
-                
+
         // this one is not in an array because we need it to run last, for cleanup of accidental links within links
         $ret = preg_replace("#(<a( [^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i", "$1$3</a>", $ret);
-        
+
         $ret = trim($ret);
         return $ret;
     }
 
-    public static function isPostedToday($posted_date) {
-        return (time() - 60 * 60 * 24) < $posted_date;
+    /**
+     * check if comment has been posted today or not
+     * return boolean
+     */
+    public static function is_posted_today($comment) {
+        return (strtotime(current_time('Y-m-d H:i:s')) - 60 * 60 * 24) < strtotime($comment->comment_date);
+    }
+
+    /**
+     * check if comment is still editable or not
+     * return boolean
+     */
+    public function is_comment_editable($comment) {
+        if ($comment->comment_ID) {
+            $wc_editable_comment_time = isset($this->wc_options_serialized->wc_comment_editable_time) ? $this->wc_options_serialized->wc_comment_editable_time : 0;
+            return $wc_editable_comment_time && ((time() - strtotime($comment->comment_date_gmt)) < intval($wc_editable_comment_time));
+        } else {
+            return false;
+        }
     }
 
     public function wc_sort_parent_comments($wc_parent_comments) {
         for ($i = 0; $i < count($wc_parent_comments); $i++) {
             for ($j = $i + 1; $j < count($wc_parent_comments); $j++) {
                 if (intval($wc_parent_comments[$i]->comment_ID) > intval($wc_parent_comments[$j]->comment_ID)) {
-                   $wc_parent_comments = $this->wc_swap_comments($i, $j, $wc_parent_comments);
+                    $wc_parent_comments = $this->wc_swap_comments($i, $j, $wc_parent_comments);
                 }
             }
         }
@@ -262,6 +279,17 @@ class WC_Helper {
         $wc_parent_comments[$i] = $wc_parent_comments[$j];
         $wc_parent_comments[$j] = $tmp;
         return $wc_parent_comments;
-    }    
+    }
+
+    public static function get_real_ip_addr() {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {   //check ip from share internet
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {   //to check ip is pass from proxy
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        return $ip;
+    }
 
 }

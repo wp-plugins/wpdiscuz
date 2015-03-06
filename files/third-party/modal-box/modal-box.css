@@ -50,6 +50,8 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#999999');
 }
 
+.modalDialog input {font-size: 10px !important;}
+
 .close {
     background: #606061;
     color: #FFFFFF;

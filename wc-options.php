@@ -66,6 +66,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_vote_reply_color = isset($_POST['wc_vote_reply_color']) ? $_POST['wc_vote_reply_color'] : '#666666';
             $this->wc_options_serialized->wc_new_loaded_comment_bg_color = isset($_POST['wc_new_loaded_comment_bg_color']) ? $_POST['wc_new_loaded_comment_bg_color'] : 'rgb(254,254,254)';
             $this->wc_options_serialized->wc_custom_css = isset($_POST['wc_custom_css']) ? $_POST['wc_custom_css'] : '.comments-area{width:auto; margin: 0 auto;}';
+            $this->wc_options_serialized->wc_hide_plugin_powerid_by = isset($_POST['wc_hide_plugin_powerid_by']) ? $_POST['wc_hide_plugin_powerid_by'] : 0;
 
             $this->wc_options_serialized->update_options();
         }

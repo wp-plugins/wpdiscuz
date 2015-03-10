@@ -483,3 +483,14 @@
         <textarea cols="50" rows="10" class="regular-text" id="wc_custom_css" name="wc_custom_css" placeholder=""><?php echo stripslashes($this->wc_options_serialized->wc_custom_css); ?></textarea>
     </td>   
 </tr>
+
+<tr valign="top">
+    <th scope="row">
+        <?php _e('Hide plugin powerid by information', WC_Core::$TEXT_DOMAIN); ?>
+    </th>
+    <td colspan="3">                                
+        <label for="wc_hide_plugin_powerid_by">
+            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_hide_plugin_powerid_by == 1) ?> value="1" name="wc_hide_plugin_powerid_by" id="wc_hide_plugin_powerid_by" />
+        </label>
+    </td>
+</tr>

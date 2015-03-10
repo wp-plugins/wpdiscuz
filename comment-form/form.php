@@ -55,7 +55,7 @@ $header_text .= ' "' . get_the_title($post) . '"';
 <div style="clear:both"></div>
 
 <?php if (comments_open($post->ID)): ?>
-	<div id="comments" class="comments-area">
+    <div id="comments" class="comments-area">
         <?php
         if (isset($_GET['wpdiscuzSubscribeID']) && isset($_GET['key'])) {
             $wc_core->wc_unsubscribe($_GET['wpdiscuzSubscribeID'], $_GET['key']);
@@ -83,7 +83,7 @@ $header_text .= ' "' . get_the_title($post) . '"';
         <?php } ?>
         <?php do_action('comment_form_before'); ?>
 
-		<?php
+        <?php
         if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_loggedin_username) {
             if (is_user_logged_in()) {
                 global $current_user;
@@ -211,14 +211,14 @@ $header_text .= ' "' . get_the_title($post) . '"';
                 </div>
                 <div style="clear:both"></div>
             <?php } ?>
-<?php else: ?>
-	<?php if ($post->comment_count > 0): ?>
-    <div class="comments-area" style="border:none;">
-    <?php else: ?>
-    <div class="comments-area" style="display:none">
-    <?php endif; ?>
-    	<div id="wpcomm" style="border:none;">    
-<?php endif; ?>
+        <?php else: ?>
+            <?php if ($post->comment_count > 0): ?>
+                <div class="comments-area" style="border:none;">
+                <?php else: ?>
+                    <div class="comments-area" style="display:none">
+                    <?php endif; ?>
+                    <div id="wpcomm" style="border:none;">    
+                    <?php endif; ?>
                     <div class="wc-thread-wrapper">
                         <?php
                         $wc_wp_comments = $wc_core->get_wp_comments(1);
@@ -249,8 +249,11 @@ $header_text .= ' "' . get_the_title($post) . '"';
                     </span>
                     <div style="clear:both"></div>
                     <?php if (comments_open($post->ID)) { ?>
-                        <div class="by-wpdiscuz"><span id="awpdiscuz" onclick='javascript:document.getElementById("bywpdiscuz").style.display = "inline"; document.getElementById("awpdiscuz").style.display = "none";'><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/icon_info.png'); ?>" align="absmiddle" class="wpdimg"/></span>&nbsp;<a href="http://gvectors.com/wpdiscuz/" id="bywpdiscuz" title="wpDiscuz v<?php echo get_option($wc_core->wc_version_slug); ?> - Interactive Comment System">wpDiscuz</a></div>
-                    <?php } ?>
+                        <?php if (!$wc_core->wc_options->wc_options_serialized->wc_hide_plugin_powerid_by) { ?>
+                            <div class="by-wpdiscuz"><span id="awpdiscuz" onclick='javascript:document.getElementById("bywpdiscuz").style.display = "inline";
+                                    document.getElementById("awpdiscuz").style.display = "none";'><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/icon_info.png'); ?>" align="absmiddle" class="wpdimg"/></span>&nbsp;<a href="http://gvectors.com/wpdiscuz/" id="bywpdiscuz" title="wpDiscuz v<?php echo get_option($wc_core->wc_version_slug); ?> - Interactive Comment System">wpDiscuz</a></div>
+                                                       <?php } ?>
+                                                   <?php } ?>
                     <div id="wc_openModalFormAction" class="modalDialog">
                         <div id="wc_response_info" class="wc_modal">
                             <div id="wc_response_info_box">
@@ -259,8 +262,8 @@ $header_text .= ' "' . get_the_title($post) . '"';
                             </div>
                         </div>
                     </div>
-   		</div><!-- wpcomm -->
-	</div><!-- comments-area -->      
-<?php if (comments_open($post->ID)) { ?>
-	<?php do_action('comment_form_after'); ?>
-<?php } ?>
+                </div><!-- wpcomm -->
+            </div><!-- comments-area -->      
+            <?php if (comments_open($post->ID)) { ?>
+                <?php do_action('comment_form_after'); ?>
+            <?php } ?>

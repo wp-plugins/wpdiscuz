@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: wordpress comments, ajax comments, ajax, live update, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system
 Requires at least: 2.7
 Tested up to: 4.1.1
-Stable tag: 2.1.0
+Stable tag: 2.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -123,6 +123,9 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 
 
 == Changelog ==
+
+= 2.1.1 =
+* Added : Adapting with wordpress.org plugin repository guidelines (added an option to allow users hide "powered by" information on front-end)
 
 = 2.1.0 =
 * Added : Users can edit their comments (time-frame can be limited by admin)

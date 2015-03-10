@@ -249,9 +249,9 @@ $header_text .= ' "' . get_the_title($post) . '"';
                     </span>
                     <div style="clear:both"></div>
                     <?php if (comments_open($post->ID)) { ?>
-                        <?php if (!$wc_core->wc_options->wc_options_serialized->wc_hide_plugin_powerid_by) { ?>
+                        <?php if ($wc_core->wc_options->wc_options_serialized->wc_show_plugin_powerid_by) { ?>
                             <div class="by-wpdiscuz"><span id="awpdiscuz" onclick='javascript:document.getElementById("bywpdiscuz").style.display = "inline";
-                                    document.getElementById("awpdiscuz").style.display = "none";'><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/icon_info.png'); ?>" align="absmiddle" class="wpdimg"/></span>&nbsp;<a href="http://gvectors.com/wpdiscuz/" id="bywpdiscuz" title="wpDiscuz v<?php echo get_option($wc_core->wc_version_slug); ?> - Interactive Comment System">wpDiscuz</a></div>
+                                            document.getElementById("awpdiscuz").style.display = "none";'><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/icon_info.png'); ?>" align="absmiddle" class="wpdimg"/></span>&nbsp;<a href="http://gvectors.com/wpdiscuz/" id="bywpdiscuz" title="wpDiscuz v<?php echo get_option($wc_core->wc_version_slug); ?> - Interactive Comment System">wpDiscuz</a></div>
                                                        <?php } ?>
                                                    <?php } ?>
                     <div id="wc_openModalFormAction" class="modalDialog">

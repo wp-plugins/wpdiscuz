@@ -486,11 +486,11 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('Hide plugin powerid by information', WC_Core::$TEXT_DOMAIN); ?>
+        <?php _e('Show plugin powered by link', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
-        <label for="wc_hide_plugin_powerid_by">
-            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_hide_plugin_powerid_by == 1) ?> value="1" name="wc_hide_plugin_powerid_by" id="wc_hide_plugin_powerid_by" />
+        <label for="wc_show_plugin_powerid_by">
+            <input type="checkbox" <?php checked($this->wc_options_serialized->wc_show_plugin_powerid_by == 1) ?> value="1" name="wc_show_plugin_powerid_by" id="wc_show_plugin_powerid_by" />
         </label>
     </td>
 </tr>

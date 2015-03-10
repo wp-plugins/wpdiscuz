@@ -276,7 +276,7 @@ class WC_Options_Serialize {
      * Description - Hide plugin powerid by information
      * Default Value - Unchecked
      */
-    public $wc_hide_plugin_powerid_by;
+    public $wc_show_plugin_powerid_by;
 
     function __construct($wc_db_helper) {
         $this->wc_db_helper = $wc_db_helper;
@@ -319,7 +319,7 @@ class WC_Options_Serialize {
         $this->wc_vote_reply_color = $options['wc_vote_reply_color'];
         $this->wc_new_loaded_comment_bg_color = isset($options['wc_new_loaded_comment_bg_color']) ? $options['wc_new_loaded_comment_bg_color'] : "rgb(255,250,214)";
         $this->wc_custom_css = isset($options['wc_custom_css']) ? $options['wc_custom_css'] : '.comments-area{width:auto; margin: 0 auto;}';
-        $this->wc_hide_plugin_powerid_by = isset($options['wc_hide_plugin_powerid_by']) ? $options['wc_hide_plugin_powerid_by'] : 0;
+        $this->wc_show_plugin_powerid_by = isset($options['wc_show_plugin_powerid_by']) ? $options['wc_show_plugin_powerid_by'] : 0;
     }
 
     /**
@@ -441,7 +441,7 @@ class WC_Options_Serialize {
             'wc_vote_reply_color' => $this->wc_vote_reply_color,
             'wc_new_loaded_comment_bg_color' => $this->wc_new_loaded_comment_bg_color,
             'wc_custom_css' => $this->wc_custom_css,
-            'wc_hide_plugin_powerid_by' => $this->wc_hide_plugin_powerid_by
+            'wc_show_plugin_powerid_by' => $this->wc_show_plugin_powerid_by
         );
 
         return $options;
@@ -484,7 +484,7 @@ class WC_Options_Serialize {
             'wc_vote_reply_color' => '#666666',
             'wc_new_loaded_comment_bg_color' => 'rgb(255,250,214)',
             'wc_custom_css' => '.comments-area{width:auto; margin: 0 auto;}',
-            'wc_hide_plugin_powerid_by' => '0'
+            'wc_show_plugin_powerid_by' => '0'
         );
         add_option($this->wc_options_slug, serialize($options));
     }

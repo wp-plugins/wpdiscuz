@@ -125,7 +125,7 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 == Changelog ==
 
 = 2.1.1 =
-* Added : Adapting with wordpress.org plugin repository guidelines (added an option to allow users hide "powered by" information on front-end)
+* Added : Adapting with wordpress.org plugin repository guidelines
 
 = 2.1.0 =
 * Added : Users can edit their comments (time-frame can be limited by admin)

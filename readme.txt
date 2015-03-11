@@ -125,9 +125,6 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 = 2.1.2 =
 * Added : Adapting with wordpress.org plugin repository guidelines
 
-= 2.1.1 =
-* Added : Adapting with wordpress.org plugin repository guidelines
-
 = 2.1.0 =
 * Added : Users can edit their comments (time-frame can be limited by admin)
 * Added : Email notification options with radio selector instead of checkboxes

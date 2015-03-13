@@ -146,9 +146,12 @@ $header_text .= ' "' . get_the_title($post) . '"';
                             <?php } ?>
                             <div class="wc_notification_checkboxes">
                                 <?php
+                                $wc_is_user_subscription_confirmed = $wc_core->wc_db_helper->wc_is_user_subscription_confirmed($post->ID, $current_user->user_email);
+                                $wc_subscription_phrase = ($wc_is_user_subscription_confirmed == 1) ? $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe'] : $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_ignore_subscription'];
                                 if ($current_user->ID && $wc_core->wc_db_helper->wc_has_post_notification($post->ID, $current_user->user_email)) {
+                                    $wc_confirmation_phrase = ($wc_is_user_subscription_confirmed == 1) ? $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_post'] : $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_confirm_email'];
                                     ?>
-                                    <label class="wc-label-comment-notify" style="cursor: default;"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_post']; ?> | <a href="<?php echo $wc_core->wc_db_helper->wc_unsubscribe_link($post->ID, $current_user->user_email, 'post'); ?>" rel="nofollow" class="unsubscribe"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe']; ?></a></label>
+                                    <label class="wc-label-comment-notify" style="cursor: default;"><?php echo $wc_confirmation_phrase; ?> | <a href="<?php echo $wc_core->wc_db_helper->wc_unsubscribe_link($post->ID, $current_user->user_email, 'post'); ?>" rel="nofollow" class="unsubscribe"><?php echo $wc_subscription_phrase; ?></a></label>
                                     <?php
                                 } else {
                                     if ($wc_core->wc_options->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) {
@@ -158,10 +161,10 @@ $header_text .= ' "' . get_the_title($post) . '"';
                                         $none_status = 'checked="checked"';
                                         $post_sub_status = '';
                                     }
-
                                     if ($current_user->ID && $wc_core->wc_db_helper->wc_has_all_comments_notification($post->ID, $current_user->user_email)) {
+                                        $wc_confirmation_phrase = ($wc_is_user_subscription_confirmed == 1) ? $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_all_comment'] : $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_confirm_email'];
                                         ?>
-                                        <label class="wc-label-all-reply-notify" style="cursor: default;"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_all_comment']; ?> | <a href="<?php echo $wc_core->wc_db_helper->wc_unsubscribe_link($post->ID, $current_user->user_email, 'all_comment'); ?>" rel="nofollow" class="unsubscribe"><?php echo $wc_core->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe']; ?></a></label><br/>
+                                        <label class="wc-label-all-reply-notify" style="cursor: default;"><?php echo $wc_confirmation_phrase; ?> | <a href="<?php echo $wc_core->wc_db_helper->wc_unsubscribe_link($post->ID, $current_user->user_email, 'all_comment'); ?>" rel="nofollow" class="unsubscribe"><?php echo $wc_subscription_phrase; ?></a></label><br/>
                                         <?php
                                     } else {
                                         if ($wc_core->wc_options->wc_options_serialized->wc_show_hide_reply_checkbox || $wc_core->wc_options->wc_options_serialized->wc_show_hide_all_reply_checkbox || $wc_core->wc_options->wc_options_serialized->wc_show_hide_comment_checkbox) {
@@ -251,7 +254,7 @@ $header_text .= ' "' . get_the_title($post) . '"';
                     <?php if (comments_open($post->ID)) { ?>
                         <?php if ($wc_core->wc_options->wc_options_serialized->wc_show_plugin_powerid_by) { ?>
                             <div class="by-wpdiscuz"><span id="awpdiscuz" onclick='javascript:document.getElementById("bywpdiscuz").style.display = "inline";
-                                            document.getElementById("awpdiscuz").style.display = "none";'><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/icon_info.png'); ?>" align="absmiddle" class="wpdimg"/></span>&nbsp;<a href="http://gvectors.com/wpdiscuz/" id="bywpdiscuz" title="wpDiscuz v<?php echo get_option($wc_core->wc_version_slug); ?> - Interactive Comment System">wpDiscuz</a></div>
+                                    document.getElementById("awpdiscuz").style.display = "none";'><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/icon_info.png'); ?>" align="absmiddle" class="wpdimg"/></span>&nbsp;<a href="http://gvectors.com/wpdiscuz/" id="bywpdiscuz" title="wpDiscuz v<?php echo get_option($wc_core->wc_version_slug); ?> - Interactive Comment System">wpDiscuz</a></div>
                                                        <?php } ?>
                                                    <?php } ?>
                     <div id="wc_openModalFormAction" class="modalDialog">

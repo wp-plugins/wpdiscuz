@@ -226,6 +226,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_phrases['wc_subscribed_on_all_comment'] = $_POST['wc_subscribed_on_all_comment'];
             $this->wc_options_serialized->wc_phrases['wc_subscribed_on_post'] = $_POST['wc_subscribed_on_post'];
             $this->wc_options_serialized->wc_phrases['wc_unsubscribe'] = $_POST['wc_unsubscribe'];            
+            $this->wc_options_serialized->wc_phrases['wc_ignore_subscription'] = $_POST['wc_ignore_subscription'];            
             $this->wc_options_serialized->wc_phrases['wc_unsubscribe_message'] = $_POST['wc_unsubscribe_message'];
             $this->wc_options_serialized->wc_phrases['wc_confirm_email'] = $_POST['wc_confirm_email'];
             $this->wc_options_serialized->wc_phrases['wc_comfirm_success_message'] = $_POST['wc_comfirm_success_message'];

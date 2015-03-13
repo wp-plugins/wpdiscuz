@@ -40,16 +40,21 @@ class WC_Comment_Template_Builder {
         $vote_cls = '';
         $vote_title_text = '';
         $user = get_user_by('id', $comment->user_id);
+        $wc_author_title_class = '';
         if ($user) {
             $post = get_post($comment->comment_post_ID);
             if ($user->ID == $post->post_author) {
+                $wc_author_title_class = 'wc-post-author';
                 $author_title = $this->wc_options->wc_options_serialized->wc_phrases['wc_user_title_author_text'];
             } else if (in_array('administrator', $user->roles)) {
+                $wc_author_title_class = 'wc-blog-admin';
                 $author_title = $this->wc_options->wc_options_serialized->wc_phrases['wc_user_title_admin_text'];
             } else {
+                $wc_author_title_class = 'wc-blog-member';
                 $author_title = $this->wc_options->wc_options_serialized->wc_phrases['wc_user_title_member_text'];
             }
         } else {
+            $wc_author_title_class = 'wc-blog-guest';
             $author_title = $this->wc_options->wc_options_serialized->wc_phrases['wc_user_title_guest_text'];
         }
 
@@ -107,7 +112,7 @@ class WC_Comment_Template_Builder {
         $output = '<div id="wc-comm-' . $unique_id . '" class="' . $comment_wrapper_class . ' ' . $parent_comment . ' wc_comment_level-' . $depth . '">';
         $output .= '<div class="wc-comment-left" id="comment-' . $comment->comment_ID . '">' . $wc_comm_author_avatar;
         if (!$this->wc_options->wc_options_serialized->wc_author_titles_show_hide) {
-            $output .= '<div class="wc-comment-label">' . $author_title . '</div>';
+            $output .= '<div class="' . $wc_author_title_class . ' wc-comment-label">' . $author_title . '</div>';
         }
         if (class_exists('userpro_api') && $comment->user_id) {
             $output .= userpro_show_badges($comment->user_id, $inline = true);
@@ -119,7 +124,7 @@ class WC_Comment_Template_Builder {
         $output .= '<div class="wc-comment-footer">';
         if (!$this->wc_options->wc_options_serialized->wc_voting_buttons_show_hide) {
             $output .= '<div id="vote-count-' . $unique_id . '" class="wc-vote-result">' . $vote_count . '</div>';
-            $output .= ' <span id="wc-up-' . $unique_id . '" class="wc-vote-link wc-up ' . $vote_cls . '" title="' . $vote_up . '"><img src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/thumbs-up.png').'"  align="absmiddle" class="wc-vote-img-up" /></span> &nbsp;|&nbsp; <span id="wc-down-' . $unique_id . '" class="wc-vote-link wc-down ' . $vote_cls . '" title="' . $vote_down . '"><img src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/thumbs-down.png').'"  align="absmiddle" class="wc-vote-img-down" /></span>&nbsp;';
+            $output .= ' <span id="wc-up-' . $unique_id . '" class="wc-vote-link wc-up ' . $vote_cls . '" title="' . $vote_up . '"><img src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/thumbs-up.png') . '"  align="absmiddle" class="wc-vote-img-up" /></span> &nbsp;|&nbsp; <span id="wc-down-' . $unique_id . '" class="wc-vote-link wc-down ' . $vote_cls . '" title="' . $vote_down . '"><img src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/thumbs-down.png') . '"  align="absmiddle" class="wc-vote-img-down" /></span>&nbsp;';
         }
 
         if (comments_open($comment->comment_post_ID)) {
@@ -209,15 +214,19 @@ class WC_Comment_Template_Builder {
             $output_form .= '<div class="wc_notification_checkboxes">';
 
 
-
+            $wc_is_user_subscription_confirmed = $this->wc_db_helper->wc_is_user_subscription_confirmed($comment->comment_post_ID, $current_user->user_email);
+            $wc_subscription_phrase = ($wc_is_user_subscription_confirmed == 1) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe'] : $this->wc_options->wc_options_serialized->wc_phrases['wc_ignore_subscription'];
             if ($current_user->ID && $this->wc_db_helper->wc_has_post_notification($comment->comment_post_ID, $current_user->user_email)) {
-                $output_form .= '<label class="wc-label-comment-notify" style="cursor: default;">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_post'] . ' | <a href="' . $this->wc_db_helper->wc_unsubscribe_link($comment->comment_post_ID, $current_user->user_email, 'post') . '" rel="nofollow" class="unsubscribe">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe'] . '</a></label>';
+                $wc_confirmation_phrase = ($wc_is_user_subscription_confirmed == 1) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_post'] : $this->wc_options->wc_options_serialized->wc_phrases['wc_confirm_email'];
+                $output_form .= '<label class="wc-label-comment-notify" style="cursor: default;">' . $wc_confirmation_phrase . ' | <a href="' . $this->wc_db_helper->wc_unsubscribe_link($comment->comment_post_ID, $current_user->user_email, 'post') . '" rel="nofollow" class="unsubscribe">' . $wc_subscription_phrase . '</a></label>';
             } else {
                 if ($current_user->ID && $this->wc_db_helper->wc_has_all_comments_notification($comment->comment_post_ID, $current_user->user_email) && $current_user->user_email == $comment->comment_author_email) {
-                    $output_form .= '<label class="wc-label-all-reply-notify" style="cursor: default;">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_all_comment'] . ' | <a href="' . $this->wc_db_helper->wc_unsubscribe_link($comment->comment_post_ID, $current_user->user_email, 'all_comment') . '" rel="nofollow" class="unsubscribe">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe'] . '</a></label><br/>';
+                    $wc_confirmation_phrase = ($wc_is_user_subscription_confirmed == 1) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_all_comment'] : $this->wc_options->wc_options_serialized->wc_phrases['wc_confirm_email'];
+                    $output_form .= '<label class="wc-label-all-reply-notify" style="cursor: default;">' . $wc_confirmation_phrase . ' | <a href="' . $this->wc_db_helper->wc_unsubscribe_link($comment->comment_post_ID, $current_user->user_email, 'all_comment') . '" rel="nofollow" class="unsubscribe">' . $wc_subscription_phrase . '</a></label><br/>';
                 } else {
                     if ($current_user->ID && $this->wc_db_helper->wc_has_comment_notification($comment->comment_post_ID, $comment->comment_ID, $current_user->user_email) && $current_user->user_email == $comment->comment_author_email) {
-                        $output_form .= '<label class="wc-label-reply-notify" style="cursor: default;">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_comment'] . ' | <a href="' . $this->wc_db_helper->wc_unsubscribe_link($comment->comment_ID, $current_user->user_email, 'comment') . '" rel="nofollow" class="unsubscribe">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe'] . '</a></label><br/>';
+                        $wc_confirmation_phrase = ($wc_is_user_subscription_confirmed == 1) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_subscribed_on_comment'] : $this->wc_options->wc_options_serialized->wc_phrases['wc_confirm_email'];
+                        $output_form .= '<label class="wc-label-reply-notify" style="cursor: default;">' . $wc_confirmation_phrase . ' | <a href="' . $this->wc_db_helper->wc_unsubscribe_link($comment->comment_ID, $current_user->user_email, 'comment') . '" rel="nofollow" class="unsubscribe">' . $wc_subscription_phrase . '</a></label><br/>';
                     } else {
                         if ($this->wc_options->wc_options_serialized->wc_comment_reply_checkboxes_default_checked == 1) {
                             $none_status = '';

@@ -27,7 +27,7 @@ class WC_DB_Helper {
             dbDelta($sql);
         }
         if (!$this->wc_is_table_exists($this->phrases)) {
-            $sql = "CREATE TABLE `" . $this->phrases . "`(`id` INT(11) NOT NULL AUTO_INCREMENT, `phrase_key` VARCHAR(255) NOT NULL, `phrase_value` VARCHAR(255) NOT NULL, PRIMARY KEY (`id`), KEY `phrase_key` (`phrase_key`)) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci AUTO_INCREMENT=1;";
+            $sql = "CREATE TABLE `" . $this->phrases . "`(`id` INT(11) NOT NULL AUTO_INCREMENT, `phrase_key` VARCHAR(255) NOT NULL, `phrase_value` TEXT NOT NULL, PRIMARY KEY (`id`), KEY `phrase_key` (`phrase_key`)) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci AUTO_INCREMENT=1;";
             dbDelta($sql);
         }
         $this->wc_create_email_notification_table();
@@ -249,19 +249,19 @@ class WC_DB_Helper {
     }
 
     public function wc_has_post_notification($post_id, $email) {
-        $sql = $this->db->prepare("SELECT `id` FROM `" . $this->email_notification . "` WHERE `subscribtion_type` = 'post' AND `subscribtion_id` = %d AND `email` = %s", $post_id, $email);
+        $sql = $this->db->prepare("SELECT `id` FROM `" . $this->email_notification . "` WHERE `subscribtion_type` = 'post' AND `subscribtion_id` = %d AND `email` = %s;", $post_id, $email);
         $result = $this->db->get_results($sql, ARRAY_N);
         return count($result);
     }
 
     public function wc_has_all_comments_notification($post_id, $email) {
-        $sql = $this->db->prepare("SELECT `id` FROM `" . $this->email_notification . "` WHERE `subscribtion_type` IN('post', 'all_comment') AND `subscribtion_id` = %d AND `email` = %s", $post_id, $email);
+        $sql = $this->db->prepare("SELECT `id` FROM `" . $this->email_notification . "` WHERE `subscribtion_type` IN('post', 'all_comment') AND `subscribtion_id` = %d AND `email` = %s;", $post_id, $email);
         $result = $this->db->get_results($sql, ARRAY_N);
         return count($result);
     }
 
     public function wc_has_comment_notification($post_id, $comment_id, $email) {
-        $sql_comments_notifications = $this->db->prepare("SELECT count(*) FROM `" . $this->email_notification . "` WHERE `email` LIKE %s AND `subscribtion_type` IN('post', 'all_comment') AND `subscribtion_id` = %d", $email, $post_id);
+        $sql_comments_notifications = $this->db->prepare("SELECT count(*) FROM `" . $this->email_notification . "` WHERE `email` LIKE %s AND `subscribtion_type` IN('post', 'all_comment') AND `subscribtion_id` = %d;", $email, $post_id);
         if ($this->db->get_var($sql_comments_notifications)) {
             return 1;
         }
@@ -269,6 +269,14 @@ class WC_DB_Helper {
         $sql = $this->db->prepare("SELECT `id` FROM `" . $this->email_notification . "` WHERE `subscribtion_type` = 'comment' AND `subscribtion_id` = %d AND `email` = %s", $comment_id, $email);
         $result = $this->db->get_results($sql, ARRAY_N);
         return count($result);
+    }
+    
+    /**
+     * check if user subscription is confirmed or not
+     */
+    public function wc_is_user_subscription_confirmed($post_id, $email) {
+        $sql_is_subscription_confirmed = $this->db->prepare("SELECT `confirm` FROM `" . $this->email_notification . "` WHERE `subscribtion_type` IN('post', 'all_comment', 'comment') AND `subscribtion_id` = %d AND `email` = %s;", $post_id, $email);
+        return $this->db->get_var($sql_is_subscription_confirmed);
     }
 
     /**
@@ -289,17 +297,6 @@ class WC_DB_Helper {
 
         $wc_unsubscribe_link = get_permalink($post_id) . "?wpdiscuzSubscribeID=" . $wc_unsubscribe['id'] . "&key=" . $wc_unsubscribe['activation_key'] . '&#wc_unsubscribe_message';
         return $wc_unsubscribe_link;
-    }
-
-    /**
-     * Alter notification table
-     */
-    public function wc_modification_notify_table() {
-        $sql_alter = "ALTER TABLE `" . $this->email_notification . "` ADD `confirm` TINYINT DEFAULT 0, ADD `subscription_date` DATETIME DEFAULT NOW();";
-        if ($this->db->query($sql_alter)) {
-            $sql_update = "UPDATE `" . $this->email_notification . "` SET `confirm` = 1;";
-            $this->db->query($sql_update);
-        }
     }
 
     /**
@@ -327,6 +324,23 @@ class WC_DB_Helper {
     public function wc_unsubscribe($id, $activation_key) {
         $sql_unsubscribe = $this->db->prepare("DELETE FROM `" . $this->email_notification . "` WHERE `id` = %d AND `activation_key` LIKE %s", $id, $activation_key);
         return $this->db->query($sql_unsubscribe);
+    }
+    
+    
+    /**
+     * Alter notification table
+     */
+    public function wc_modification_notify_table() {
+        $sql_alter = "ALTER TABLE `" . $this->email_notification . "` ADD `confirm` TINYINT DEFAULT 0, ADD `subscription_date` DATETIME DEFAULT NOW();";
+        if ($this->db->query($sql_alter)) {
+            $sql_update = "UPDATE `" . $this->email_notification . "` SET `confirm` = 1;";
+            $this->db->query($sql_update);
+        }
+    }
+    
+    public function wc_alter_phrases_table() {
+        $sql_alter = "ALTER TABLE `" . $this->phrases . "` MODIFY `phrase_value` TEXT NOT NULL;";
+        $this->db->query($sql_alter);
     }
 
 }

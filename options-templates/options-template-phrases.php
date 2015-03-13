@@ -376,7 +376,7 @@
 
 <tr valign="top">
     <th scope="row">
-        <?php _e('New Reply Message', WC_Core::$TEXT_DOMAIN); ?>
+        <?php _e('Unsubscribe', WC_Core::$TEXT_DOMAIN); ?>
     </th>
     <td colspan="3">                                
         <label for="wc_unsubscribe">

@@ -126,9 +126,6 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 * Added: CSS classes for blog users titles by rank
 * Fixed Bug: Phrases saving issue
 
-= 2.1.3 =
-* Fixed Bug: Options saving issue
-
 = 2.1.2 =
 * Added : Adapting with wordpress.org plugin repository guidelines (added an option to allow users show/hide "powered by" information on front-end)
 

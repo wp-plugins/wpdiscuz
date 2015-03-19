@@ -3,16 +3,22 @@
 class WC_Helper {
 
     public static $datetime = 'datetime';
-    public static $datetime_phrases_keys = array(
-        'wc_year_text', 'wc_month_text', 'wc_day_text',
-        'wc_hour_text', 'wc_minute_text', 'wc_second_text'
-    );
+//    public static $datetime_phrases_keys = array(
+//        'wc_year_text', 'wc_month_text', 'wc_day_text',
+//        'wc_hour_text', 'wc_minute_text', 'wc_second_text'
+//    );
     public static $year = 'wc_year_text';
+    public static $years = 'wc_year_text_plural';
     public static $month = 'wc_month_text';
+    public static $months = 'wc_month_text_plural';
     public static $day = 'wc_day_text';
+    public static $days = 'wc_day_text_plural';
     public static $hour = 'wc_hour_text';
+    public static $hours = 'wc_hour_text_plural';
     public static $minute = 'wc_minute_text';
+    public static $minutes = 'wc_minute_text_plural';
     public static $second = 'wc_second_text';
+    public static $seconds = 'wc_second_text_plural';
     private $wc_options_serialized;
 
     function __construct($wc_options_serialize) {
@@ -74,7 +80,7 @@ class WC_Helper {
         $times = array();
 // Loop thru all diffs
         foreach ($diffs as $interval => $value) {
-            $interval = $this->date_text_by_index($interval);
+            $interval = $this->date_text_by_index($interval, $value);
 // Break if we have needed precission
             if ($count >= $precision) {
                 break;
@@ -82,10 +88,6 @@ class WC_Helper {
 // Add value and interval 
 // if value is bigger than 0
             if ($value > 0) {
-// Add s if value is not 1
-                if ($value != 1) {
-                    $interval .= $this->wc_options_serialized->wc_phrases['wc_plural_text'];
-                }
 // Add value and interval to times array
                 $times[] = $value . " " . $interval;
                 $count++;
@@ -122,15 +124,27 @@ class WC_Helper {
         switch ($phrase['phrase_key']) {
             case WC_Helper::$year:
                 return array(WC_Helper::$datetime => array($phrase_value, 1));
+            case WC_Helper::$years:
+                return array(WC_Helper::$datetime => array($phrase_value, 1));
             case WC_Helper::$month:
+                return array(WC_Helper::$datetime => array($phrase_value, 2));
+            case WC_Helper::$months:
                 return array(WC_Helper::$datetime => array($phrase_value, 2));
             case WC_Helper::$day:
                 return array(WC_Helper::$datetime => array($phrase_value, 3));
+            case WC_Helper::$days:
+                return array(WC_Helper::$datetime => array($phrase_value, 3));
             case WC_Helper::$hour:
+                return array(WC_Helper::$datetime => array($phrase_value, 4));
+            case WC_Helper::$hours:
                 return array(WC_Helper::$datetime => array($phrase_value, 4));
             case WC_Helper::$minute:
                 return array(WC_Helper::$datetime => array($phrase_value, 5));
+            case WC_Helper::$minutes:
+                return array(WC_Helper::$datetime => array($phrase_value, 5));
             case WC_Helper::$second:
+                return array(WC_Helper::$datetime => array($phrase_value, 6));
+            case WC_Helper::$seconds:
                 return array(WC_Helper::$datetime => array($phrase_value, 6));
             default :
                 return $phrase_value;
@@ -154,20 +168,20 @@ class WC_Helper {
         }
     }
 
-    private function date_text_by_index($index) {
+    private function date_text_by_index($index, $value) {
         switch ($index) {
             case 'year':
-                return $this->wc_options_serialized->wc_phrases['wc_year_text']['datetime'][0];
+                return ($value > 1) ? $this->wc_options_serialized->wc_phrases['wc_year_text_plural']['datetime'][0] : $this->wc_options_serialized->wc_phrases['wc_year_text']['datetime'][0];
             case 'month':
-                return $this->wc_options_serialized->wc_phrases['wc_month_text']['datetime'][0];
+                return ($value > 1) ? $this->wc_options_serialized->wc_phrases['wc_month_text_plural']['datetime'][0] : $this->wc_options_serialized->wc_phrases['wc_month_text']['datetime'][0];
             case 'day':
-                return $this->wc_options_serialized->wc_phrases['wc_day_text']['datetime'][0];
+                return ($value > 1) ? $this->wc_options_serialized->wc_phrases['wc_day_text_plural']['datetime'][0] : $this->wc_options_serialized->wc_phrases['wc_day_text']['datetime'][0];
             case 'hour':
-                return $this->wc_options_serialized->wc_phrases['wc_hour_text']['datetime'][0];
+                return ($value > 1) ? $this->wc_options_serialized->wc_phrases['wc_hour_text_plural']['datetime'][0] : $this->wc_options_serialized->wc_phrases['wc_hour_text']['datetime'][0];
             case 'minute':
-                return $this->wc_options_serialized->wc_phrases['wc_minute_text']['datetime'][0];
+                return ($value > 1) ? $this->wc_options_serialized->wc_phrases['wc_minute_text_plural']['datetime'][0] : $this->wc_options_serialized->wc_phrases['wc_minute_text']['datetime'][0];
             case 'second':
-                return $this->wc_options_serialized->wc_phrases['wc_second_text']['datetime'][0];
+                return ($value > 1) ? $this->wc_options_serialized->wc_phrases['wc_second_text_plural']['datetime'][0] : $this->wc_options_serialized->wc_phrases['wc_second_text']['datetime'][0];
         }
     }
 

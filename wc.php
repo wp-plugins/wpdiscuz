@@ -3,7 +3,7 @@
 /*
   Plugin Name: wpDiscuz - Wordpress Comments
   Description: Better comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share.
-  Version: 2.1.4
+  Version: 2.1.5
   Author: gVectors Team (A. Chakhoyan, G. Zakaryan, H. Martirosyan)
   Author URI: http://www.gvectors.com/
   Plugin URI: http://www.gvectors.com/wpdiscuz/
@@ -113,9 +113,6 @@ class WC_Core {
             if ($wc_version === '1.0.0') {
                 add_option($this->wc_version_slug, $wc_plugin_data['Version']);
             } else {
-                if (version_compare('2.1.0', $wc_version, '>')) {
-                    $this->wc_db_helper->wc_modification_notify_table();
-                }
                 update_option($this->wc_version_slug, $wc_plugin_data['Version']);
             }
             if (version_compare($wc_version, '2.1.2', '<=')) {
@@ -189,7 +186,7 @@ class WC_Core {
      * Styles and scripts registration to use on front page
      */
     public function front_end_styles_scripts() {
-        if (is_singular()) {
+        if ( is_singular() ) {
             $u_agent = $_SERVER['HTTP_USER_AGENT'];
 
             if ($this->wc_options->wc_options_serialized->wc_comment_list_update_type != 0) {
@@ -254,6 +251,12 @@ class WC_Core {
 
         wp_register_script('wc-scripts-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-scripts.js'), array('jquery'));
         wp_enqueue_script('wc-scripts-js');
+
+        wp_register_style('wc-easy-responsive-tabs-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/easy-responsive-tabs/css/easy-responsive-tabs.css'), true);
+        wp_enqueue_style('wc-easy-responsive-tabs-css');
+
+        wp_register_script('wc-easy-responsive-tabs-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/easy-responsive-tabs/js/easy-responsive-tabs.js'), array('jquery'), '1.0.0', true);
+        wp_enqueue_script('wc-easy-responsive-tabs-js');
     }
 
     /*
@@ -309,42 +312,33 @@ class WC_Core {
 
         if ($name && filter_var($email, FILTER_VALIDATE_EMAIL) && $comment && filter_var($comment_post_ID)) {
 
-            $held_moderate = 1;
-            if ($this->wc_options->wc_options_serialized->wc_held_comment_to_moderate) {
-                $held_moderate = 0;
-            }
-
             $author_ip = WC_Helper::get_real_ip_addr();
 
             $new_commentdata = array(
                 'user_id' => $user_id,
-                'comment_post_ID' => apply_filters('pre_user_id', $comment_post_ID),
+                'comment_post_ID' => $comment_post_ID,
                 'comment_parent' => $comment_parent,
-                'comment_author' => apply_filters('pre_comment_author_name', $name),
-                'comment_author_email' => apply_filters('pre_comment_author_email', $email),
-                'comment_content' => apply_filters('pre_comment_content', $comment),
-                'comment_author_url' => apply_filters('pre_comment_author_url', $user_url),
-                'comment_author_IP' => apply_filters('pre_comment_user_ip', $author_ip),
-                'comment_approved' => $held_moderate,
-                'comment_agent' => apply_filters('pre_comment_user_agent', $this->wc_user_agent)
+                'comment_author' => $name,
+                'comment_author_email' => $email,
+                'comment_content' => $comment,
+                'comment_author_url' => $user_url,
+                'comment_author_IP' => $author_ip,
+                'comment_agent' => $this->wc_user_agent
             );
-            if (!$held_moderate) {
-                $new_comment_id = wp_new_comment($new_commentdata);
-                $new_inserted_comment = get_comment($new_comment_id);
-                if ($new_inserted_comment->comment_approved) {
-                    $held_moderate = 1;
-                }
-            } else {
-                $new_commentdata['comment_approved'] = wp_blacklist_check($new_commentdata['comment_author'], $new_commentdata['comment_author_email'], $new_commentdata['comment_author_url'], $new_commentdata['comment_content'], $new_commentdata['comment_author_IP'], $new_commentdata['comment_agent']) ? 'spam' : $held_moderate;
-                $new_comment_id = wp_insert_comment($new_commentdata);
+
+            $new_comment_id = wp_new_comment($new_commentdata);
+            $new_inserted_comment = get_comment($new_comment_id);
+            $held_moderate = 1;
+            if ($new_inserted_comment->comment_approved) {
+                $held_moderate = 0;
             }
             $wc_notification_inserted_id = 0;
             if ($notification_type == 'post' && !$this->wc_db_helper->wc_has_post_notification($comment_post_ID, $email)) {
                 if (class_exists('Prompt_Comment_Form_Handling') && $this->wc_options->wc_options_serialized->wc_use_postmatic_for_comment_notification) {
                     $_POST[Prompt_Comment_Form_Handling::SUBSCRIBE_CHECKBOX_NAME] = 1;
-                    Prompt_Comment_Form_Handling::handle_form($new_comment_id, $held_moderate);
+                    Prompt_Comment_Form_Handling::handle_form($new_comment_id, $new_inserted_comment->comment_approved);
                 } else {
-                    $wc_notification_inserted_id = $this->wc_db_helper->wc_add_email_notification($comment_post_ID, $comment_post_ID, $email, 1);                 
+                    $wc_notification_inserted_id = $this->wc_db_helper->wc_add_email_notification($comment_post_ID, $comment_post_ID, $email, 1);
                 }
             } else if ($notification_type == 'all_comment' && !$this->wc_db_helper->wc_has_all_comments_notification($comment_post_ID, $email)) {
                 $wc_notification_inserted_id = $this->wc_db_helper->wc_add_email_notification($comment_post_ID, $comment_post_ID, $email, 2);
@@ -357,7 +351,7 @@ class WC_Core {
             }
 
             $new_comment = new WC_Comment(get_comment($new_comment_id, OBJECT));
-            if (!$held_moderate || $new_commentdata['comment_approved'] === 'spam') {
+            if ($held_moderate) {
                 $message_array['code'] = -2;
                 $message_array['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_held_for_moderate'];
             } else {
@@ -874,13 +868,11 @@ class WC_Core {
 
     public function wc_confirm_email_sender($subscrib_id, $email, $post_id, $new_comment_id, $subscribtion_type) {
         $curr_post = get_post($post_id);
-        $curr_post_author = get_userdata($curr_post->post_author);        
+        $curr_post_author = get_userdata($curr_post->post_author);
 
         $subject = isset($this->wc_options->wc_options_serialized->wc_phrases['wc_confirm_email_subject']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_confirm_email_subject'] : __('Subscribe Confirmation', WC_Core::$TEXT_DOMAIN);
         $message = isset($this->wc_options->wc_options_serialized->wc_phrases['wc_confirm_email_message']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_confirm_email_message'] : __('Hi, <br/> You just subscribed for new comments on our website. This means you will receive an email when new comments are posted according to subscription option you\'ve chosen. <br/> To activate, click confirm below. If you believe this is an error, ignore this message and we\'ll never bother you again.', WC_Core::$TEXT_DOMAIN);
-        if ($email == $curr_post_author->user_email && (get_option('comments_notify') || get_option('moderation_notify'))) {
-            return;
-        }
+
         if ($subscribtion_type == 'post' || $subscribtion_type = '') {
             $comment_or_post_subscrib_id = $post_id;
         } else {
@@ -908,8 +900,12 @@ class WC_Core {
         $curr_post = get_post($comment->comment_post_ID);
         $curr_post_author = get_userdata($curr_post->post_author);
 
-        if ($email_data['email'] == $curr_post_author->user_email && (get_option('comments_notify') || get_option('moderation_notify'))) {
-            return;
+        if ($email_data['email'] == $curr_post_author->user_email) {
+            if (get_option('moderation_notify') && !$comment->comment_approved) {
+                return;
+            } else if (get_option('comments_notify') && $comment->comment_approved) {
+                return;
+            }
         }
 
         $wc_new_comment_content = $comment->comment_content;

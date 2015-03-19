@@ -52,4 +52,11 @@ jQuery(document).ready(function ($) {
             $('#wc_new_loaded_comment_bg_color').val('rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')');
         }
     });
+    
+    $('#wc_colorpickerHolder8').ColorPicker({
+        flat: true,
+        onChange: function (hsb, hex, rgb) {
+            $('#wc_input_border_color').val('#' + hex);
+        }
+    });
 });

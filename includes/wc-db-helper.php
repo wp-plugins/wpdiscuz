@@ -14,7 +14,7 @@ class WC_DB_Helper {
         $this->dbprefix = $wpdb->prefix;
         $this->users_voted = $this->dbprefix . 'wc_users_voted';
         $this->phrases = $this->dbprefix . 'wc_phrases';
-        $this->email_notification = $this->dbprefix . 'wc_email_notify';
+        $this->email_notification = $this->dbprefix . 'wc_comments_subscription';
     }
 
     /**
@@ -43,21 +43,26 @@ class WC_DB_Helper {
 
     public function wc_create_email_notification_table() {
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        $wc_old_notification_table_name = $this->dbprefix . 'wc_email_notfication';
+        $wc_old_notification_table_name_v200 = $this->dbprefix . 'wc_email_notfication';
+        $wc_old_notification_table_name_v214 = $this->dbprefix . 'wc_email_notify';
         if (!$this->wc_is_table_exists($this->email_notification)) {
-            $sql = "CREATE TABLE `" . $this->email_notification . "`(`id` INT(11) NOT NULL AUTO_INCREMENT, `email` VARCHAR(255) NOT NULL, `subscribtion_id` INT(11) NOT NULL, `post_id` INT(11) NOT NULL, `subscribtion_type` VARCHAR(255) NOT NULL, `activation_key` VARCHAR(255) NOT NULL, `confirm` TINYINT DEFAULT 0, `subscription_date` DATETIME DEFAULT NOW(), PRIMARY KEY (`id`), KEY `subscribtion_id` (`subscribtion_id`), KEY `post_id` (`post_id`), KEY `confirm`(`confirm`)) ENGINE=MYISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci AUTO_INCREMENT=1;";
+            $sql = "CREATE TABLE `" . $this->email_notification . "`(`id` INT(11) NOT NULL AUTO_INCREMENT, `email` VARCHAR(255) NOT NULL, `subscribtion_id` INT(11) NOT NULL, `post_id` INT(11) NOT NULL, `subscribtion_type` VARCHAR(255) NOT NULL, `activation_key` VARCHAR(255) NOT NULL, `confirm` TINYINT DEFAULT 0, `subscription_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`id`), KEY `subscribtion_id` (`subscribtion_id`), KEY `post_id` (`post_id`), KEY `confirm`(`confirm`)) ENGINE=MYISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci AUTO_INCREMENT=1;";
             dbDelta($sql);
         }
 
-        if ($this->wc_is_table_exists($wc_old_notification_table_name)) {
-            $this->wc_save_notification_data($wc_old_notification_table_name);
+        if ($this->wc_is_table_exists($wc_old_notification_table_name_v200)) {
+            $this->wc_save_notification_data_v200($wc_old_notification_table_name_v200);
+        }
+
+        if ($this->wc_is_table_exists($wc_old_notification_table_name_v214)) {
+            $this->wc_save_notification_data_v214($wc_old_notification_table_name_v214);
         }
     }
 
     /**
-     * save old notification data into new created table and drop old table
+     * save old notification data from notification table v200 into new created table and drop old table
      */
-    public function wc_save_notification_data($wc_old_notification_table_name) {
+    public function wc_save_notification_data_v200($wc_old_notification_table_name) {
         $sql_post_notification_data = "SELECT * FROM `" . $wc_old_notification_table_name . "` WHERE `post_id` > 0;";
         $sql_comment_notification_data = "SELECT * FROM `" . $wc_old_notification_table_name . "` WHERE `comment_id` > 0;";
         $post_notifications_data = $this->db->get_results($sql_post_notification_data, ARRAY_A);
@@ -69,7 +74,7 @@ class WC_DB_Helper {
             $inserted_post_ids[] = $post_id;
             $subscribtion_type = "post";
             $activation_key = md5($email . uniqid() . time());
-            $sql_add_old_post_notification = "INSERT INTO `" . $this->email_notification . "` (`email`, `subscribtion_id`, `post_id`, `subscribtion_type`, `activation_key`) VALUES('$email', $post_id, $post_id, '$subscribtion_type', '$activation_key');";
+            $sql_add_old_post_notification = "INSERT INTO `" . $this->email_notification . "` (`email`, `subscribtion_id`, `post_id`, `subscribtion_type`, `activation_key`, `confirm`) VALUES('$email', $post_id, $post_id, '$subscribtion_type', '$activation_key', '1');";
             $this->db->query($sql_add_old_post_notification);
         }
 
@@ -80,12 +85,22 @@ class WC_DB_Helper {
             if (!$this->wc_has_comment_notification($comment->comment_post_ID, $comment_id, $email)) {
                 $subscribtion_type = "comment";
                 $activation_key = md5($email . uniqid() . time());
-                $sql_add_old_post_notification = "INSERT INTO `" . $this->email_notification . "` (`email`, `subscribtion_id`, `post_id`, `subscribtion_type`, `activation_key`) VALUES('$email', $comment_id, $comment->comment_post_ID, '$subscribtion_type', '$activation_key');";
+                $sql_add_old_post_notification = "INSERT INTO `" . $this->email_notification . "` (`email`, `subscribtion_id`, `post_id`, `subscribtion_type`, `activation_key`, `confirm`) VALUES('$email', $comment_id, $comment->comment_post_ID, '$subscribtion_type', '$activation_key', '1');";
                 $this->db->query($sql_add_old_post_notification);
             }
         }
 
         $sql_drop_old_notification_table = "DROP TABLE `" . $wc_old_notification_table_name . "`;";
+        $this->db->query($sql_drop_old_notification_table);
+    }
+
+    /**
+     * save old notification data from notification table v214 into new created table and drop old table
+     */
+    public function wc_save_notification_data_v214($wc_old_notification_table_name_v214) {
+        $sql_post_notification_data = "INSERT INTO `" . $this->email_notification . "` (`email`, `subscribtion_id`, `post_id`, `subscribtion_type`, `activation_key`, `confirm`) SELECT `email`, `subscribtion_id`, `post_id`, `subscribtion_type`, `activation_key`, '1' FROM " . $wc_old_notification_table_name_v214 . ";";
+        $this->db->query($sql_post_notification_data);
+        $sql_drop_old_notification_table = "DROP TABLE `" . $wc_old_notification_table_name_v214 . "`;";
         $this->db->query($sql_drop_old_notification_table);
     }
 
@@ -270,7 +285,7 @@ class WC_DB_Helper {
         $result = $this->db->get_results($sql, ARRAY_N);
         return count($result);
     }
-    
+
     /**
      * check if user subscription is confirmed or not
      */
@@ -325,19 +340,7 @@ class WC_DB_Helper {
         $sql_unsubscribe = $this->db->prepare("DELETE FROM `" . $this->email_notification . "` WHERE `id` = %d AND `activation_key` LIKE %s", $id, $activation_key);
         return $this->db->query($sql_unsubscribe);
     }
-    
-    
-    /**
-     * Alter notification table
-     */
-    public function wc_modification_notify_table() {
-        $sql_alter = "ALTER TABLE `" . $this->email_notification . "` ADD `confirm` TINYINT DEFAULT 0, ADD `subscription_date` DATETIME DEFAULT NOW();";
-        if ($this->db->query($sql_alter)) {
-            $sql_update = "UPDATE `" . $this->email_notification . "` SET `confirm` = 1;";
-            $this->db->query($sql_update);
-        }
-    }
-    
+
     public function wc_alter_phrases_table() {
         $sql_alter = "ALTER TABLE `" . $this->phrases . "` MODIFY `phrase_value` TEXT NOT NULL;";
         $this->db->query($sql_alter);

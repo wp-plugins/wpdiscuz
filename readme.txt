@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: wordpress comments, ajax comments, ajax, live update, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system
 Requires at least: 2.7
 Tested up to: 4.1.1
-Stable tag: 2.1.4
+Stable tag: 2.1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,12 +122,27 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 
 
 == Changelog ==
+
+= 2.1.5 =
+* Fixed Bug: Problems with email notifications
+* Fixed Bug: Empty name of anonymouse comments
+* Added: Option to set form fields border color
+* Added: Additional phrases for plural form
+* Added: Tabbed General Settings admin page
+* Added: Tabbed Phrase Manager admin page
+* Added: Better integration with Postmatic
+* Added: Portuguese (pt_PT) language, thanks to Celso Azevedo
+
+IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
+
 = 2.1.4 =
 * Added: CSS classes for blog users titles by rank
 * Fixed Bug: Phrases saving issue
 
+
 = 2.1.2 =
 * Added : Adapting with wordpress.org plugin repository guidelines
+
 
 = 2.1.0 =
 * Added : Users can edit their comments (time-frame can be limited by admin)
@@ -145,8 +160,6 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 * Added : Filter hooks on email fields
 * Added : Filter hooks on comment form fields
 * Fixed Bug: Image source URL to image conversion in comment content
-
-IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
 
 
 = 2.0.9 =

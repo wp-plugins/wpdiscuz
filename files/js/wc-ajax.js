@@ -69,7 +69,7 @@ jQuery(document).ready(function ($) {
         wc_comment_post_ID = $('#wc_comment_post_ID-' + uniqueID).val();
         wc_comment_parent = $('#wc_comment_parent-' + uniqueID).val();
         wc_form = $('#wc_comm_form-' + uniqueID);
-        var notification_type_radio = $("input:radio[name='wp_comment_reply_notification-" + uniqueID + "']:checked").length ? $("input:radio[name='wp_comment_reply_notification-" + uniqueID + "']:checked").val() : '';
+        var notification_type_radio = $("input[name='wc_comment_reply_notification-" + uniqueID + "']:checked").length ? $("input[name='wc_comment_reply_notification-" + uniqueID + "']:checked").val() : '';
 
         var depth = '';
         if (isMainFormSubmit(wc_submitID, wc_comment_post_ID)) {
@@ -199,7 +199,7 @@ jQuery(document).ready(function ($) {
                     $('#wc_openModalFormAction').css('opacity', '1');
                     $('#wc_openModalFormAction').css('pointer-events', 'auto');
                     $('#wc_openModalFormAction .close').css('display', 'block');
-                    $('#wc_openModalFormAction > #wc_response_info').html(html + response);
+                    $('#wc_openModalFormAction > #wc_response_info').html(html + e);
                 }
             });
         }
@@ -461,9 +461,9 @@ jQuery(document).ready(function ($) {
      */
     // MUST BE CHANGED IN NEXT VERSION OF PLUGIN
     function updateAutomatically() {
-        wc_submitID = $('.wc_main_comm_form input.wc_comm_submit').attr('id');
-        var uniqueID = wc_submitID.substring(wc_submitID.lastIndexOf('-') + 1);
-        wc_comment_post_ID = getPostID(uniqueID);
+//        wc_submitID = $('.wc_main_comm_form input.wc_comm_submit').attr('id');
+//        var uniqueID = wc_submitID.substring(wc_submitID.lastIndexOf('-') + 1);
+        wc_comment_post_ID = $('#wpdiscuz_current_post_id').val();
         var wc_last_comment_id = $('#wc_last_comment_id_before_update').val();
         var wc_last_new_comment_id = $('#wc_last_new_comment_id').val();
         var wc_last_new_reply_id = $('#wc_last_new_reply_id').val();

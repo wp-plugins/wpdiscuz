@@ -44,7 +44,7 @@ class WC_Options_Serialize {
      * Description - Allow commnet editing after comment subimt
      * Default Value - Editable comment time value
      */
-    public $wc_comment_editable_time;      
+    public $wc_comment_editable_time;
 
     /**
      * Type - Checkbox
@@ -87,14 +87,6 @@ class WC_Options_Serialize {
      * Default Value - Checked
      */
     public $wc_show_hide_loggedin_username;
-
-    /**
-     * Type - Checkbox
-     * Available Values - Checked/Unchecked
-     * Description - If checked held the comment to approve manually    
-     * Default Value - Unchecked
-     */
-    public $wc_held_comment_to_moderate;
 
     /**
      * Type - Checkbox
@@ -167,7 +159,7 @@ class WC_Options_Serialize {
      * Default Value - Checked
      */
     public $wc_show_hide_all_reply_checkbox;
-    
+
     /**
      * Type - Checkbox
      * Available Values - Checked/Unchecked
@@ -175,8 +167,7 @@ class WC_Options_Serialize {
      * Default Value - Checked
      */
     public $wc_show_hide_reply_checkbox;
-    
-    
+
     /**
      * Type - Checkbox
      * Available Values - Checked/Unchecked
@@ -240,6 +231,14 @@ class WC_Options_Serialize {
      * Default Value - #666666
      */
     public $wc_vote_reply_color;
+    
+    /**
+     * Type - Input
+     * Available Values - color codes
+     * Description - Form imput border olor
+     * Default Value - #d9d9d9
+     */
+    public $wc_input_border_color;
 
     /**
      * Type - Input
@@ -269,7 +268,7 @@ class WC_Options_Serialize {
      * helper class for database operations
      */
     public $wc_db_helper;
-    
+
     /**
      * Type - Checkbox
      * Available Values - Checked/Unchecked
@@ -298,7 +297,6 @@ class WC_Options_Serialize {
         $this->wc_captcha_show_hide = $options['wc_captcha_show_hide'];
         $this->wc_user_must_be_registered = $options['wc_user_must_be_registered'];
         $this->wc_show_hide_loggedin_username = isset($options['wc_show_hide_loggedin_username']) ? $options['wc_show_hide_loggedin_username'] : 0;
-        $this->wc_held_comment_to_moderate = $options['wc_held_comment_to_moderate'];
         $this->wc_reply_button_guests_show_hide = $options['wc_reply_button_guests_show_hide'];
         $this->wc_reply_button_members_show_hide = $options['wc_reply_button_members_show_hide'];
         $this->wc_author_titles_show_hide = $options['wc_author_titles_show_hide'];
@@ -317,6 +315,7 @@ class WC_Options_Serialize {
         $this->wc_comment_text_color = $options['wc_comment_text_color'];
         $this->wc_author_title_color = $options['wc_author_title_color'];
         $this->wc_vote_reply_color = $options['wc_vote_reply_color'];
+        $this->wc_input_border_color = isset($options['wc_input_border_color']) ? $options['wc_input_border_color'] : "#d9d9d9";
         $this->wc_new_loaded_comment_bg_color = isset($options['wc_new_loaded_comment_bg_color']) ? $options['wc_new_loaded_comment_bg_color'] : "rgb(255,250,214)";
         $this->wc_custom_css = isset($options['wc_custom_css']) ? $options['wc_custom_css'] : '.comments-area{width:auto; margin: 0 auto;}';
         $this->wc_show_plugin_powerid_by = isset($options['wc_show_plugin_powerid_by']) ? $options['wc_show_plugin_powerid_by'] : 0;
@@ -327,84 +326,90 @@ class WC_Options_Serialize {
      */
     public function init_phrases() {
         $this->wc_phrases = array(
-            'wc_leave_a_reply_text' => 'Leave a Reply',
-            'wc_be_the_first_text' => 'Be the First to Comment!',
-            'wc_header_text' => 'Comment',
-            'wc_header_on_text' => 'on',
-            'wc_comment_start_text' => 'Start the discussion',
-            'wc_comment_join_text' => 'Join the discussion',
-            'wc_email_text' => 'Email',
-            'wc_name_text' => 'Name',
-            'wc_captcha_text' => 'Please insert the code above to comment',
-            'wc_submit_text' => 'Post Comment',
-            'wc_manage_subscribtions' => 'Manage Subscriptions',
-            'wc_notify_none' => 'None',
-            'wc_notify_on_new_comment' => 'Notify of all new follow-up comments',
-            'wc_notify_on_all_new_reply' => 'Notify of new replies to all my comments',
-            'wc_notify_on_new_reply' => 'Notify of new replies to this comment',
-            'wc_load_more_submit_text' => 'Load More Comments',
-            'wc_reply_text' => 'Reply',
-            'wc_share_text' => 'Share',
-            'wc_share_facebook' => 'Share On Facebook',
-            'wc_share_twitter' => 'Share On Twitter',
-            'wc_share_google' => 'Share On Google',
-            'wc_hide_replies_text' => 'Hide Replies',
-            'wc_show_replies_text' => 'Show Replies',
-            'wc_user_title_guest_text' => 'Guest',
-            'wc_user_title_member_text' => 'Member',
-            'wc_user_title_author_text' => 'Author',
-            'wc_user_title_admin_text' => 'Admin',
-            'wc_email_subject' => 'New Comment',
-            'wc_email_message' => 'New comment on the discussion section you\'ve been interested in',
-            'wc_new_reply_email_subject' => 'New Reply',
-            'wc_new_reply_email_message' => 'New reply on the discussion section you\'ve been interested in',
-            'wc_subscribed_on_comment' => 'You\'re subscribed for new replies on this comment',
-            'wc_subscribed_on_all_comment' => 'You\'re subscribed for new replies on all your comments',
-            'wc_subscribed_on_post' => 'You\'re subscribed for new follow-up comments on this post',
-            'wc_unsubscribe' => 'Unsubscribe',
-            'wc_ignore_subscription' => 'Ignore Subscription',
-            'wc_unsubscribe_message' => 'You\'ve successfully unsubscribed.',
-            'wc_confirm_email' => 'Confirm your subscribtion',
-            'wc_comfirm_success_message' => 'You\'ve successfully confirmed your subscription.',
-            'wc_confirm_email_subject' => 'Subscribe Confirmation',
-            'wc_confirm_email_message' => 'Hi, <br/> You just subscribed for new comments on our website. This means you will receive an email when new comments are posted according to subscription option you\'ve chosen. <br/> To activate, click confirm below. If you believe this is an error, ignore this message and we\'ll never bother you again.',
-            'wc_error_empty_text' => 'please fill out this field to comment',
-            'wc_error_email_text' => 'email address is invalid',
-            'wc_year_text' => array('datetime' => array('year', 1)),
-            'wc_month_text' => array('datetime' => array('month', 2)),
-            'wc_day_text' => array('datetime' => array('day', 3)),
-            'wc_hour_text' => array('datetime' => array('hour', 4)),
-            'wc_minute_text' => array('datetime' => array('minute', 5)),
-            'wc_second_text' => array('datetime' => array('second', 6)),
-            'wc_plural_text' => 's',
-            'wc_right_now_text' => 'right now',
-            'wc_ago_text' => 'ago',
-            'wc_posted_today_text' => 'Today',
-            'wc_you_must_be_text' => 'You must be',
-            'wc_logged_in_as' => 'You are logged in as',            
-            'wc_log_out' => 'Log out',            
-            'wc_logged_in_text' => 'logged in',
-            'wc_to_post_comment_text' => 'to post a comment.',
-            'wc_vote_up' => 'Vote Up',
-            'wc_vote_down' => 'Vote Down',
-            'wc_vote_counted' => 'Vote Counted',
-            'wc_vote_only_one_time' => "You've already voted for this comment",
-            'wc_voting_error' => 'Voting Error',
-            'wc_login_to_vote' => 'You Must Be Logged In To Vote',
-            'wc_self_vote' => 'You cannot vote for your comment',
-            'wc_invalid_captcha' => 'Invalid Captcha Code',
-            'wc_invalid_field' => 'Some of field value is invalid',
-            'wc_held_for_moderate' => 'Your Comment awaiting moderation',
-            'wc_new_comment_button_text' => 'new comment',
-            'wc_new_comments_button_text' => 'new comments',
-            'wc_new_reply_button_text' => 'new reply on your comment',
-            'wc_new_replies_button_text' => 'new replies on your comments',
-            'wc_new_comments_text' => 'New',
-            'wc_comment_not_updated' => 'Sorry, the comment was not updated',
-            'wc_comment_edit_not_possible' => 'Sorry, this comment no longer possible to edit',
-            'wc_comment_not_edited' => 'You\'ve not made any changes',
-            'wc_comment_edit_save_button' => 'Save',
-            'wc_comment_edit_cancel_button' => 'Cancel',
+            'wc_leave_a_reply_text' => __('Leave a Reply', WC_Core::$TEXT_DOMAIN),
+            'wc_be_the_first_text' => __('Be the First to Comment!', WC_Core::$TEXT_DOMAIN),
+            'wc_header_text' => __('Comment', WC_Core::$TEXT_DOMAIN),
+            'wc_header_text_plural' => __('Comments', WC_Core::$TEXT_DOMAIN), // PLURAL
+            'wc_header_on_text' => __('on', WC_Core::$TEXT_DOMAIN),
+            'wc_comment_start_text' => __('Start the discussion', WC_Core::$TEXT_DOMAIN),
+            'wc_comment_join_text' => __('Join the discussion', WC_Core::$TEXT_DOMAIN),
+            'wc_email_text' => __('Email', WC_Core::$TEXT_DOMAIN),
+            'wc_name_text' => __('Name', WC_Core::$TEXT_DOMAIN),
+            'wc_captcha_text' => __('Please insert the code above to comment', WC_Core::$TEXT_DOMAIN),
+            'wc_submit_text' => __('Post Comment', WC_Core::$TEXT_DOMAIN),
+            'wc_manage_subscribtions' => __('Manage Subscriptions', WC_Core::$TEXT_DOMAIN),
+            'wc_notify_none' => __('None', WC_Core::$TEXT_DOMAIN),
+            'wc_notify_on_new_comment' => __('Notify of all new follow-up comments', WC_Core::$TEXT_DOMAIN),
+            'wc_notify_on_all_new_reply' => __('Notify of new replies to all my comments', WC_Core::$TEXT_DOMAIN),
+            'wc_notify_on_new_reply' => __('Notify of new replies to this comment', WC_Core::$TEXT_DOMAIN),
+            'wc_load_more_submit_text' => __('Load More Comments', WC_Core::$TEXT_DOMAIN),
+            'wc_reply_text' => __('Reply', WC_Core::$TEXT_DOMAIN),
+            'wc_share_text' => __('Share', WC_Core::$TEXT_DOMAIN),
+            'wc_share_facebook' => __('Share On Facebook', WC_Core::$TEXT_DOMAIN),
+            'wc_share_twitter' => __('Share On Twitter', WC_Core::$TEXT_DOMAIN),
+            'wc_share_google' => __('Share On Google', WC_Core::$TEXT_DOMAIN),
+            'wc_hide_replies_text' => __('Hide Replies', WC_Core::$TEXT_DOMAIN),
+            'wc_show_replies_text' => __('Show Replies', WC_Core::$TEXT_DOMAIN),
+            'wc_user_title_guest_text' => __('Guest', WC_Core::$TEXT_DOMAIN),
+            'wc_user_title_member_text' => __('Member', WC_Core::$TEXT_DOMAIN),
+            'wc_user_title_author_text' => __('Author', WC_Core::$TEXT_DOMAIN),
+            'wc_user_title_admin_text' => __('Admin', WC_Core::$TEXT_DOMAIN),
+            'wc_email_subject' => __('New Comment', WC_Core::$TEXT_DOMAIN),
+            'wc_email_message' => __('New comment on the discussion section you\'ve been interested in', WC_Core::$TEXT_DOMAIN),
+            'wc_new_reply_email_subject' => __('New Reply', WC_Core::$TEXT_DOMAIN),
+            'wc_new_reply_email_message' => __('New reply on the discussion section you\'ve been interested in', WC_Core::$TEXT_DOMAIN),
+            'wc_subscribed_on_comment' => __('You\'re subscribed for new replies on this comment', WC_Core::$TEXT_DOMAIN),
+            'wc_subscribed_on_all_comment' => __('You\'re subscribed for new replies on all your comments', WC_Core::$TEXT_DOMAIN),
+            'wc_subscribed_on_post' => __('You\'re subscribed for new follow-up comments on this post', WC_Core::$TEXT_DOMAIN),
+            'wc_unsubscribe' => __('Unsubscribe', WC_Core::$TEXT_DOMAIN),
+            'wc_ignore_subscription' => __('Ignore Subscription', WC_Core::$TEXT_DOMAIN),
+            'wc_unsubscribe_message' => __('You\'ve successfully unsubscribed.', WC_Core::$TEXT_DOMAIN),
+            'wc_confirm_email' => __('Confirm your subscribtion', WC_Core::$TEXT_DOMAIN),
+            'wc_comfirm_success_message' => __('You\'ve successfully confirmed your subscription.', WC_Core::$TEXT_DOMAIN),
+            'wc_confirm_email_subject' => __('Subscribe Confirmation', WC_Core::$TEXT_DOMAIN),
+            'wc_confirm_email_message' => __('Hi, <br/> You just subscribed for new comments on our website. This means you will receive an email when new comments are posted according to subscription option you\'ve chosen. <br/> To activate, click confirm below. If you believe this is an error, ignore this message and we\'ll never bother you again.', WC_Core::$TEXT_DOMAIN),
+            'wc_error_empty_text' => __('please fill out this field to comment', WC_Core::$TEXT_DOMAIN),
+            'wc_error_email_text' => __('email address is invalid', WC_Core::$TEXT_DOMAIN),
+            'wc_year_text' => array('datetime' => array(__('year', WC_Core::$TEXT_DOMAIN), 1)),
+            'wc_year_text_plural' => array('datetime' => array(__('years', WC_Core::$TEXT_DOMAIN), 1)), // PLURAL
+            'wc_month_text' => array('datetime' => array(__('month', WC_Core::$TEXT_DOMAIN), 2)),
+            'wc_month_text_plural' => array('datetime' => array(__('months', WC_Core::$TEXT_DOMAIN), 2)), // PLURAL
+            'wc_day_text' => array('datetime' => array(__('day', WC_Core::$TEXT_DOMAIN), 3)),
+            'wc_day_text_plural' => array('datetime' => array(__('days', WC_Core::$TEXT_DOMAIN), 3)), // PLURAL
+            'wc_hour_text' => array('datetime' => array(__('hour', WC_Core::$TEXT_DOMAIN), 4)),
+            'wc_hour_text_plural' => array('datetime' => array(__('hours', WC_Core::$TEXT_DOMAIN), 4)), // PLURAL
+            'wc_minute_text' => array('datetime' => array(__('minute', WC_Core::$TEXT_DOMAIN), 5)),
+            'wc_minute_text_plural' => array('datetime' => array(__('minutes', WC_Core::$TEXT_DOMAIN), 5)), // PLURAL
+            'wc_second_text' => array('datetime' => array(__('second', WC_Core::$TEXT_DOMAIN), 6)),
+            'wc_second_text_plural' => array('datetime' => array(__('seconds', WC_Core::$TEXT_DOMAIN), 6)), // PLURAL
+            'wc_right_now_text' => __('right now', WC_Core::$TEXT_DOMAIN),
+            'wc_ago_text' => __('ago', WC_Core::$TEXT_DOMAIN),
+            'wc_posted_today_text' => __('Today', WC_Core::$TEXT_DOMAIN),
+            'wc_you_must_be_text' => __('You must be', WC_Core::$TEXT_DOMAIN),
+            'wc_logged_in_as' => __('You are logged in as', WC_Core::$TEXT_DOMAIN),
+            'wc_log_out' => __('Log out', WC_Core::$TEXT_DOMAIN),
+            'wc_logged_in_text' => __('logged in', WC_Core::$TEXT_DOMAIN),
+            'wc_to_post_comment_text' => __('to post a comment.', WC_Core::$TEXT_DOMAIN),
+            'wc_vote_up' => __('Vote Up', WC_Core::$TEXT_DOMAIN),
+            'wc_vote_down' => __('Vote Down', WC_Core::$TEXT_DOMAIN),
+            'wc_vote_counted' => __('Vote Counted', WC_Core::$TEXT_DOMAIN),
+            'wc_vote_only_one_time' => __("You've already voted for this comment", WC_Core::$TEXT_DOMAIN),
+            'wc_voting_error' => __('Voting Error', WC_Core::$TEXT_DOMAIN),
+            'wc_login_to_vote' => __('You Must Be Logged In To Vote', WC_Core::$TEXT_DOMAIN),
+            'wc_self_vote' => __('You cannot vote for your comment', WC_Core::$TEXT_DOMAIN),
+            'wc_invalid_captcha' => __('Invalid Captcha Code', WC_Core::$TEXT_DOMAIN),
+            'wc_invalid_field' => __('Some of field value is invalid', WC_Core::$TEXT_DOMAIN),
+            'wc_new_comment_button_text' => __('new comment', WC_Core::$TEXT_DOMAIN),
+            'wc_new_comments_button_text' => __('new comments', WC_Core::$TEXT_DOMAIN), // PLURAL
+            'wc_held_for_moderate' => __('Your Comment awaiting moderation', WC_Core::$TEXT_DOMAIN),
+            'wc_new_reply_button_text' => __('new reply on your comment', WC_Core::$TEXT_DOMAIN),
+            'wc_new_replies_button_text' => __('new replies on your comments', WC_Core::$TEXT_DOMAIN), // PLURAL
+            'wc_new_comments_text' => __('New', WC_Core::$TEXT_DOMAIN),
+            'wc_comment_not_updated' => __('Sorry, the comment was not updated', WC_Core::$TEXT_DOMAIN),
+            'wc_comment_edit_not_possible' => __('Sorry, this comment no longer possible to edit', WC_Core::$TEXT_DOMAIN),
+            'wc_comment_not_edited' => __('You\'ve not made any changes', WC_Core::$TEXT_DOMAIN),
+            'wc_comment_edit_save_button' => __('Save', WC_Core::$TEXT_DOMAIN),
+            'wc_comment_edit_cancel_button' => __('Cancel', WC_Core::$TEXT_DOMAIN),
         );
     }
 
@@ -420,7 +425,6 @@ class WC_Options_Serialize {
             'wc_captcha_show_hide' => $this->wc_captcha_show_hide,
             'wc_user_must_be_registered' => $this->wc_user_must_be_registered,
             'wc_show_hide_loggedin_username' => $this->wc_show_hide_loggedin_username,
-            'wc_held_comment_to_moderate' => $this->wc_held_comment_to_moderate,
             'wc_reply_button_guests_show_hide' => $this->wc_reply_button_guests_show_hide,
             'wc_reply_button_members_show_hide' => $this->wc_reply_button_members_show_hide,
             'wc_author_titles_show_hide' => $this->wc_author_titles_show_hide,
@@ -439,6 +443,7 @@ class WC_Options_Serialize {
             'wc_comment_text_color' => $this->wc_comment_text_color,
             'wc_author_title_color' => $this->wc_author_title_color,
             'wc_vote_reply_color' => $this->wc_vote_reply_color,
+            'wc_input_border_color' => $this->wc_input_border_color,
             'wc_new_loaded_comment_bg_color' => $this->wc_new_loaded_comment_bg_color,
             'wc_custom_css' => $this->wc_custom_css,
             'wc_show_plugin_powerid_by' => $this->wc_show_plugin_powerid_by
@@ -463,7 +468,6 @@ class WC_Options_Serialize {
             'wc_captcha_show_hide' => '0',
             'wc_user_must_be_registered' => '0',
             'wc_show_hide_loggedin_username' => '1',
-            'wc_held_comment_to_moderate' => '1',
             'wc_reply_button_guests_show_hide' => '0',
             'wc_reply_button_members_show_hide' => '0',
             'wc_author_titles_show_hide' => '0',
@@ -482,6 +486,7 @@ class WC_Options_Serialize {
             'wc_comment_text_color' => '#555',
             'wc_author_title_color' => '#00B38F',
             'wc_vote_reply_color' => '#666666',
+            'wc_input_border_color' => '#d9d9d9',
             'wc_new_loaded_comment_bg_color' => 'rgb(255,250,214)',
             'wc_custom_css' => '.comments-area{width:auto; margin: 0 auto;}',
             'wc_show_plugin_powerid_by' => '0'

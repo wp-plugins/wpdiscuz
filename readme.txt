@@ -126,6 +126,7 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 = 2.1.5 =
 * Fixed Bug: Problems with email notifications
 * Fixed Bug: Empty name of anonymouse comments
+* Added: RTL Support (for right to left languages)
 * Added: Option to set form fields border color
 * Added: Additional phrases for plural form
 * Added: Tabbed General Settings admin page

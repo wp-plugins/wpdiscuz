@@ -19,7 +19,7 @@ class WC_CSS {
 			if (is_rtl()) {
 				// RTL SUPPORT HERE
 				?>
-                <style type="text/css">#wpcomm .wc-field-comment .wc-field-textarea{ margin-left: 2px; margin-right: 65px; } #wpcomm .wc-form-wrapper .avatar{ margin-top: 0px; } #wpcomm .wc-field-submit{ float:left } #wpcomm .wc-field-captcha{ float:right; } #wpcomm .wc_notification_checkboxes{ text-align:right; } #wpcomm .wc-comment .wc-comment-right{ margin-left:0px; margin-right:70px; } #wpcomm .wc-comment-author{ float:right; } #wpcomm .wc-comment-date{ float:left; } #wpcomm .wc-comment-footer .wc-vote-result{ margin-right:0px; margin-left:5px; } #wpcomm .wc-toggle{ float:left; }</style>
+                <style type="text/css">#wpcomm .wc-field-comment .wc-field-textarea{ margin-left: 2px; margin-right: 65px; } #wpcomm .wc-form-wrapper .avatar{ margin-top: 0px; } #wpcomm .wc-field-comment .wc-field-avatararea{ float:right; } #wpcomm .wc-field-submit{ float:left } #wpcomm .wc-field-captcha{ float:right; } #wpcomm .wc_notification_checkboxes{ text-align:right; } #wpcomm .wc-comment .wc-comment-right{ margin-left:0px; margin-right:70px; } #wpcomm .wc-comment-author{ float:right; } #wpcomm .wc-comment-date{ float:left; } #wpcomm .wc-comment-footer .wc-vote-result{ margin-right:0px; margin-left:5px; } #wpcomm .wc-toggle{ float:left; }</style>
                 <?php
 			}
 		}

@@ -3,13 +3,14 @@
 /*
   Plugin Name: wpDiscuz - Wordpress Comments
   Description: Better comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share.
-  Version: 2.1.5
+  Version: 2.1.6
   Author: gVectors Team (A. Chakhoyan, G. Zakaryan, H. Martirosyan)
   Author URI: http://www.gvectors.com/
   Plugin URI: http://www.gvectors.com/wpdiscuz/
  */
 
-include_once 'wc-options.php';
+include_once 'options/wc-options.php';
+include_once 'options/wc-options-serialize.php';
 include_once 'helper/wc-helper.php';
 include_once 'includes/wc-db-helper.php';
 include_once 'comment-form/tpl-comment.php';
@@ -19,6 +20,7 @@ include_once 'wc-css.php';
 class WC_Core {
 
     public $wc_options;
+    public $wc_options_serialized;
     public $comment_types;
     public $reviews_count;
     public $wc_db_helper;
@@ -39,14 +41,16 @@ class WC_Core {
         add_action('plugins_loaded', array(&$this, 'load_wpdiscuz_text_domain'));
         add_action('init', array(&$this, 'init_plugin_dir_name'), 1);
 
-        $this->wc_options = new WC_Options();
-        $this->wc_db_helper = $this->wc_options->wc_db_helper;
+        $this->wc_db_helper = new WC_DB_Helper();
+        $this->wc_options_serialized = new WC_Options_Serialize($this->wc_db_helper);
+        $this->wc_options = new WC_Options($this->wc_options_serialized, $this->wc_db_helper);
+//        $this->wc_db_helper = $this->wc_options->wc_db_helper;
 
         register_activation_hook(__FILE__, array($this, 'db_operations'));
 
-        $this->wc_helper = new WC_Helper($this->wc_options->wc_options_serialized);
-        $this->wc_css = new WC_CSS($this->wc_options);
-        $this->comment_tpl_builder = new WC_Comment_Template_Builder($this->wc_helper, $this->wc_db_helper, $this->wc_options);
+        $this->wc_helper = new WC_Helper($this->wc_options_serialized);
+        $this->wc_css = new WC_CSS($this->wc_options_serialized);
+        $this->comment_tpl_builder = new WC_Comment_Template_Builder($this->wc_helper, $this->wc_db_helper, $this->wc_options, $this->wc_options_serialized);
 
         add_action('init', array(&$this, 'register_session'), 2);
         add_action('admin_init', array(&$this, 'wc_plugin_new_version'), 2);
@@ -75,7 +79,7 @@ class WC_Core {
         add_action('wp_ajax_wc_list_new_comments', array(&$this, 'wc_list_new_comments'));
         add_action('wp_ajax_nopriv_wc_list_new_comments', array(&$this, 'wc_list_new_comments'));
 
-        if ($this->wc_options->wc_options_serialized->wc_comment_editable_time) {
+        if ($this->wc_options_serialized->wc_comment_editable_time) {
             add_action('wp_ajax_wc_get_editable_comment_content', array(&$this, 'wc_get_editable_comment_content'));
             add_action('wp_ajax_nopriv_wc_get_editable_comment_content', array(&$this, 'wc_get_editable_comment_content'));
             add_action('wp_ajax_wc_save_edited_comment', array(&$this, 'wc_save_edited_comment'));
@@ -122,16 +126,16 @@ class WC_Core {
     }
 
     private function wc_add_new_options() {
-        $this->wc_options->wc_options_serialized->init_options(get_option($this->wc_options->wc_options_serialized->wc_options_slug));
-        $wc_new_options = $this->wc_options->wc_options_serialized->to_array();
-        update_option($this->wc_options->wc_options_serialized->wc_options_slug, serialize($wc_new_options));
+        $this->wc_options_serialized->init_options(get_option($this->wc_options_serialized->wc_options_slug));
+        $wc_new_options = $this->wc_options_serialized->to_array();
+        update_option($this->wc_options_serialized->wc_options_slug, serialize($wc_new_options));
     }
 
     private function wc_add_new_phrases() {
         if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
             $wc_saved_phrases = $this->wc_db_helper->get_phrases();
-            $this->wc_options->wc_options_serialized->init_phrases();
-            $wc_phrases = $this->wc_options->wc_options_serialized->wc_phrases;
+            $this->wc_options_serialized->init_phrases();
+            $wc_phrases = $this->wc_options_serialized->wc_phrases;
             $wc_new_phrases = array_merge($wc_phrases, $wc_saved_phrases);
             $this->wc_db_helper->update_phrases($wc_new_phrases);
         }
@@ -189,7 +193,7 @@ class WC_Core {
         if ( is_singular() ) {
             $u_agent = $_SERVER['HTTP_USER_AGENT'];
 
-            if ($this->wc_options->wc_options_serialized->wc_comment_list_update_type != 0) {
+            if ($this->wc_options_serialized->wc_comment_list_update_type != 0) {
                 wp_enqueue_script('wc-jquery-ui', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/jquery-ui/jquery-ui.js'), array('jquery'), '1.11.2', false);
             }
 
@@ -272,13 +276,13 @@ class WC_Core {
         $notification_type = isset($_POST['notification_type']) ? $_POST['notification_type'] : '';
 
 
-        if (!$this->wc_options->wc_options_serialized->wc_captcha_show_hide) {
+        if (!$this->wc_options_serialized->wc_captcha_show_hide) {
             if (!is_user_logged_in()) {
                 $sess_captcha = $_SESSION['wc_captcha'][$comment_post_ID . '-' . $comment_parent];
                 $captcha = filter_input(INPUT_POST, 'captcha');
                 if (md5(strtolower($captcha)) !== $sess_captcha) {
                     $message_array['code'] = -1;
-                    $message_array['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_invalid_captcha'];
+                    $message_array['message'] = $this->wc_options_serialized->wc_phrases['wc_invalid_captcha'];
                     echo json_encode($message_array);
                     exit;
                 }
@@ -334,7 +338,7 @@ class WC_Core {
             }
             $wc_notification_inserted_id = 0;
             if ($notification_type == 'post' && !$this->wc_db_helper->wc_has_post_notification($comment_post_ID, $email)) {
-                if (class_exists('Prompt_Comment_Form_Handling') && $this->wc_options->wc_options_serialized->wc_use_postmatic_for_comment_notification) {
+                if (class_exists('Prompt_Comment_Form_Handling') && $this->wc_options_serialized->wc_use_postmatic_for_comment_notification) {
                     $_POST[Prompt_Comment_Form_Handling::SUBSCRIBE_CHECKBOX_NAME] = 1;
                     Prompt_Comment_Form_Handling::handle_form($new_comment_id, $new_inserted_comment->comment_approved);
                 } else {
@@ -353,7 +357,7 @@ class WC_Core {
             $new_comment = new WC_Comment(get_comment($new_comment_id, OBJECT));
             if ($held_moderate) {
                 $message_array['code'] = -2;
-                $message_array['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_held_for_moderate'];
+                $message_array['message'] = $this->wc_options_serialized->wc_phrases['wc_held_for_moderate'];
             } else {
                 $message_array['code'] = 1;
                 $message_array['message'] = $this->comment_tpl_builder->get_comment_template($new_comment, null, $comment_depth);
@@ -363,7 +367,7 @@ class WC_Core {
         } else {
             $message_array['code'] = -1;
             $message_array['wc_new_comment_id'] = -1;
-            $message_array['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_invalid_field'];
+            $message_array['message'] = $this->wc_options_serialized->wc_phrases['wc_invalid_field'];
         }
 
         echo json_encode($message_array);
@@ -376,13 +380,13 @@ class WC_Core {
 // MUST BE CHANGED IN NEXT VERSION OF PLUGIN
     public function vote_on_comment() {
         if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
-            $this->wc_options->wc_options_serialized->wc_phrases = $this->wc_db_helper->get_phrases();
+            $this->wc_options_serialized->wc_phrases = $this->wc_db_helper->get_phrases();
         }
         $messageArray = array();
         $messageArray['code'] = -1;
         $comment_id = '';
         if (!is_user_logged_in()) {
-            $messageArray['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_login_to_vote'];
+            $messageArray['message'] = $this->wc_options_serialized->wc_phrases['wc_login_to_vote'];
             echo json_encode($messageArray);
             exit();
         }
@@ -394,7 +398,7 @@ class WC_Core {
             $is_user_voted = $this->wc_db_helper->is_user_voted($user_id, $comment_id);
             $comment = get_comment($comment_id);
             if ($comment->user_id == $user_id) {
-                $messageArray['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_self_vote'];
+                $messageArray['message'] = $this->wc_options_serialized->wc_phrases['wc_self_vote'];
                 echo json_encode($messageArray);
                 exit();
             }
@@ -406,9 +410,9 @@ class WC_Core {
                     $vote_count = intval(get_comment_meta($comment_id, 'wpdiscuz_votes', true)) + intval($vote_type);
                     update_comment_meta($comment_id, 'wpdiscuz_votes', '' . $vote_count);
                     $messageArray['code'] = 1;
-                    $messageArray['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_vote_counted'];
+                    $messageArray['message'] = $this->wc_options_serialized->wc_phrases['wc_vote_counted'];
                 } else {
-                    $messageArray['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_vote_only_one_time'];
+                    $messageArray['message'] = $this->wc_options_serialized->wc_phrases['wc_vote_only_one_time'];
                 }
             } else {
                 $this->wc_db_helper->add_vote_type($user_id, $comment_id, $vote_type);
@@ -420,10 +424,10 @@ class WC_Core {
                     update_comment_meta($comment_id, 'wpdiscuz_votes', '' . $vote_count);
                 }
                 $messageArray['code'] = 1;
-                $messageArray['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_vote_counted'];
+                $messageArray['message'] = $this->wc_options_serialized->wc_phrases['wc_vote_counted'];
             }
         } else {
-            $messageArray['message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_voting_error'];
+            $messageArray['message'] = $this->wc_options_serialized->wc_phrases['wc_voting_error'];
         }
 
         echo json_encode($messageArray);
@@ -436,7 +440,7 @@ class WC_Core {
         get_currentuserinfo();
         $message_array = array();
         $wc_post_id = isset($_POST['wc_post_id']) ? intval($_POST['wc_post_id']) : 0;
-        $wc_comment_list_update_type = $this->wc_options->wc_options_serialized->wc_comment_list_update_type;
+        $wc_comment_list_update_type = $this->wc_options_serialized->wc_comment_list_update_type;
 
         $wc_all_new_comments_count = $this->wc_db_helper->get_comments_count($wc_post_id, null, null);
         $wc_last_comment_id = isset($_POST['wc_last_comment_id']) ? intval($_POST['wc_last_comment_id']) : 0;
@@ -452,7 +456,7 @@ class WC_Core {
         $c_offset = intval($_POST['wc_comments_offset']);
         $c_offset = ($c_offset) ? $c_offset : 1;
         $wc_curr_user_comment_count = isset($_POST['wc_curr_user_comment_count']) ? $_POST['wc_curr_user_comment_count'] : 0;
-        $wc_limit = $c_offset * $this->wc_options->wc_options_serialized->wc_comment_count + $wc_curr_user_comment_count;
+        $wc_limit = $c_offset * $this->wc_options_serialized->wc_comment_count + $wc_curr_user_comment_count;
         $wc_new_comments = $this->wc_db_helper->wc_get_new_comments($wc_post_id, $wc_last_comment_id, $wc_author_email);
 
         $wc_visible_parent_comment_ids = $this->wc_db_helper->wc_get_visible_parent_comment_ids($wc_post_id, $wc_limit);
@@ -471,8 +475,8 @@ class WC_Core {
 
                 $wc_user_comments_replies_count = count($wc_hidden_new_comment_data['wc_new_replies_ids']);
                 $wc_all_new_comments_count = count($wc_hidden_new_comment_data['wc_new_comments_ids']);
-                $wc_all_new_comments_count_text = ($wc_all_new_comments_count > 1) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_new_comments_button_text'] : $this->wc_options->wc_options_serialized->wc_phrases['wc_new_comment_button_text'];
-                $wc_user_comments_replies_count_text = ($wc_user_comments_replies_count > 1) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_new_replies_button_text'] : $this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_button_text'];
+                $wc_all_new_comments_count_text = ($wc_all_new_comments_count > 1) ? $this->wc_options_serialized->wc_phrases['wc_new_comments_button_text'] : $this->wc_options_serialized->wc_phrases['wc_new_comment_button_text'];
+                $wc_user_comments_replies_count_text = ($wc_user_comments_replies_count > 1) ? $this->wc_options_serialized->wc_phrases['wc_new_replies_button_text'] : $this->wc_options_serialized->wc_phrases['wc_new_reply_button_text'];
 
                 $message_array['code'] = 2;
                 $message_array['wc_new_comment_button_text'] = $wc_all_new_comments_count_text;
@@ -502,8 +506,8 @@ class WC_Core {
         $wc_requested_comments_type = isset($_POST['wc_requested_comments_type']) ? intval($_POST['wc_requested_comments_type']) : 0;
         $wc_curr_user_comment_count = isset($_POST['wc_curr_user_comment_count']) ? intval($_POST['wc_curr_user_comment_count']) : 0;
         $wc_comments_offset = isset($_POST['wc_comments_offset']) ? $_POST['wc_comments_offset'] : 1;
-        $wc_limit = $wc_comments_offset * $this->wc_options->wc_options_serialized->wc_comment_count + $wc_curr_user_comment_count;
-        $wc_comments_max_depth = $this->wc_options->wc_options_serialized->wc_comments_max_depth ? $this->wc_options->wc_options_serialized->wc_comments_max_depth : 2;
+        $wc_limit = $wc_comments_offset * $this->wc_options_serialized->wc_comment_count + $wc_curr_user_comment_count;
+        $wc_comments_max_depth = $this->wc_options_serialized->wc_comments_max_depth ? $this->wc_options_serialized->wc_comments_max_depth : 2;
 
         $wc_new_comments_ids = array();
         if (is_user_logged_in()) {
@@ -561,7 +565,7 @@ class WC_Core {
             $wc_child_comments = array();
             $wc_parent_comments = $this->wc_helper->wc_sort_parent_comments($wc_parent_comments);
 
-            if ($this->wc_options->wc_options_serialized->wc_comment_list_order === 'desc') {
+            if ($this->wc_options_serialized->wc_comment_list_order === 'desc') {
                 $wc_parent_comments = array_reverse($wc_parent_comments);
             }
 
@@ -571,11 +575,11 @@ class WC_Core {
             $message_array['message'] = wp_list_comments($comm_list_args, $wc_parent_comments);
             $wc_post_parent_comments_count = $this->wc_db_helper->get_post_parent_comments_count($wc_post_id);
 
-            if ($wc_post_parent_comments_count > $this->wc_options->wc_options_serialized->wc_comment_count * $wc_comments_offset + $wc_curr_user_comment_count) {
+            if ($wc_post_parent_comments_count > $this->wc_options_serialized->wc_comment_count * $wc_comments_offset + $wc_curr_user_comment_count) {
 
                 $unique_id = $wc_post_id . '_' . 0;
                 $load_more = '<div class="wc-load-more-submit-wrap">';
-                $load_more .= '<button name="submit" id="wc-load-more-submit-' . $unique_id . '" class="wc-load-more-submit button">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_load_more_submit_text'];
+                $load_more .= '<button name="submit" id="wc-load-more-submit-' . $unique_id . '" class="wc-load-more-submit button">' . $this->wc_options_serialized->wc_phrases['wc_load_more_submit_text'];
 
                 $load_more .= '</button>';
                 $load_more .= '</div>';
@@ -595,7 +599,7 @@ class WC_Core {
         }
         $child_comments = array();
         foreach ($wc_parent_comments as $parent_comment) {
-            $child_comments = get_comments(array('parent' => $parent_comment->comment_ID, 'order' => $wc_comment_list_order = $this->wc_options->wc_options_serialized->wc_comment_list_order));
+            $child_comments = get_comments(array('parent' => $parent_comment->comment_ID, 'order' => $wc_comment_list_order = $this->wc_options_serialized->wc_comment_list_order));
             if (!$this->has_comment($wc_child_comments, $parent_comment)) {
                 $wc_child_comments[] = $parent_comment;
             }
@@ -669,15 +673,15 @@ class WC_Core {
     public function get_wp_comments($comments_offset, $post_id = null, $wc_curr_user_comment_count = 0, $wc_hidden_new_comment_count = 0) {
         global $post;
         if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
-            $this->wc_options->wc_options_serialized->wc_phrases = $this->wc_db_helper->get_phrases();
+            $this->wc_options_serialized->wc_phrases = $this->wc_db_helper->get_phrases();
         }
 
         if (!$post_id) {
             $post_id = $post->ID;
         }
-        $wc_comment_count = $this->wc_options->wc_options_serialized->wc_comment_count;
-        $wc_comment_list_order = $this->wc_options->wc_options_serialized->wc_comment_list_order;
-        $wc_comments_max_depth = $this->wc_options->wc_options_serialized->wc_comments_max_depth ? $this->wc_options->wc_options_serialized->wc_comments_max_depth : 2;
+        $wc_comment_count = $this->wc_options_serialized->wc_comment_count;
+        $wc_comment_list_order = $this->wc_options_serialized->wc_comment_list_order;
+        $wc_comments_max_depth = $this->wc_options_serialized->wc_comments_max_depth ? $this->wc_options_serialized->wc_comments_max_depth : 2;
 
         $comm_list_args = array(
             'callback' => array(&$this, 'wc_comment_callback'),
@@ -694,14 +698,14 @@ class WC_Core {
         $wc_wp_comments['wc_list'] = wp_list_comments($comm_list_args, $wc_comments);
         $wc_button_comments_count_style = $wc_hidden_new_comment_count > 0 ? "inline-block" : "none";
 
-        if ($this->wc_parent_comments_count > $this->wc_options->wc_options_serialized->wc_comment_count * $comments_offset + $wc_curr_user_comment_count) {
+        if ($this->wc_parent_comments_count > $this->wc_options_serialized->wc_comment_count * $comments_offset + $wc_curr_user_comment_count) {
 
             $unique_id = $post_id . '_' . 0;
             $load_more = '<div class="wc-load-more-submit-wrap">';
-            $load_more .= '<button name="submit" id="wc-load-more-submit-' . $unique_id . '" class="wc-load-more-submit button">' . $this->wc_options->wc_options_serialized->wc_phrases['wc_load_more_submit_text'];
+            $load_more .= '<button name="submit" id="wc-load-more-submit-' . $unique_id . '" class="wc-load-more-submit button">' . $this->wc_options_serialized->wc_phrases['wc_load_more_submit_text'];
 
-            if ($this->wc_options->wc_options_serialized->wc_comment_list_update_type == 1) {
-                $load_more .= '<span style="display:' . $wc_button_comments_count_style . ';" id="wc_button_new_comments_text" class="wc_button_new_comments_text">&nbsp;&nbsp;-&nbsp;&nbsp;' . $this->wc_options->wc_options_serialized->wc_phrases['wc_new_comments_text'] . ' : ';
+            if ($this->wc_options_serialized->wc_comment_list_update_type == 1) {
+                $load_more .= '<span style="display:' . $wc_button_comments_count_style . ';" id="wc_button_new_comments_text" class="wc_button_new_comments_text">&nbsp;&nbsp;-&nbsp;&nbsp;' . $this->wc_options_serialized->wc_phrases['wc_new_comments_text'] . ' : ';
                 $load_more .= '<span id="wc_button_new_comments_count" class="wc_button_new_comments_count">' . $wc_hidden_new_comment_count . '</span></span>';
             }
 
@@ -724,7 +728,7 @@ class WC_Core {
         $post_id = intval($_POST['wc_post_id']);
         $message_array = array();
         if ($c_offset && $post_id) {
-            $wc_limit = $c_offset * $this->wc_options->wc_options_serialized->wc_comment_count;
+            $wc_limit = $c_offset * $this->wc_options_serialized->wc_comment_count;
             $wc_last_comment_id = isset($_POST['wc_last_comment_id']) ? $_POST['wc_last_comment_id'] : 0;
             $wc_curr_user_comment_count = isset($_POST['wc_curr_user_comment_count']) ? $_POST['wc_curr_user_comment_count'] : 0;
             $wc_new_comments = $this->wc_db_helper->wc_get_new_comments($post_id, $wc_last_comment_id);
@@ -732,7 +736,7 @@ class WC_Core {
             $wc_hidden_new_comment_data = $this->get_invisible_comment_count($wc_new_comments, null, $wc_visible_parent_comment_ids);
 
             $message_array['code'] = 1;
-            if ($this->wc_options->wc_options_serialized->wc_comment_list_update_type == 2) {
+            if ($this->wc_options_serialized->wc_comment_list_update_type == 2) {
                 $message_array['wc_last_comment_id'] = ($wc_hidden_new_comment_data['last_comment_id']) ? $wc_hidden_new_comment_data['last_comment_id'] : $wc_last_comment_id;
             } else {
                 $message_array['wc_last_comment_id'] = $this->wc_db_helper->get_last_comment_id_by_post_id($post_id);
@@ -769,7 +773,7 @@ class WC_Core {
 
     public function is_guest_can_comment() {
         $user_can_comment = TRUE;
-        if ($this->wc_options->wc_options_serialized->wc_user_must_be_registered) {
+        if ($this->wc_options_serialized->wc_user_must_be_registered) {
             if (!is_user_logged_in()) {
                 $user_can_comment = FALSE;
             }
@@ -786,7 +790,7 @@ class WC_Core {
 
     public function init_current_post_type() {
         global $post;
-        if ($post && in_array($post->post_type, $this->wc_options->wc_options_serialized->wc_post_types)) {
+        if ($post && in_array($post->post_type, $this->wc_options_serialized->wc_post_types)) {
             add_filter('comments_template', array(&$this, 'remove_comments_template_on_pages'), 1);
         }
     }
@@ -835,8 +839,8 @@ class WC_Core {
      */
     public function wc_notify_on_new_comments($post_id, $comment_id, $email) {
         $emails_array = $this->wc_db_helper->wc_get_post_new_comment_notification($post_id, $email);
-        $subject = ($this->wc_options->wc_options_serialized->wc_phrases['wc_email_subject']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_email_subject'] : 'New Comment';
-        $message = ($this->wc_options->wc_options_serialized->wc_phrases['wc_email_message']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_email_message'] : 'New comment on the discussion section you\'ve been interested in';
+        $subject = ($this->wc_options_serialized->wc_phrases['wc_email_subject']) ? $this->wc_options_serialized->wc_phrases['wc_email_subject'] : 'New Comment';
+        $message = ($this->wc_options_serialized->wc_phrases['wc_email_message']) ? $this->wc_options_serialized->wc_phrases['wc_email_message'] : 'New comment on the discussion section you\'ve been interested in';
         foreach ($emails_array as $e_row) {
             $this->wc_email_sender($e_row, $comment_id, $subject, $message);
         }
@@ -847,8 +851,8 @@ class WC_Core {
      */
     public function wc_notify_on_all_new_reply($post_id, $new_comment_id, $email) {
         $emails_array = $this->wc_db_helper->wc_get_post_all_new_comment_notification($post_id, $email);
-        $subject = ($this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_subject']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_subject'] : 'New Reply';
-        $message = ($this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_message']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_message'] : 'New reply on the discussion section you\'ve been interested in';
+        $subject = ($this->wc_options_serialized->wc_phrases['wc_new_reply_email_subject']) ? $this->wc_options_serialized->wc_phrases['wc_new_reply_email_subject'] : 'New Reply';
+        $message = ($this->wc_options_serialized->wc_phrases['wc_new_reply_email_message']) ? $this->wc_options_serialized->wc_phrases['wc_new_reply_email_message'] : 'New reply on the discussion section you\'ve been interested in';
         foreach ($emails_array as $e_row) {
             $this->wc_email_sender($e_row, $new_comment_id, $subject, $message);
         }
@@ -859,8 +863,8 @@ class WC_Core {
      */
     public function wc_notify_on_new_reply($parent_comment_id, $new_comment_id, $email) {
         $emails_array = $this->wc_db_helper->wc_get_post_new_reply_notification($parent_comment_id, $email);
-        $subject = ($this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_subject']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_subject'] : 'New Reply';
-        $message = ($this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_message']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_new_reply_email_message'] : 'New reply on the discussion section you\'ve been interested in';
+        $subject = ($this->wc_options_serialized->wc_phrases['wc_new_reply_email_subject']) ? $this->wc_options_serialized->wc_phrases['wc_new_reply_email_subject'] : 'New Reply';
+        $message = ($this->wc_options_serialized->wc_phrases['wc_new_reply_email_message']) ? $this->wc_options_serialized->wc_phrases['wc_new_reply_email_message'] : 'New reply on the discussion section you\'ve been interested in';
         foreach ($emails_array as $e_row) {
             $this->wc_email_sender($e_row, $new_comment_id, $subject, $message);
         }
@@ -870,8 +874,8 @@ class WC_Core {
         $curr_post = get_post($post_id);
         $curr_post_author = get_userdata($curr_post->post_author);
 
-        $subject = isset($this->wc_options->wc_options_serialized->wc_phrases['wc_confirm_email_subject']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_confirm_email_subject'] : __('Subscribe Confirmation', WC_Core::$TEXT_DOMAIN);
-        $message = isset($this->wc_options->wc_options_serialized->wc_phrases['wc_confirm_email_message']) ? $this->wc_options->wc_options_serialized->wc_phrases['wc_confirm_email_message'] : __('Hi, <br/> You just subscribed for new comments on our website. This means you will receive an email when new comments are posted according to subscription option you\'ve chosen. <br/> To activate, click confirm below. If you believe this is an error, ignore this message and we\'ll never bother you again.', WC_Core::$TEXT_DOMAIN);
+        $subject = isset($this->wc_options_serialized->wc_phrases['wc_confirm_email_subject']) ? $this->wc_options_serialized->wc_phrases['wc_confirm_email_subject'] : __('Subscribe Confirmation', WC_Core::$TEXT_DOMAIN);
+        $message = isset($this->wc_options_serialized->wc_phrases['wc_confirm_email_message']) ? $this->wc_options_serialized->wc_phrases['wc_confirm_email_message'] : __('Hi, <br/> You just subscribed for new comments on our website. This means you will receive an email when new comments are posted according to subscription option you\'ve chosen. <br/> To activate, click confirm below. If you believe this is an error, ignore this message and we\'ll never bother you again.', WC_Core::$TEXT_DOMAIN);
 
         if ($subscribtion_type == 'post' || $subscribtion_type = '') {
             $comment_or_post_subscrib_id = $post_id;
@@ -882,8 +886,8 @@ class WC_Core {
         $unsubscribe_url = $this->wc_db_helper->wc_unsubscribe_link($comment_or_post_subscrib_id, $email, $subscribtion_type);
         $post_permalink = get_permalink($post_id);
         $message .= "<br/><br/><a href='$post_permalink'>$post_permalink</a>";
-        $message .= "<br/><br/><a href='$confirm_url'>" . $this->wc_options->wc_options_serialized->wc_phrases['wc_confirm_email'] . "</a>";
-        $message .= "<br/><br/><a href='$unsubscribe_url'>" . $this->wc_options->wc_options_serialized->wc_phrases['wc_ignore_subscription'] . "</a>";
+        $message .= "<br/><br/><a href='$confirm_url'>" . $this->wc_options_serialized->wc_phrases['wc_confirm_email'] . "</a>";
+        $message .= "<br/><br/><a href='$unsubscribe_url'>" . $this->wc_options_serialized->wc_phrases['wc_ignore_subscription'] . "</a>";
         $headers = array();
         $content_type = apply_filters('wp_mail_content_type', 'text/html');
         $from_name = apply_filters('wp_mail_from_name', get_bloginfo('name'));
@@ -913,7 +917,7 @@ class WC_Core {
         $unsubscribe_url = get_permalink($comment->comment_post_ID) . "?wpdiscuzSubscribeID=" . $email_data['id'] . "&key=" . $email_data['activation_key'] . '&#wc_unsubscribe_message';
         $message .= "<br/><br/><a href='$permalink'>$permalink</a>";
         $message .= "<br/><br/>$wc_new_comment_content";
-        $message .= "<br/><br/><a href='$unsubscribe_url'>" . $this->wc_options->wc_options_serialized->wc_phrases['wc_unsubscribe'] . "</a>";
+        $message .= "<br/><br/><a href='$unsubscribe_url'>" . $this->wc_options_serialized->wc_phrases['wc_unsubscribe'] . "</a>";
         $headers = array();
         $content_type = apply_filters('wp_mail_content_type', 'text/html');
         $from_name = apply_filters('wp_mail_from_name', get_bloginfo('name'));
@@ -966,7 +970,7 @@ class WC_Core {
                 $message_array['message'] = $comment->comment_content;
             } else {
                 $message_array['code'] = -1;
-                $message_array['phrase_message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_comment_edit_not_possible'];
+                $message_array['phrase_message'] = $this->wc_options_serialized->wc_phrases['wc_comment_edit_not_possible'];
             }
         }
         echo json_encode($message_array);
@@ -1014,11 +1018,11 @@ class WC_Core {
                     $message_array['message'] = $this->comment_tpl_builder->get_comment_template($edited_comment, null, $comment_depth);
                 } else {
                     $message_array['code'] = -1;
-                    $message_array['phrase_message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_comment_not_updated'];
+                    $message_array['phrase_message'] = $this->wc_options_serialized->wc_phrases['wc_comment_not_updated'];
                 }
             } else {
                 $message_array['code'] = -2;
-                $message_array['phrase_message'] = $this->wc_options->wc_options_serialized->wc_phrases['wc_comment_not_edited'];
+                $message_array['phrase_message'] = $this->wc_options_serialized->wc_phrases['wc_comment_not_edited'];
             }
         }
 

@@ -1,6 +1,4 @@
 <?php
-include_once 'wc-options-serialize.php';
-include_once 'includes/wc-db-helper.php';
 
 class WC_Options {
 
@@ -8,9 +6,9 @@ class WC_Options {
     public $wc_db_helper;
     private $wc_post_types;
 
-    public function __construct() {
-        $this->wc_db_helper = new WC_DB_Helper();
-        $this->wc_options_serialized = new WC_Options_Serialize($this->wc_db_helper);
+    public function __construct($wc_options_serialized, $wc_db_helper) {        
+        $this->wc_db_helper = $wc_db_helper;
+        $this->wc_options_serialized = $wc_options_serialized;
     }
 
     /**
@@ -165,13 +163,12 @@ class WC_Options {
                     </ul>
                     <div class="resp-tabs-container hor_1">                            
                         <?php
-                        include 'options/options-layouts/settings-general.php';
-                        include 'options/options-layouts/settings-live-update.php';
-                        include 'options/options-layouts/settings-show-hide.php';
-                        include 'options/options-layouts/settings-subscription.php';
-                        include 'options/options-layouts/settings-style.php';
+                        include 'options-layouts/settings-general.php';
+                        include 'options-layouts/settings-live-update.php';
+                        include 'options-layouts/settings-show-hide.php';
+                        include 'options-layouts/settings-subscription.php';
+                        include 'options-layouts/settings-style.php';
                         ?>
-                        <?php // include 'options/options-template-main.php'; ?>
                     </div>
                 </div>
                 <script type="text/javascript">
@@ -329,12 +326,12 @@ class WC_Options {
                         <li><?php _e('Notification', WC_Core::$TEXT_DOMAIN); ?></li>
                     </ul>
                     <div class="resp-tabs-container hor_2">  
-                        <?php include 'options/phrases-layout/phrases-general.php'; ?>
-                        <?php include 'options/phrases-layout/phrases-form.php'; ?>
-                        <?php include 'options/phrases-layout/phrases-comment.php'; ?>
-                        <?php include 'options/phrases-layout/phrases-datetime.php'; ?>
-                        <?php include 'options/phrases-layout/phrases-email.php'; ?>
-                        <?php include 'options/phrases-layout/phrases-notification.php'; ?>
+                        <?php include 'phrases-layout/phrases-general.php'; ?>
+                        <?php include 'phrases-layout/phrases-form.php'; ?>
+                        <?php include 'phrases-layout/phrases-comment.php'; ?>
+                        <?php include 'phrases-layout/phrases-datetime.php'; ?>
+                        <?php include 'phrases-layout/phrases-email.php'; ?>
+                        <?php include 'phrases-layout/phrases-notification.php'; ?>
                     </div>
                </div>
                <script type="text/javascript">

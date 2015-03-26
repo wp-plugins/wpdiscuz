@@ -1,7 +1,5 @@
 <?php
 
-include_once 'includes/wc-db-helper.php';
-
 class WC_Options_Serialize {
 
     public $wc_options_slug = 'wc_options';

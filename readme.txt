@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: wordpress comments, ajax comments, ajax, live update, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system
 Requires at least: 2.7
 Tested up to: 4.1.1
-Stable tag: 2.1.5
+Stable tag: 2.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,17 @@ New interactive, AJAX comment system. Responsive comment plugin with Live Update
 
 New interactive, AJAX comment system. Responsive comment plugin with Live Update function. Allows your visitors discuss, vote for comments and share. 
 
+
 **wpDiscuz Features:**
+
+
+**Integration with User Profile Plugins**
+
+* BuddyPress - Avatar, Profile page
+* Users Ultra - Avatar, Profile page
+* Ultimate Member - Avatar, Profile page
+* UserPro - Avatar, Badges, Profile page
+
 
 **Front-end**
 
@@ -41,13 +51,6 @@ New interactive, AJAX comment system. Responsive comment plugin with Live Update
 * | Comment voting with positive and negative result
 * | Smart voting system with tracking by logged-in user and cookies
 * | Post sharing options: Facebook, Twitter and Google+
-
-
-**Integration with User Profile Plugins**
-
-* BuddyPress - Avatar, Profile page
-* Users Ultra - Avatar, Profile page
-* UserPro - Avatar, Badges, Profile page
 
 
 **Dashboard** 
@@ -123,6 +126,13 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 
 == Changelog ==
 
+= 2.1.6 =
+* Added : Integration with Ultimate Member - author profile picture
+* Added : Integration with Ultimate Member - author name is linked to profile page
+* Fixed Bug: CSS overrides some default styles on /wp-admin/
+
+IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
+
 = 2.1.5 =
 * Fixed Bug: Problems with email notifications
 * Fixed Bug: Empty name of anonymouse comments
@@ -133,8 +143,6 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 * Added: Tabbed Phrase Manager admin page
 * Added: Better integration with Postmatic
 * Added: Portuguese (pt_PT) language, thanks to Celso Azevedo
-
-IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
 
 = 2.1.4 =
 * Added: CSS classes for blog users titles by rank

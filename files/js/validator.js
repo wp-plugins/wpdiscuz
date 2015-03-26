@@ -232,7 +232,7 @@ var validator = (function($) {
 
         // check if not already marked as a 'bad' record and add the 'alert' object.
         // if already is marked as 'bad', then make sure the text is set again because it might change depending on validation
-        var item = field.parents('.item'),
+        var item = field.parents('.wpdiscuz-item'),
                 warning;
 
         if (item.hasClass('bad')) {
@@ -258,7 +258,7 @@ var validator = (function($) {
             return false;
         }
 
-        field.parents('.item')
+        field.parents('.wpdiscuz-item')
                 .removeClass('bad')
                 .find('.alert').remove();
     };

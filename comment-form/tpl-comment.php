@@ -210,10 +210,10 @@ class WC_Comment_Template_Builder {
             $output_form .= '<div style="clear:both"></div>';
 
             if ($this->wc_options_serialized->wc_show_hide_comment_checkbox || $this->wc_options_serialized->wc_show_hide_reply_checkbox || $this->wc_options_serialized->wc_show_hide_all_reply_checkbox) {
-                $output_form .= '<span class="wc_manage_subscribtions" '.((class_exists('Prompt_Comment_Form_Handling') && $this->wc_options_serialized->wc_use_postmatic_for_comment_notification) ? 'style="display:none"' : '').'>' . $this->wc_options_serialized->wc_phrases['wc_manage_subscribtions'] . ' &or;</span>';
+                $output_form .= '<span class="wc_manage_subscribtions" ' . ((class_exists('Prompt_Comment_Form_Handling') && $this->wc_options_serialized->wc_use_postmatic_for_comment_notification) ? 'style="display:none"' : '') . '>' . $this->wc_options_serialized->wc_phrases['wc_manage_subscribtions'] . ' &or;</span>';
             }
 
-            $output_form .= '<div class="wc_notification_checkboxes" '.((class_exists('Prompt_Comment_Form_Handling') && $this->wc_options_serialized->wc_use_postmatic_for_comment_notification) ? 'style="display:block"' : '').'>';
+            $output_form .= '<div class="wc_notification_checkboxes" ' . ((class_exists('Prompt_Comment_Form_Handling') && $this->wc_options_serialized->wc_use_postmatic_for_comment_notification) ? 'style="display:block"' : '') . '>';
 
 
             $wc_is_user_subscription_confirmed = $this->wc_db_helper->wc_is_user_subscription_confirmed($comment->comment_post_ID, $current_user->user_email);
@@ -329,8 +329,7 @@ class WC_Comment_Template_Builder {
         if ($user) {
             if (class_exists('BuddyPress')) {
                 $wc_profile_url = bp_core_get_user_domain($user->ID);
-            } else
-            if (class_exists('XooUserUltra')) {
+            } else if (class_exists('XooUserUltra')) {
                 global $xoouserultra;
                 $wc_profile_url = $xoouserultra->userpanel->get_user_profile_permalink($user->ID);
             } else if (class_exists('userpro_api')) {
@@ -338,10 +337,11 @@ class WC_Comment_Template_Builder {
                 $wc_profile_url = $userpro->permalink($user->ID);
             } else if (class_exists('UM_API')) {
                 $wc_profile_url = apply_filters('get_comment_author_link', $wc_profile_url);
-                $dom = new DOMDocument;
-                $dom->loadHTML($wc_profile_url);
-                $node = $dom->getElementsByTagName('a')->item(0);
-                $wc_profile_url = $node->getAttribute( 'href' );
+                if (preg_match('|<a[^\<\>]*href=[\'\"]+([^\"\']+)[\'\"]+[^\<\>]*>|is', $wc_profile_url, $wc_profile_arr)) {
+                    $wc_profile_url = $wc_profile_arr[1];
+                } else {
+                    $wc_profile_url = '';
+                }
             } else {
                 if (count_user_posts($user->ID)) {
                     $wc_profile_url = get_author_posts_url($user->ID);

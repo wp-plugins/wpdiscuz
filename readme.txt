@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: wordpress comments, ajax comments, ajax, live update, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system
 Requires at least: 2.7
 Tested up to: 4.1.1
-Stable tag: 2.1.6
+Stable tag: 2.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -126,12 +126,17 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 
 == Changelog ==
 
+= 2.1.7 =
+* Fixed Bug: Ultimate Member Integration problem on WEB Servers w/o DomObject support
+(SyntaxError: Unexpected token ... )
+
+IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
+
+
 = 2.1.6 =
 * Added : Integration with Ultimate Member - author profile picture
 * Added : Integration with Ultimate Member - author name is linked to profile page
 * Fixed Bug: CSS overrides some default styles on /wp-admin/
-
-IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
 
 = 2.1.5 =
 * Fixed Bug: Problems with email notifications

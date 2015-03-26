@@ -199,7 +199,11 @@ jQuery(document).ready(function ($) {
                     $('#wc_openModalFormAction').css('opacity', '1');
                     $('#wc_openModalFormAction').css('pointer-events', 'auto');
                     $('#wc_openModalFormAction .close').css('display', 'block');
-                    $('#wc_openModalFormAction > #wc_response_info').html(html + e);
+                    if (response.contains('<') && response.contains('>')) {
+                        $('#wc_openModalFormAction > #wc_response_info').html(html + e);
+                    }else{
+                         $('#wc_openModalFormAction > #wc_response_info').html(html + response);
+                    }
                 }
             });
         }
@@ -554,7 +558,7 @@ jQuery(document).ready(function ($) {
             }
             setInputsDataFromCookie();
         } catch (e) {
-            alert(e);
+            console.log(e);
         }
     }
 
@@ -646,7 +650,7 @@ jQuery(document).ready(function ($) {
                     $('#wc_openModalFormAction > #wc_response_info').html(html + obj.phrase_message);
                 }
             } catch (e) {
-
+                console.log(e);
             }
         });
     });
@@ -694,7 +698,7 @@ jQuery(document).ready(function ($) {
                     editableTextarea = '';
                     commentContent = '';
                 } catch (e) {
-
+                    console.log(e);
                 }
             });
         }

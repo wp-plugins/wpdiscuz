@@ -23,7 +23,7 @@ class WC_DB_Helper {
     public function create_tables() {
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         if (!$this->wc_is_table_exists($this->users_voted)) {
-            $sql = "CREATE TABLE `" . $this->users_voted . "`(`id` INT(11) NOT NULL AUTO_INCREMENT,`user_id` INT(11) NOT NULL, `comment_id` INT(11) NOT NULL, `vote_type` INT(11) DEFAULT NULL, PRIMARY KEY (`id`), KEY `user_id` (`user_id`), KEY `comment_id` (`comment_id`),  KEY `vote_type` (`vote_type`)) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci AUTO_INCREMENT=1;";
+            $sql = "CREATE TABLE `" . $this->users_voted . "`(`id` INT(11) NOT NULL AUTO_INCREMENT,`user_id` VARCHAR(255) NOT NULL, `comment_id` INT(11) NOT NULL, `vote_type` INT(11) DEFAULT NULL, `is_guest` TINYINT(1) DEFAULT 0, PRIMARY KEY (`id`), KEY `user_id` (`user_id`), KEY `comment_id` (`comment_id`),  KEY `vote_type` (`vote_type`), KEY `is_guest` (`is_guest`)) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci AUTO_INCREMENT=1;";
             dbDelta($sql);
         }
         if (!$this->wc_is_table_exists($this->phrases)) {
@@ -108,7 +108,8 @@ class WC_DB_Helper {
      * add vote type
      */
     public function add_vote_type($user_id, $comment_id, $vote_type) {
-        $sql = $this->db->prepare("INSERT INTO `" . $this->users_voted . "`(`user_id`, `comment_id`, `vote_type`)VALUES(%d,%d,%d);", $user_id, $comment_id, $vote_type);
+        $is_guest = is_user_logged_in() ? 0 : 1;
+        $sql = $this->db->prepare("INSERT INTO `" . $this->users_voted . "`(`user_id`, `comment_id`, `vote_type`,`is_guest`)VALUES(%s,%d,%d,%d);", $user_id, $comment_id, $vote_type,$is_guest);
         return $this->db->query($sql);
     }
 
@@ -124,7 +125,7 @@ class WC_DB_Helper {
      * check if the user is already voted on comment or not by user id and comment id
      */
     public function is_user_voted($user_id, $comment_id) {
-        $sql = $this->db->prepare("SELECT `vote_type` FROM `" . $this->users_voted . "` WHERE `user_id` = %d AND `comment_id` = %d;", $user_id, $comment_id);
+        $sql = $this->db->prepare("SELECT `vote_type` FROM `" . $this->users_voted . "` WHERE `user_id` = %s AND `comment_id` = %d;", $user_id, $comment_id);
         return $this->db->get_var($sql);
     }
 
@@ -343,6 +344,11 @@ class WC_DB_Helper {
 
     public function wc_alter_phrases_table() {
         $sql_alter = "ALTER TABLE `" . $this->phrases . "` MODIFY `phrase_value` TEXT NOT NULL;";
+        $this->db->query($sql_alter);
+    }
+    
+    public function wc_alter_voting_table() {
+        $sql_alter = "ALTER TABLE `" . $this->users_voted . "` MODIFY `user_id` VARCHAR(255) NOT NULL, ADD COLUMN `is_guest` TINYINT(1) DEFAULT 0, ADD INDEX `is_guest` (`is_guest`);";
         $this->db->query($sql_alter);
     }
 

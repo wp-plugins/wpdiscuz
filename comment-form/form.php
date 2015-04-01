@@ -9,10 +9,10 @@ if ($wc_core->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
 $wc_comment_list_update_type = $wc_core->wc_options_serialized->wc_comment_list_update_type;
 ?>
 <script type="text/javascript">
-//    initialize the validator function
-    validator.message['invalid'] = '<?php echo $wc_core->wc_options_serialized->wc_phrases['wc_invalid_field']; ?>';
-    validator.message['empty'] = '<?php echo $wc_core->wc_options_serialized->wc_phrases['wc_error_empty_text']; ?>';
-    validator.message['email'] = '<?php echo $wc_core->wc_options_serialized->wc_phrases['wc_error_email_text']; ?>';
+//    initialize the wpdiscuzValidator function
+    wpdiscuzValidator.message['invalid'] = '<?php echo $wc_core->wc_options_serialized->wc_phrases['wc_invalid_field']; ?>';
+    wpdiscuzValidator.message['empty'] = '<?php echo $wc_core->wc_options_serialized->wc_phrases['wc_error_empty_text']; ?>';
+    wpdiscuzValidator.message['email'] = '<?php echo $wc_core->wc_options_serialized->wc_phrases['wc_error_email_text']; ?>';
 
     jQuery(document).ready(function ($) {
         $(document).delegate('.wc-toggle', 'click', function () {

@@ -3,10 +3,6 @@
 class WC_Helper {
 
     public static $datetime = 'datetime';
-//    public static $datetime_phrases_keys = array(
-//        'wc_year_text', 'wc_month_text', 'wc_day_text',
-//        'wc_hour_text', 'wc_minute_text', 'wc_second_text'
-//    );
     public static $year = 'wc_year_text';
     public static $years = 'wc_year_text_plural';
     public static $month = 'wc_month_text';
@@ -261,7 +257,7 @@ class WC_Helper {
      * return boolean
      */
     public static function is_posted_today($comment) {
-        return (strtotime(current_time('Y-m-d H:i:s')) - 60 * 60 * 24) < strtotime($comment->comment_date);
+        return date('Ymd',  strtotime(current_time('Ymd'))) <=  date('Ymd',  strtotime($comment->comment_date));
     }
 
     /**
@@ -295,6 +291,9 @@ class WC_Helper {
         return $wc_parent_comments;
     }
 
+    /**
+     * return client real ip
+     */
     public static function get_real_ip_addr() {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {   //check ip from share internet
             $ip = $_SERVER['HTTP_CLIENT_IP'];

@@ -95,13 +95,13 @@ class WC_Comment_Template_Builder {
             'status' => 'approve'
         ));
 
-        if (!is_user_logged_in()) {
+        if (!$this->wc_options_serialized->wc_is_guest_can_vote && !is_user_logged_in()) {
             $vote_cls = ' wc_tooltipster';
             $vote_title_text = $this->wc_options_serialized->wc_phrases['wc_login_to_vote'];
             $vote_up = $vote_title_text;
             $vote_down = $vote_title_text;
         } else {
-            $vote_cls = ' wc_vote';
+            $vote_cls = ' wc_vote wc_tooltipster';
             $vote_up = $this->wc_options_serialized->wc_phrases['wc_vote_up'];
             $vote_down = $this->wc_options_serialized->wc_phrases['wc_vote_down'];
         }

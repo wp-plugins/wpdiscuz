@@ -64,6 +64,16 @@
             </tr>
             <tr valign="top">
                 <th scope="row">
+                    <?php _e('Load Rest of Comments', WC_Core::$TEXT_DOMAIN); ?>
+                </th>
+                <td colspan="3">                                
+                    <label for="wc_load_rest_comments_submit_text">
+                        <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_load_rest_comments_submit_text']) ? $this->wc_options_serialized->wc_phrases['wc_load_rest_comments_submit_text'] : 'Load Rest of Comments'; ?>" name="wc_load_rest_comments_submit_text" id="wc_load_rest_comments_submit_text" />
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row">
                     <?php _e('Button text if has new comment', WC_Core::$TEXT_DOMAIN); ?>
                 </th>
                 <td colspan="3">                                
@@ -74,7 +84,7 @@
             </tr>
             <tr valign="top">
                 <th scope="row">
-                    <?php _e('Button text if has new comments', WC_Core::$TEXT_DOMAIN); ?>
+                    <?php _e('Button text if has new comments (Plural Form)', WC_Core::$TEXT_DOMAIN); ?>
                 </th>
                 <td colspan="3">                                
                     <label for="wc_new_comments_button_text">
@@ -94,7 +104,7 @@
             </tr>
             <tr valign="top">
                 <th scope="row">
-                    <?php _e('Button text if has new replies', WC_Core::$TEXT_DOMAIN); ?>
+                    <?php _e('Button text if has new replies (Plural Form)', WC_Core::$TEXT_DOMAIN); ?>
                 </th>
                 <td colspan="3">                                
                     <label for="wc_new_replies_button_text">

@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: wordpress comments, ajax comments, ajax, live update, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system
 Requires at least: 2.7
 Tested up to: 4.1.1
-Stable tag: 2.1.7
+Stable tag: 2.1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,6 +59,7 @@ New interactive, AJAX comment system. Responsive comment plugin with Live Update
 * | Option to show the latest comments on top or bottom of threads
 * | Option to set Live Update mode (auto or notifier buttons) and update period
 * | Options to turn On/Off Comment Voting and Sharing features
+* | Option to allow guests vote for comments
 * | Option to hide/show CAPTCHA field on comment form
 * | Option for "User Must be registered to comment"
 * | Option to held new comments for moderation 
@@ -126,16 +127,23 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 
 == Changelog ==
 
+= 2.1.8 =
+* Added: Option to allow guests vote for comments
+* Added: Option to load rest of all comments using the Load More Comments button
+* Fixed Bug: Subscription option resetting after editing wrong CAPTCHA code.
+* Fixed Bug: Header CSS code for dynamic style values ( 90% reduced )
+* Fixed Bug: JS/CSS conflicts with WooDiscuz plugin
+* Fixed Bug: Wrong comment time when Wordpress date format is turned on.
+
+IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
+
 = 2.1.7 =
 * Fixed Bug: Ultimate Member Integration problem on WEB Servers w/o DomObject support
 (SyntaxError: Unexpected token ... )
 
-IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
-
-
 = 2.1.6 =
-* Added : Integration with Ultimate Member - author profile picture
-* Added : Integration with Ultimate Member - author name is linked to profile page
+* Added: Integration with Ultimate Member - author profile picture
+* Added: Integration with Ultimate Member - author name is linked to profile page
 * Fixed Bug: CSS overrides some default styles on /wp-admin/
 
 = 2.1.5 =
@@ -153,10 +161,8 @@ IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz u
 * Added: CSS classes for blog users titles by rank
 * Fixed Bug: Phrases saving issue
 
-
 = 2.1.2 =
 * Added : Adapting with wordpress.org plugin repository guidelines
-
 
 = 2.1.0 =
 * Added : Users can edit their comments (time-frame can be limited by admin)
@@ -175,21 +181,17 @@ IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz u
 * Added : Filter hooks on comment form fields
 * Fixed Bug: Image source URL to image conversion in comment content
 
-
 = 2.0.9 =
 * Fixed Bug: Adapted with some themes ( Fatal error: Cannot redeclare add_user() )
 * Fixed Bug: Incorrect comment date/time if the default Wordpress date format is on
-
 
 = 2.0.8 =
 * Fixed Bug: Disabled comment issues (missing comment form)
 * If wpDiscuz comment form is missing please read this support topic: 
 http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 
-
 = 2.0.7 =
 * Fixed Bug: Comment system hiding problem on posts with disabled discussion option.
-
 
 = 2.0.6 =
 * Fixed Bug: Problem with saving new pharses (Same text on checboxes)
@@ -205,25 +207,20 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 * Fixed Bug: Duplication of "New Comment" email notifications for post authors
 * Fixed Bug: Problem with large space between the paragraphs
 
-
 = 2.0.4 =
 * Added : Current subscribe status note on comment form (for logged-in users)
 * Added : Unsubscribe link on comment form and in "new comment" notification message.
 * Fixed Bug: Redirection to blank option.php on saving any option page.
 
-
 = 2.0.3 =
 * Fixed Bug: Problem with email notification options on comment form
 * Added : Option to keep checked-on the email notification checkboxes on comment form by default
 
-
 = 2.0.2 =
 * Fixed Bug: Problem with saving checkbox options (incorrect logic of values)
 
-
 = 2.0.1 =
 * Fixed Bug: Problem with new options and phrase saving
-
 
 = 2.0.0 =
 * Added : Live update of new comments with notifier buttons
@@ -239,7 +236,6 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 * Added : Option to manage (hide/show) email notification checkboxes
 * Added : Option to manage background color of just loaded new comment (on live update)
 * Fixed Bug: Problem with multiple line-breaks
-
 
 = 1.0.9 =
 * Added : Option to set comment text font size

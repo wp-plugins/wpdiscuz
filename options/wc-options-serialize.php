@@ -47,6 +47,22 @@ class WC_Options_Serialize {
     /**
      * Type - Checkbox
      * Available Values - Checked/Unchecked
+     * Description - Allow guests to vote on comments
+     * Default Value - Checked
+     */
+    public $wc_is_guest_can_vote;
+    
+     /**
+     * Type - Checkbox
+     * Available Values - Checked/Unchecked
+     * Description - Load all comments on click load more button
+     * Default Value - Unchecked
+     */
+    public $wc_load_all_comments;
+
+    /**
+     * Type - Checkbox
+     * Available Values - Checked/Unchecked
      * Description - Show/Hide Voting buttons
      * Default Value - Unchecked
      */
@@ -229,7 +245,7 @@ class WC_Options_Serialize {
      * Default Value - #666666
      */
     public $wc_vote_reply_color;
-    
+
     /**
      * Type - Input
      * Available Values - color codes
@@ -290,6 +306,8 @@ class WC_Options_Serialize {
         $this->wc_comment_list_update_type = isset($options['wc_comment_list_update_type']) ? $options['wc_comment_list_update_type'] : 0;
         $this->wc_comment_list_update_timer = isset($options['wc_comment_list_update_timer']) ? $options['wc_comment_list_update_timer'] : 30;
         $this->wc_comment_editable_time = isset($options['wc_comment_editable_time']) ? $options['wc_comment_editable_time'] : 900;
+        $this->wc_is_guest_can_vote = isset($options['wc_is_guest_can_vote']) ? $options['wc_is_guest_can_vote'] : 0;
+        $this->wc_load_all_comments = isset($options['wc_load_all_comments']) ? $options['wc_load_all_comments'] : 0;
         $this->wc_voting_buttons_show_hide = $options['wc_voting_buttons_show_hide'];
         $this->wc_share_buttons_show_hide = $options['wc_share_buttons_show_hide'];
         $this->wc_captcha_show_hide = $options['wc_captcha_show_hide'];
@@ -341,6 +359,7 @@ class WC_Options_Serialize {
             'wc_notify_on_all_new_reply' => __('Notify of new replies to all my comments', WC_Core::$TEXT_DOMAIN),
             'wc_notify_on_new_reply' => __('Notify of new replies to this comment', WC_Core::$TEXT_DOMAIN),
             'wc_load_more_submit_text' => __('Load More Comments', WC_Core::$TEXT_DOMAIN),
+            'wc_load_rest_comments_submit_text' => __('Load Rest of Comments', WC_Core::$TEXT_DOMAIN),
             'wc_reply_text' => __('Reply', WC_Core::$TEXT_DOMAIN),
             'wc_share_text' => __('Share', WC_Core::$TEXT_DOMAIN),
             'wc_share_facebook' => __('Share On Facebook', WC_Core::$TEXT_DOMAIN),
@@ -395,6 +414,7 @@ class WC_Options_Serialize {
             'wc_voting_error' => __('Voting Error', WC_Core::$TEXT_DOMAIN),
             'wc_login_to_vote' => __('You Must Be Logged In To Vote', WC_Core::$TEXT_DOMAIN),
             'wc_self_vote' => __('You cannot vote for your comment', WC_Core::$TEXT_DOMAIN),
+            'wc_deny_voting_from_same_ip' => __('You are not allowed to vote for this comment', WC_Core::$TEXT_DOMAIN),
             'wc_invalid_captcha' => __('Invalid Captcha Code', WC_Core::$TEXT_DOMAIN),
             'wc_invalid_field' => __('Some of field value is invalid', WC_Core::$TEXT_DOMAIN),
             'wc_new_comment_button_text' => __('new comment', WC_Core::$TEXT_DOMAIN),
@@ -418,6 +438,8 @@ class WC_Options_Serialize {
             'wc_comment_list_update_type' => $this->wc_comment_list_update_type,
             'wc_comment_list_update_timer' => $this->wc_comment_list_update_timer,
             'wc_comment_editable_time' => $this->wc_comment_editable_time,
+            'wc_is_guest_can_vote' => $this->wc_is_guest_can_vote,
+            'wc_load_all_comments' => $this->wc_load_all_comments,
             'wc_voting_buttons_show_hide' => $this->wc_voting_buttons_show_hide,
             'wc_share_buttons_show_hide' => $this->wc_share_buttons_show_hide,
             'wc_captcha_show_hide' => $this->wc_captcha_show_hide,
@@ -461,6 +483,8 @@ class WC_Options_Serialize {
             'wc_comment_list_update_type' => '0',
             'wc_comment_list_update_timer' => '30',
             'wc_comment_editable_time' => '900',
+            'wc_is_guest_can_vote' => '1',
+            'wc_load_all_comments' => '0',
             'wc_voting_buttons_show_hide' => '0',
             'wc_share_buttons_show_hide' => '0',
             'wc_captcha_show_hide' => '0',

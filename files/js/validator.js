@@ -6,7 +6,7 @@
  MIT-style license.
  */
 
-var validator = (function($) {
+var wpdiscuzValidator = (function($) {
     var message, tests, checkField, validate, mark, unmark, field, minmax, defaults,
             validateWords, lengthRange, lengthLimit, pattern, alertTxt, data,
             email_illegalChars = /[\(\)\<\>\,\;\:\\\/\"\[\]]/,

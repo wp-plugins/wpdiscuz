@@ -135,6 +135,16 @@
             </tr>
             <tr valign="top">
                 <th scope="row">
+                    <?php _e('You are not allowed to vote for this comment (Voting from same IP)', WC_Core::$TEXT_DOMAIN); ?>
+                </th>
+                <td colspan="3">                                
+                    <label for="wc_deny_voting_from_same_ip">
+                        <input type="text" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_deny_voting_from_same_ip']) ? $this->wc_options_serialized->wc_phrases['wc_deny_voting_from_same_ip'] : 'You are not allowed to vote for this comment'; ?>" name="wc_deny_voting_from_same_ip" id="wc_deny_voting_from_same_ip" />
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row">
                     <?php _e('Invalid Captcha Code', WC_Core::$TEXT_DOMAIN); ?>
                 </th>
                 <td colspan="3">                                

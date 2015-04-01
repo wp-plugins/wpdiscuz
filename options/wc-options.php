@@ -6,7 +6,7 @@ class WC_Options {
     public $wc_db_helper;
     private $wc_post_types;
 
-    public function __construct($wc_options_serialized, $wc_db_helper) {        
+    public function __construct($wc_options_serialized, $wc_db_helper) {
         $this->wc_db_helper = $wc_db_helper;
         $this->wc_options_serialized = $wc_options_serialized;
     }
@@ -38,6 +38,8 @@ class WC_Options {
             $this->wc_options_serialized->wc_comment_list_update_type = isset($_POST['wc_comment_list_update_type']) ? $_POST['wc_comment_list_update_type'] : 0;
             $this->wc_options_serialized->wc_comment_list_update_timer = isset($_POST['wc_comment_list_update_timer']) ? $_POST['wc_comment_list_update_timer'] : 30;
             $this->wc_options_serialized->wc_comment_editable_time = isset($_POST['wc_comment_editable_time']) ? $_POST['wc_comment_editable_time'] : 900;
+            $this->wc_options_serialized->wc_is_guest_can_vote = isset($_POST['wc_is_guest_can_vote']) ? $_POST['wc_is_guest_can_vote'] : 0;
+            $this->wc_options_serialized->wc_load_all_comments = isset($_POST['wc_load_all_comments']) ? $_POST['wc_load_all_comments'] : 0;
             $this->wc_options_serialized->wc_voting_buttons_show_hide = isset($_POST['wc_voting_buttons_show_hide']) ? $_POST['wc_voting_buttons_show_hide'] : 0;
             $this->wc_options_serialized->wc_share_buttons_show_hide = isset($_POST['wc_share_buttons_show_hide']) ? $_POST['wc_share_buttons_show_hide'] : 0;
             $this->wc_options_serialized->wc_captcha_show_hide = isset($_POST['wc_captcha_show_hide']) ? $_POST['wc_captcha_show_hide'] : 0;
@@ -101,7 +103,7 @@ class WC_Options {
                         <table width="100%" border="0" cellspacing="1" class="widefat">
                             <thead>
                                 <tr>
-                                    <th style="font-size:14px;">&nbsp;Information</th>
+                                    <th style="font-size:14px; background-color:#FEFCE7">&nbsp;Information</th>
                                 </tr>
                             </thead>
                             <tr valign="top">
@@ -114,19 +116,19 @@ class WC_Options {
                         <table width="100%" border="0" cellspacing="1" class="widefat">
                             <thead>
                                 <tr>
-                                    <th style="font-size:16px;"><strong>Like wpDiscuz?</strong> <br /><span style="font-size:15px">We really need your reviews!</span></th>
+                                    <th style="font-size:16px; background-color:#FEFCE7;"><strong>Like wpDiscuz?</strong> <br /><span style="font-size:15px">We really need your reviews!</span></th>
                                 </tr>
                             </thead>
                             <tr valign="top">
                                 <td style="background:#FFF; text-align:left; font-size:13px;">
-                                	We do our best to make wpDiscuz the best self-hosted comment plugin for Wordpress. Thousands users are currently satisfied with wpDiscuz but only about 1% of them give us 5 start rating.
+                                    We do our best to make wpDiscuz the best self-hosted comment plugin for Wordpress. Thousands users are currently satisfied with wpDiscuz but only about 1% of them give us 5 start rating.
                                     However we have a very few users who for some very specific reasons are not satisfied and they are very active in decreasing wpDiscuz rating. 
                                     Please help us keep plugin rating high, encouraging us to develop and maintain this plugin. Take a one minute to leave <a href="https://wordpress.org/support/view/plugin-reviews/wpdiscuz?filter=5" title="Go to wpDiscuz Reviews section on Wordpress.org"><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/'); ?>files/img/gc/5s.png" border="0" align="absmiddle" /></a> star review on <a href="https://wordpress.org/support/view/plugin-reviews/wpdiscuz?filter=5">Wordpress.org</a>
                                     <hr style="border-style:dotted;" />
                                     <div style="width:200px; float:right;">
-                                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-                                    	<input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="UC44WQM5XJFPA"><input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"><img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-                                    </form>
+                                        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                                            <input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="UC44WQM5XJFPA"><input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"><img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+                                        </form>
                                     </div>
                                     We spend as much of my spare time as possible working on wpDiscuz and any donation is appreciated. Donations play a crucial role in supporting Free and Open Source Software projects.            
                                 </td>
@@ -144,15 +146,27 @@ class WC_Options {
                 });
             </script>
             <br />
+
+            <?php
+            if (isset($_GET['wpdiscuz_reset_options']) && $_GET['wpdiscuz_reset_options'] == 1 && current_user_can('manage_options')) {
+                delete_option($this->wc_options_serialized->wc_options_slug);
+                $this->wc_options_serialized->wc_post_types = array('post');
+                $this->wc_options_serialized->add_options();
+                $this->wc_options_serialized->init_options(get_option($this->wc_options_serialized->wc_options_slug));
+                $this->wc_options_serialized->wc_show_plugin_powerid_by = 1;
+                $this->wc_options_serialized->update_options();
+            }
+            ?>
+
             <form action="<?php echo admin_url(); ?>admin.php?page=wpdiscuz_options_page&updated=true" method="post" name="wpdiscuz_options_page" class="wc-main-settings-form wc-form">
                 <?php
                 if (function_exists('wp_nonce_field')) {
                     wp_nonce_field('wc_options_form');
                 }
                 ?>
-                
+
                 <h2>&nbsp;</h2>
-                
+
                 <div id="parentHorizontalTab">
                     <ul class="resp-tabs-list hor_1">
                         <li><?php _e('General settings', WC_Core::$TEXT_DOMAIN); ?></li>
@@ -188,6 +202,7 @@ class WC_Options {
                             <td colspan="4">
                                 <p class="submit">
                                     <input type="submit" class="button button-primary" name="wc_submit_options" value="<?php _e('Save Changes', WC_Core::$TEXT_DOMAIN); ?>" />
+                                    <a style="float: right;" class="button button-secondary" href="<?php echo admin_url(); ?>admin.php?page=wpdiscuz_options_page&wpdiscuz_reset_options=1"><?php _e('Reset Options', WC_Core::$TEXT_DOMAIN); ?></a>
                                 </p>
                             </td>
                         </tr>
@@ -229,6 +244,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_phrases['wc_notify_on_all_new_reply'] = $_POST['wc_notify_on_all_new_reply'];
             $this->wc_options_serialized->wc_phrases['wc_notify_on_new_reply'] = $_POST['wc_notify_on_new_reply'];
             $this->wc_options_serialized->wc_phrases['wc_load_more_submit_text'] = $_POST['wc_load_more_submit_text'];
+            $this->wc_options_serialized->wc_phrases['wc_load_rest_comments_submit_text'] = $_POST['wc_load_rest_comments_submit_text'];
             $this->wc_options_serialized->wc_phrases['wc_reply_text'] = $_POST['wc_reply_text'];
             $this->wc_options_serialized->wc_phrases['wc_share_text'] = $_POST['wc_share_text'];
             $this->wc_options_serialized->wc_phrases['wc_share_facebook'] = $_POST['wc_share_facebook'];
@@ -283,6 +299,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_phrases['wc_vote_only_one_time'] = $_POST['wc_vote_only_one_time'];
             $this->wc_options_serialized->wc_phrases['wc_voting_error'] = $_POST['wc_voting_error'];
             $this->wc_options_serialized->wc_phrases['wc_self_vote'] = $_POST['wc_self_vote'];
+            $this->wc_options_serialized->wc_phrases['wc_deny_voting_from_same_ip'] = $_POST['wc_deny_voting_from_same_ip'];
             $this->wc_options_serialized->wc_phrases['wc_login_to_vote'] = $_POST['wc_login_to_vote'];
             $this->wc_options_serialized->wc_phrases['wc_invalid_captcha'] = $_POST['wc_invalid_captcha'];
             $this->wc_options_serialized->wc_phrases['wc_invalid_field'] = $_POST['wc_invalid_field'];
@@ -316,7 +333,7 @@ class WC_Options {
                     wp_nonce_field('wc_phrases_form');
                 }
                 ?>
-               <div id="parentHorizontalTab1">
+                <div id="parentHorizontalTab1">
                     <ul class="resp-tabs-list hor_2">
                         <li><?php _e('General', WC_Core::$TEXT_DOMAIN); ?></li>
                         <li><?php _e('Form', WC_Core::$TEXT_DOMAIN); ?></li>
@@ -333,8 +350,8 @@ class WC_Options {
                         <?php include 'phrases-layout/phrases-email.php'; ?>
                         <?php include 'phrases-layout/phrases-notification.php'; ?>
                     </div>
-               </div>
-               <script type="text/javascript">
+                </div>
+                <script type="text/javascript">
                     jQuery(document).ready(function ($) {
                         //Horizontal Tab
                         $('#parentHorizontalTab1').easyResponsiveTabs({
@@ -345,12 +362,12 @@ class WC_Options {
                         });
                     });
                 </script>
-                 <table class="form-table wc-form-table">
+                <table class="form-table wc-form-table">
                     <tbody>
                         <tr valign="top">
                             <td colspan="4">
                                 <p class="submit">
-                                    <input type="submit" class="button button-primary" name="wc_submit_phrases" value="<?php _e('Save Changes', WC_Core::$TEXT_DOMAIN); ?>" />
+                                    <input type="submit" class="button button-primary" name="wc_submit_phrases" value="<?php _e('Save Changes', WC_Core::$TEXT_DOMAIN); ?>" />                                    
                                 </p>
                             </td>
                         </tr>

@@ -3,7 +3,7 @@
 /*
   Plugin Name: wpDiscuz - Wordpress Comments
   Description: Better comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share.
-  Version: 2.1.7
+  Version: 2.1.8
   Author: gVectors Team (A. Chakhoyan, G. Zakaryan, H. Martirosyan)
   Author URI: http://www.gvectors.com/
   Plugin URI: http://www.gvectors.com/wpdiscuz/
@@ -44,7 +44,6 @@ class WC_Core {
         $this->wc_db_helper = new WC_DB_Helper();
         $this->wc_options_serialized = new WC_Options_Serialize($this->wc_db_helper);
         $this->wc_options = new WC_Options($this->wc_options_serialized, $this->wc_db_helper);
-//        $this->wc_db_helper = $this->wc_options->wc_db_helper;
 
         register_activation_hook(__FILE__, array($this, 'db_operations'));
 
@@ -122,6 +121,10 @@ class WC_Core {
             if (version_compare($wc_version, '2.1.2', '<=')) {
                 $this->wc_db_helper->wc_alter_phrases_table();
             }
+
+            if (version_compare($wc_version, '2.1.7', '<=')) {
+                $this->wc_db_helper->wc_alter_voting_table();
+            }
         }
     }
 
@@ -190,40 +193,48 @@ class WC_Core {
      * Styles and scripts registration to use on front page
      */
     public function front_end_styles_scripts() {
-        if ( is_singular() ) {
+        if (is_singular()) {
             $u_agent = $_SERVER['HTTP_USER_AGENT'];
 
+            wp_register_style('wpdiscuz-frontend-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/css/wpdiscuz.css'));
+            wp_enqueue_style('wpdiscuz-frontend-css');
+
+            if (is_rtl()) {
+                wp_register_style('wpdiscuz-frontend-rtl-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/css/wpdiscuz-rtl.css'));
+                wp_enqueue_style('wpdiscuz-frontend-rtl-css');
+            }
+
             if ($this->wc_options_serialized->wc_comment_list_update_type != 0) {
-                wp_enqueue_script('wc-jquery-ui', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/jquery-ui/jquery-ui.js'), array('jquery'), '1.11.2', false);
+                wp_enqueue_script('wpdiscuz-jquery-ui', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/jquery-ui/jquery-ui.js'), array('jquery'), '1.11.2', false);
             }
 
             if (preg_match('/MSIE/i', $u_agent)) {
-                wp_enqueue_script('wc-html5-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/tooltipster/js/html5.js'), array('jquery'), '1.2', false);
+                wp_enqueue_script('wpdiscuz-html5-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/tooltipster/js/html5.js'), array('jquery'), '1.2', false);
 
-                wp_register_style('modal-css-ie', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/modal-box/modal-box-ie.css'));
-                wp_enqueue_style('modal-css-ie');
+                wp_register_style('wpdiscuz-modal-css-ie', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/modal-box/modal-box-ie.css'));
+                wp_enqueue_style('wpdiscuz-modal-css-ie');
             }
 
-            wp_register_style('modal-box-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/modal-box/modal-box.css'));
-            wp_enqueue_style('modal-box-css');
+            wp_register_style('wpdiscuz-modal-box-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/modal-box/modal-box.css'));
+            wp_enqueue_style('wpdiscuz-modal-box-css');
 
-            wp_enqueue_script('form-validator-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/validator.js'), array('jquery'), '1.0.0', false);
+            wp_enqueue_script('wpdiscuz-validator-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/validator.js'), array('jquery'), '1.0.0', false);
 
-            wp_register_style('validator-style', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/css/fv.css'));
-            wp_enqueue_style('validator-style');
+            wp_register_style('wpdiscuz-validator-style', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/css/fv.css'));
+            wp_enqueue_style('wpdiscuz-validator-style');
 
-            wp_enqueue_script('wc-ajax-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-ajax.js'), array('jquery'), get_option($this->wc_version_slug), false);
-            wp_localize_script('wc-ajax-js', 'wc_ajax_obj', array('url' => admin_url('admin-ajax.php')));
+            wp_enqueue_script('wpdiscuz-ajax-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-ajax.js'), array('jquery'), get_option($this->wc_version_slug), false);
+            wp_localize_script('wpdiscuz-ajax-js', 'wc_ajax_obj', array('url' => admin_url('admin-ajax.php')));
 
-            wp_enqueue_script('wc-cookie-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/jquery.cookie.js'), array('jquery'), '1.4.1', false);
+            wp_enqueue_script('wpdiscuz-cookie-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/jquery.cookie.js'), array('jquery'), '1.4.1', false);
 
-            wp_register_style('wc-tooltipster-style', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/tooltipster/css/tooltipster.css'));
-            wp_enqueue_style('wc-tooltipster-style');
+            wp_register_style('wpdiscuz-tooltipster-style', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/tooltipster/css/tooltipster.css'));
+            wp_enqueue_style('wpdiscuz-tooltipster-style');
 
-            wp_enqueue_script('wc-tooltipster-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/tooltipster/js/jquery.tooltipster.min.js'), array('jquery'), '1.2', false);
+            wp_enqueue_script('wpdiscuz-tooltipster-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/tooltipster/js/jquery.tooltipster.min.js'), array('jquery'), '1.2', false);
 
             wp_enqueue_script('autogrowtextarea-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/jquery.autogrowtextarea.min.js'), array('jquery'), '3.0', false);
-            wp_enqueue_script('wc-frontend-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-frontend.js'), array('jquery'));
+            wp_enqueue_script('wpdiscuz-frontend-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-frontend.js'), array('jquery'));
         }
     }
 
@@ -234,33 +245,33 @@ class WC_Core {
 
         $u_agent = $_SERVER['HTTP_USER_AGENT'];
         if (preg_match('/MSIE/i', $u_agent)) {
-            wp_register_style('modal-css-ie', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/modal-box/modal-box-ie.css'));
-            wp_enqueue_style('modal-css-ie');
+            wp_register_style('wpdiscuz-modal-css-ie', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/modal-box/modal-box-ie.css'));
+            wp_enqueue_style('wpdiscuz-modal-css-ie');
         }
 
-        wp_register_style('modal-box-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/modal-box/modal-box.css'));
-        wp_enqueue_style('modal-box-css');
+        wp_register_style('wpdiscuz-modal-box-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/modal-box/modal-box.css'));
+        wp_enqueue_style('wpdiscuz-modal-box-css');
 
-        wp_register_style('colorpicker-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/colorpicker/css/colorpicker.css'));
-        wp_enqueue_style('colorpicker-css');
+        wp_register_style('wpdiscuz-colorpicker-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/colorpicker/css/colorpicker.css'));
+        wp_enqueue_style('wpdiscuz-colorpicker-css');
 
-        wp_register_script('wc-colorpicker-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/colorpicker/js/colorpicker.js'), array('jquery'), '2.0.0.9', false);
-        wp_enqueue_script('wc-colorpicker-js');
+        wp_register_script('wpdiscuz-colorpicker-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/colorpicker/js/colorpicker.js'), array('jquery'), '2.0.0.9', false);
+        wp_enqueue_script('wpdiscuz-colorpicker-js');
 
-        wp_register_style('wc-options-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/css/options-css.css'));
-        wp_enqueue_style('wc-options-css');
+        wp_register_style('wpdiscuz-options-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/css/options-css.css'));
+        wp_enqueue_style('wpdiscuz-options-css');
 
-        wp_register_script('wc-option-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/options-js.js'), array('jquery'));
-        wp_enqueue_script('wc-option-js');
+        wp_register_script('wpdiscuz-option-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/options-js.js'), array('jquery'));
+        wp_enqueue_script('wpdiscuz-option-js');
 
-        wp_register_script('wc-scripts-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-scripts.js'), array('jquery'));
-        wp_enqueue_script('wc-scripts-js');
+        wp_register_script('wpdiscuz-scripts-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-scripts.js'), array('jquery'));
+        wp_enqueue_script('wpdiscuz-scripts-js');
 
-        wp_register_style('wc-easy-responsive-tabs-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/easy-responsive-tabs/css/easy-responsive-tabs.css'), true);
-        wp_enqueue_style('wc-easy-responsive-tabs-css');
+        wp_register_style('wpdiscuz-easy-responsive-tabs-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/easy-responsive-tabs/css/easy-responsive-tabs.css'), true);
+        wp_enqueue_style('wpdiscuz-easy-responsive-tabs-css');
 
-        wp_register_script('wc-easy-responsive-tabs-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/easy-responsive-tabs/js/easy-responsive-tabs.js'), array('jquery'), '1.0.0', true);
-        wp_enqueue_script('wc-easy-responsive-tabs-js');
+        wp_register_script('wpdiscuz-easy-responsive-tabs-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/easy-responsive-tabs/js/easy-responsive-tabs.js'), array('jquery'), '1.0.0', true);
+        wp_enqueue_script('wpdiscuz-easy-responsive-tabs-js');
     }
 
     /*
@@ -379,25 +390,34 @@ class WC_Core {
      */
 // MUST BE CHANGED IN NEXT VERSION OF PLUGIN
     public function vote_on_comment() {
+        if ($this->wc_options_serialized->wc_voting_buttons_show_hide) {
+            exit();
+        }
+
         if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
             $this->wc_options_serialized->wc_phrases = $this->wc_db_helper->get_phrases();
         }
         $messageArray = array();
         $messageArray['code'] = -1;
         $comment_id = '';
-        if (!is_user_logged_in()) {
+        if (!$this->wc_options_serialized->wc_is_guest_can_vote) {
             $messageArray['message'] = $this->wc_options_serialized->wc_phrases['wc_login_to_vote'];
             echo json_encode($messageArray);
             exit();
         }
         if (isset($_POST['comment_ID']) && isset($_POST['vote_type']) && intval($_POST['comment_ID']) && intval($_POST['vote_type'])) {
             $comment_id = $_POST['comment_ID'];
-            $user_id = get_current_user_id();
+            $user_id_or_ip = is_user_logged_in() ? get_current_user_id() : WC_Helper::get_real_ip_addr();
             $vote_type = $_POST['vote_type'];
 
-            $is_user_voted = $this->wc_db_helper->is_user_voted($user_id, $comment_id);
+            $is_user_voted = $this->wc_db_helper->is_user_voted($user_id_or_ip, $comment_id);
             $comment = get_comment($comment_id);
-            if ($comment->user_id == $user_id) {
+            if (!is_user_logged_in() && $comment->comment_author_IP == $user_id_or_ip) {
+                $messageArray['message'] = $this->wc_options_serialized->wc_phrases['wc_deny_voting_from_same_ip'];
+                echo json_encode($messageArray);
+                exit();
+            }
+            if ($comment->user_id == $user_id_or_ip) {
                 $messageArray['message'] = $this->wc_options_serialized->wc_phrases['wc_self_vote'];
                 echo json_encode($messageArray);
                 exit();
@@ -406,7 +426,7 @@ class WC_Core {
             if ($is_user_voted != '') {
                 $vote = intval($is_user_voted) + intval($vote_type);
                 if ($vote >= -1 && $vote <= 1) {
-                    $this->wc_db_helper->update_vote_type($user_id, $comment_id, $vote);
+                    $this->wc_db_helper->update_vote_type($user_id_or_ip, $comment_id, $vote);
                     $vote_count = intval(get_comment_meta($comment_id, 'wpdiscuz_votes', true)) + intval($vote_type);
                     update_comment_meta($comment_id, 'wpdiscuz_votes', '' . $vote_count);
                     $messageArray['code'] = 1;
@@ -415,7 +435,7 @@ class WC_Core {
                     $messageArray['message'] = $this->wc_options_serialized->wc_phrases['wc_vote_only_one_time'];
                 }
             } else {
-                $this->wc_db_helper->add_vote_type($user_id, $comment_id, $vote_type);
+                $this->wc_db_helper->add_vote_type($user_id_or_ip, $comment_id, $vote_type);
                 $vote_count = get_comment_meta($comment_id, 'wpdiscuz_votes', true);
                 if ($vote_count == '') {
                     add_comment_meta($comment_id, 'wpdiscuz_votes', '' . $vote_type);
@@ -578,9 +598,10 @@ class WC_Core {
             if ($wc_post_parent_comments_count > $this->wc_options_serialized->wc_comment_count * $wc_comments_offset + $wc_curr_user_comment_count) {
 
                 $unique_id = $wc_post_id . '_' . 0;
+                $load_more_button_text = ($this->wc_options_serialized->wc_load_all_comments) ? $this->wc_options_serialized->wc_phrases['wc_load_rest_comments_submit_text'] : $this->wc_options_serialized->wc_phrases['wc_load_more_submit_text'];
                 $load_more = '<div class="wc-load-more-submit-wrap">';
-                $load_more .= '<button name="submit" id="wc-load-more-submit-' . $unique_id . '" class="wc-load-more-submit button">' . $this->wc_options_serialized->wc_phrases['wc_load_more_submit_text'];
-
+                $load_more .= '<button name="submit" id="wc-load-more-submit-' . $unique_id . '" class="wc-load-more-submit button">';
+                $load_more .= $load_more_button_text;
                 $load_more .= '</button>';
                 $load_more .= '</div>';
                 $message_array['message'] .= $load_more;
@@ -686,7 +707,7 @@ class WC_Core {
         $comm_list_args = array(
             'callback' => array(&$this, 'wc_comment_callback'),
             'style' => 'div',
-            'per_page' => $comments_offset * $wc_comment_count + $wc_curr_user_comment_count,
+            'per_page' => $comments_offset ? $comments_offset * $wc_comment_count + $wc_curr_user_comment_count : '',
             'max_depth' => $wc_comments_max_depth,
             'reverse_top_level' => false,
             'echo' => false
@@ -698,17 +719,17 @@ class WC_Core {
         $wc_wp_comments['wc_list'] = wp_list_comments($comm_list_args, $wc_comments);
         $wc_button_comments_count_style = $wc_hidden_new_comment_count > 0 ? "inline-block" : "none";
 
-        if ($this->wc_parent_comments_count > $this->wc_options_serialized->wc_comment_count * $comments_offset + $wc_curr_user_comment_count) {
+        if ($this->wc_parent_comments_count > $this->wc_options_serialized->wc_comment_count * $comments_offset + $wc_curr_user_comment_count && $comments_offset) {
 
             $unique_id = $post_id . '_' . 0;
             $load_more = '<div class="wc-load-more-submit-wrap">';
-            $load_more .= '<button name="submit" id="wc-load-more-submit-' . $unique_id . '" class="wc-load-more-submit button">' . $this->wc_options_serialized->wc_phrases['wc_load_more_submit_text'];
-
+            $load_more .= '<button name="submit" id="wc-load-more-submit-' . $unique_id . '" class="wc-load-more-submit button">';
+            $load_more_button_text = ($this->wc_options_serialized->wc_load_all_comments) ? $this->wc_options_serialized->wc_phrases['wc_load_rest_comments_submit_text'] : $this->wc_options_serialized->wc_phrases['wc_load_more_submit_text'];
+            $load_more .= $load_more_button_text;
             if ($this->wc_options_serialized->wc_comment_list_update_type == 1) {
                 $load_more .= '<span style="display:' . $wc_button_comments_count_style . ';" id="wc_button_new_comments_text" class="wc_button_new_comments_text">&nbsp;&nbsp;-&nbsp;&nbsp;' . $this->wc_options_serialized->wc_phrases['wc_new_comments_text'] . ' : ';
                 $load_more .= '<span id="wc_button_new_comments_count" class="wc_button_new_comments_count">' . $wc_hidden_new_comment_count . '</span></span>';
             }
-
             $load_more .= '</button>';
             $load_more .= '</div>';
             $wc_wp_comments['wc_list'] .= $load_more;
@@ -725,10 +746,13 @@ class WC_Core {
     public function load_more_comments() {
         $c_offset = intval($_POST['comments_offset']);
         $c_offset = ($c_offset) ? $c_offset : 1;
+        if ($this->wc_options_serialized->wc_load_all_comments) {
+            $c_offset = '';
+        }
         $post_id = intval($_POST['wc_post_id']);
         $message_array = array();
-        if ($c_offset && $post_id) {
-            $wc_limit = $c_offset * $this->wc_options_serialized->wc_comment_count;
+        if ($post_id) {
+            $wc_limit = $c_offset ? $c_offset * $this->wc_options_serialized->wc_comment_count : $this->wc_db_helper->get_comments_count($post_id);
             $wc_last_comment_id = isset($_POST['wc_last_comment_id']) ? $_POST['wc_last_comment_id'] : 0;
             $wc_curr_user_comment_count = isset($_POST['wc_curr_user_comment_count']) ? $_POST['wc_curr_user_comment_count'] : 0;
             $wc_new_comments = $this->wc_db_helper->wc_get_new_comments($post_id, $wc_last_comment_id);
@@ -791,7 +815,7 @@ class WC_Core {
     public function init_current_post_type() {
         global $post;
         if ($post && in_array($post->post_type, $this->wc_options_serialized->wc_post_types)) {
-            add_filter('comments_template', array(&$this, 'remove_comments_template_on_pages'), 1);
+            add_filter('comments_template', array(&$this, 'remove_comments_template_on_pages'), 10);
         }
     }
 

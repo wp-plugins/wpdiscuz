@@ -130,7 +130,7 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 = 2.1.8 =
 * Added: Option to allow guests vote for comments
 * Added: Option to load rest of all comments using the Load More Comments button
-* Fixed Bug: Subscription option resetting after editing wrong CAPTCHA code.
+* Fixed Bug: Subscription option resetting after inserting wrong CAPTCHA code.
 * Fixed Bug: Header CSS code for dynamic style values ( 90% reduced )
 * Fixed Bug: JS/CSS conflicts with WooDiscuz plugin
 * Fixed Bug: Wrong comment time when Wordpress date format is turned on.

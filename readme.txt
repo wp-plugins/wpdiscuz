@@ -131,6 +131,8 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 * Added: Option to redirect first commenters to "Thank You" page 
 * Fixed Bug: Issues with guest voting (more secure and stable)
 
+IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
+
 = 2.1.8 =
 * Added: Option to allow guests vote for comments
 * Added: Option to load rest of all comments using the Load More Comments button
@@ -138,8 +140,6 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 * Fixed Bug: Header CSS code for dynamic style values ( 90% reduced )
 * Fixed Bug: JS/CSS conflicts with WooDiscuz plugin
 * Fixed Bug: Wrong comment time when Wordpress date format is turned on.
-
-IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
 
 = 2.1.7 =
 * Fixed Bug: Ultimate Member Integration problem on WEB Servers w/o DomObject support

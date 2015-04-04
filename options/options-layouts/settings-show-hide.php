@@ -1,5 +1,5 @@
 <div>
-	<h2 style="padding:5px 10px 10px 10px; margin:0px;"><?php _e('Show/Hide Components', WC_Core::$TEXT_DOMAIN); ?></h2>
+    <h2 style="padding:5px 10px 10px 10px; margin:0px;"><?php _e('Show/Hide Components', WC_Core::$TEXT_DOMAIN); ?></h2>
     <table class="wp-list-table widefat plugins" style="margin-top:10px; border:none;">
         <tbody>
             <tr valign="top">
@@ -45,7 +45,7 @@
                     </label>
                 </td>
             </tr>
-            
+
             <tr valign="top">
                 <th scope="row">
                     <?php _e('Hide Voting buttons', WC_Core::$TEXT_DOMAIN); ?>
@@ -79,7 +79,7 @@
                 </td>
             </tr>
 
-        
+
         </tbody>
     </table>
 </div>

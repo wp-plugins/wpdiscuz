@@ -336,12 +336,8 @@ class WC_Comment_Template_Builder {
                 global $userpro;
                 $wc_profile_url = $userpro->permalink($user->ID);
             } else if (class_exists('UM_API')) {
-                $wc_profile_url = apply_filters('get_comment_author_link', $wc_profile_url);
-                if (preg_match('|<a[^\<\>]*href=[\'\"]+([^\"\']+)[\'\"]+[^\<\>]*>|is', $wc_profile_url, $wc_profile_arr)) {
-                    $wc_profile_url = $wc_profile_arr[1];
-                } else {
-                    $wc_profile_url = '';
-                }
+                um_fetch_user($user->ID);
+                $wc_profile_url = um_user_profile_url();
             } else {
                 if (count_user_posts($user->ID)) {
                     $wc_profile_url = get_author_posts_url($user->ID);

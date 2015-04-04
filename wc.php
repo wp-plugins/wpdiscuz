@@ -3,7 +3,7 @@
 /*
   Plugin Name: wpDiscuz - Wordpress Comments
   Description: Better comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share.
-  Version: 2.1.8
+  Version: 2.1.9
   Author: gVectors Team (A. Chakhoyan, G. Zakaryan, H. Martirosyan)
   Author URI: http://www.gvectors.com/
   Plugin URI: http://www.gvectors.com/wpdiscuz/
@@ -77,6 +77,9 @@ class WC_Core {
 
         add_action('wp_ajax_wc_list_new_comments', array(&$this, 'wc_list_new_comments'));
         add_action('wp_ajax_nopriv_wc_list_new_comments', array(&$this, 'wc_list_new_comments'));
+
+        add_action('wp_ajax_wpdiscuz_comment_redirect', array(&$this, 'wpdiscuz_comment_redirect'));
+        add_action('wp_ajax_nopriv_wpdiscuz_comment_redirect', array(&$this, 'wpdiscuz_comment_redirect'));
 
         if ($this->wc_options_serialized->wc_comment_editable_time) {
             add_action('wp_ajax_wc_get_editable_comment_content', array(&$this, 'wc_get_editable_comment_content'));
@@ -386,6 +389,26 @@ class WC_Core {
     }
 
     /**
+     * redirect first commenter to the selected page from options
+     */
+    public function wpdiscuz_comment_redirect() {
+        $message_array = array();
+        $wc_comment_id = intval(filter_input(INPUT_POST, 'wc_new_comment_id'));
+        if ($wc_comment_id) {
+            $comment = get_comment($wc_comment_id);
+            if ($comment->comment_ID) {
+                $wc_user_comment_count = get_comments(array('author_email' => $comment->comment_author_email, 'count' => true));
+                if ($wc_user_comment_count == 1) {
+                    $message_array['code'] = 1;
+                    $message_array['redirect_to'] = get_permalink($this->wc_options_serialized->wpdiscuz_redirect_page);
+                }
+            }
+        }
+        echo json_encode($message_array);
+        exit();
+    }
+
+    /**
      * vote on comment via ajax
      */
 // MUST BE CHANGED IN NEXT VERSION OF PLUGIN
@@ -400,7 +423,7 @@ class WC_Core {
         $messageArray = array();
         $messageArray['code'] = -1;
         $comment_id = '';
-        if (!$this->wc_options_serialized->wc_is_guest_can_vote) {
+        if (!$this->wc_options_serialized->wc_is_guest_can_vote && !is_user_logged_in()) {
             $messageArray['message'] = $this->wc_options_serialized->wc_phrases['wc_login_to_vote'];
             echo json_encode($messageArray);
             exit();

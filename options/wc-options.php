@@ -38,6 +38,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_comment_list_update_type = isset($_POST['wc_comment_list_update_type']) ? $_POST['wc_comment_list_update_type'] : 0;
             $this->wc_options_serialized->wc_comment_list_update_timer = isset($_POST['wc_comment_list_update_timer']) ? $_POST['wc_comment_list_update_timer'] : 30;
             $this->wc_options_serialized->wc_comment_editable_time = isset($_POST['wc_comment_editable_time']) ? $_POST['wc_comment_editable_time'] : 900;
+            $this->wc_options_serialized->wpdiscuz_redirect_page = isset($_POST['wpdiscuz_redirect_page']) ? $_POST['wpdiscuz_redirect_page'] : 0;
             $this->wc_options_serialized->wc_is_guest_can_vote = isset($_POST['wc_is_guest_can_vote']) ? $_POST['wc_is_guest_can_vote'] : 0;
             $this->wc_options_serialized->wc_load_all_comments = isset($_POST['wc_load_all_comments']) ? $_POST['wc_load_all_comments'] : 0;
             $this->wc_options_serialized->wc_voting_buttons_show_hide = isset($_POST['wc_voting_buttons_show_hide']) ? $_POST['wc_voting_buttons_show_hide'] : 0;

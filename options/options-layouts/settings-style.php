@@ -1,5 +1,5 @@
 <div>
-	<h2 style="padding:5px 10px 10px 10px; margin:0px;"><?php _e('Background and Colors', WC_Core::$TEXT_DOMAIN); ?></h2>
+    <h2 style="padding:5px 10px 10px 10px; margin:0px;"><?php _e('Background and Colors', WC_Core::$TEXT_DOMAIN); ?></h2>
     <table class="wp-list-table widefat plugins" style="margin-top:10px; border:none;">
         <tbody>
             <tr valign="top">
@@ -202,7 +202,7 @@
                     <textarea cols="50" rows="10" class="regular-text" id="wc_custom_css" name="wc_custom_css" placeholder=""><?php echo stripslashes($this->wc_options_serialized->wc_custom_css); ?></textarea>
                 </td>   
             </tr>
-            
+
         </tbody>
     </table>
 </div>

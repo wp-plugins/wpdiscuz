@@ -190,6 +190,30 @@ jQuery(document).ready(function ($) {
                     $('.wc_comm_form textarea').css('box-shadow', '0 0 4px -2px #d4d0ba');
 
                     notify_on_new_comment(wc_comment_post_ID, wc_new_comment_id, wc_email, notification_type);
+
+                    // call redirection if comment added successfully
+                    if (obj.code == 1 || obj.code == -2) {
+                        $.ajax({
+                            type: 'POST',
+                            url: wc_ajax_obj.url,
+                            data: {
+                                wc_new_comment_id: wc_new_comment_id,
+                                action: 'wpdiscuz_comment_redirect'
+                            }
+                        }).done(function (redirectResponse) {
+                            try {
+                                var redirectObj = $.parseJSON(redirectResponse);
+                                if (redirectObj.code == 1) {
+                                    setTimeout(function () {
+                                        window.location.href = redirectObj.redirect_to;
+                                    }, 5000)
+                                }
+                            } catch (e) {
+
+                            }
+                        });
+                    }
+
                 } catch (e) {
                     $('#wc_captcha-' + uniqueID).val('');
                     $('.wc_tooltipster').tooltipster({offsetY: 2});

@@ -51,8 +51,8 @@ class WC_Options_Serialize {
      * Default Value - Checked
      */
     public $wc_is_guest_can_vote;
-    
-     /**
+
+    /**
      * Type - Checkbox
      * Available Values - Checked/Unchecked
      * Description - Load all comments on click load more button
@@ -291,6 +291,14 @@ class WC_Options_Serialize {
      */
     public $wc_show_plugin_powerid_by;
 
+    /**
+     * Type - Dropdown menu
+     * Available Values - list of pages (ids)
+     * Description - Redirect first commenter to the selected page
+     * Default Value - 0
+     */
+    public $wpdiscuz_redirect_page;
+
     function __construct($wc_db_helper) {
         $this->wc_db_helper = $wc_db_helper;
         $this->init_phrases();
@@ -306,6 +314,7 @@ class WC_Options_Serialize {
         $this->wc_comment_list_update_type = isset($options['wc_comment_list_update_type']) ? $options['wc_comment_list_update_type'] : 0;
         $this->wc_comment_list_update_timer = isset($options['wc_comment_list_update_timer']) ? $options['wc_comment_list_update_timer'] : 30;
         $this->wc_comment_editable_time = isset($options['wc_comment_editable_time']) ? $options['wc_comment_editable_time'] : 900;
+        $this->wpdiscuz_redirect_page = isset($options['wpdiscuz_redirect_page']) ? $options['wpdiscuz_redirect_page'] : 0;
         $this->wc_is_guest_can_vote = isset($options['wc_is_guest_can_vote']) ? $options['wc_is_guest_can_vote'] : 0;
         $this->wc_load_all_comments = isset($options['wc_load_all_comments']) ? $options['wc_load_all_comments'] : 0;
         $this->wc_voting_buttons_show_hide = $options['wc_voting_buttons_show_hide'];
@@ -438,6 +447,7 @@ class WC_Options_Serialize {
             'wc_comment_list_update_type' => $this->wc_comment_list_update_type,
             'wc_comment_list_update_timer' => $this->wc_comment_list_update_timer,
             'wc_comment_editable_time' => $this->wc_comment_editable_time,
+            'wpdiscuz_redirect_page' => $this->wpdiscuz_redirect_page,
             'wc_is_guest_can_vote' => $this->wc_is_guest_can_vote,
             'wc_load_all_comments' => $this->wc_load_all_comments,
             'wc_voting_buttons_show_hide' => $this->wc_voting_buttons_show_hide,
@@ -483,6 +493,7 @@ class WC_Options_Serialize {
             'wc_comment_list_update_type' => '0',
             'wc_comment_list_update_timer' => '30',
             'wc_comment_editable_time' => '900',
+            'wpdiscuz_redirect_page' => '0',
             'wc_is_guest_can_vote' => '1',
             'wc_load_all_comments' => '0',
             'wc_voting_buttons_show_hide' => '0',

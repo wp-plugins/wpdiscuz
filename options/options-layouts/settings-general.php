@@ -123,6 +123,22 @@
 
             <tr valign="top">
                 <th scope="row">
+                    <?php _e('Redirect first commenter to', WC_Core::$TEXT_DOMAIN); ?>
+                </th>
+                <td>
+                    <?php
+                    wp_dropdown_pages(array(
+                        'name' => 'wpdiscuz_redirect_page',
+                        'selected' => isset($this->wc_options_serialized->wpdiscuz_redirect_page) ? $this->wc_options_serialized->wpdiscuz_redirect_page : 0,
+                        'show_option_none' => __('Do not redirect'),
+                        'option_none_value' => 0
+                    ));
+                    ?>
+                </td>
+            </tr>
+
+            <tr valign="top">
+                <th scope="row">
                     <?php _e('Allow guests to vote on comments', WC_Core::$TEXT_DOMAIN); ?>
                 </th>
                 <td>                                

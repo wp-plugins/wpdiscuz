@@ -130,11 +130,11 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 = 2.1.10 =
 Fixed Bug: First comment redirection without setting the destination page  
 
+IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
+
 = 2.1.9 =
 * Added: Option to redirect first commenters to "Thank You" page 
 * Fixed Bug: Issues with guest voting (more secure and stable)
-
-IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
 
 = 2.1.8 =
 * Added: Option to allow guests vote for comments

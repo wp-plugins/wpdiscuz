@@ -344,7 +344,7 @@ class WC_Comment_Template_Builder {
                 }
             }
             $user_id = $user->ID;
-            $wc_profile_url_data = apply_filters('wpdiscuz_profil_url', array('user_id' => $user_id, 'permalink' => ''));
+            $wc_profile_url_data = apply_filters('wpdiscuz_profile_url', array('user_id' => $user_id, 'permalink' => ''));
 
             $wc_profile_url_filter = $wc_profile_url_data['permalink'];
         }

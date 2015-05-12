@@ -45,6 +45,14 @@ class WC_Options_Serialize {
     public $wc_comment_editable_time;
 
     /**
+     * Type - Dropdown menu
+     * Available Values - list of pages (ids)
+     * Description - Redirect first commenter to the selected page
+     * Default Value - 0
+     */
+    public $wpdiscuz_redirect_page;
+
+    /**
      * Type - Checkbox
      * Available Values - Checked/Unchecked
      * Description - Allow guests to vote on comments
@@ -84,6 +92,14 @@ class WC_Options_Serialize {
      */
     public $wc_captcha_show_hide;
 
+    /*
+     * Type - Checkbox
+     * Available Values - Checked/Unchecked
+     * Description - Show/Hide the  Web URL field
+     * Default Value - Unchecked
+     */
+    public $wc_weburl_show_hide;
+
     /**
      * Type - Radiobutton
      * Available Values - Yes/No
@@ -93,6 +109,22 @@ class WC_Options_Serialize {
      * Default Value - No
      */
     public $wc_user_must_be_registered;
+
+    /**
+     * Type - Checkbox
+     * Available Values - Checked/Unchecked
+     * Description - If checked user must fill this field
+     * Default Value - Checked
+     */
+    public $wc_is_name_field_required;
+
+    /**
+     * Type - Checkbox
+     * Available Values - Checked/Unchecked
+     * Description - If checked user must fill this field
+     * Default Value - Checked
+     */
+    public $wc_is_email_field_required;
 
     /**
      * Type - Checkbox
@@ -291,14 +323,6 @@ class WC_Options_Serialize {
      */
     public $wc_show_plugin_powerid_by;
 
-    /**
-     * Type - Dropdown menu
-     * Available Values - list of pages (ids)
-     * Description - Redirect first commenter to the selected page
-     * Default Value - 0
-     */
-    public $wpdiscuz_redirect_page;
-
     function __construct($wc_db_helper) {
         $this->wc_db_helper = $wc_db_helper;
         $this->init_phrases();
@@ -320,7 +344,10 @@ class WC_Options_Serialize {
         $this->wc_voting_buttons_show_hide = $options['wc_voting_buttons_show_hide'];
         $this->wc_share_buttons_show_hide = $options['wc_share_buttons_show_hide'];
         $this->wc_captcha_show_hide = $options['wc_captcha_show_hide'];
+        $this->wc_weburl_show_hide = isset($options['wc_weburl_show_hide']) ? $options['wc_weburl_show_hide'] : 0;
         $this->wc_user_must_be_registered = $options['wc_user_must_be_registered'];
+        $this->wc_is_name_field_required = isset($options['wc_is_name_field_required']) ? $options['wc_is_name_field_required'] : 0;
+        $this->wc_is_email_field_required = isset($options['wc_is_email_field_required']) ? $options['wc_is_email_field_required'] : 0;
         $this->wc_show_hide_loggedin_username = isset($options['wc_show_hide_loggedin_username']) ? $options['wc_show_hide_loggedin_username'] : 0;
         $this->wc_reply_button_guests_show_hide = $options['wc_reply_button_guests_show_hide'];
         $this->wc_reply_button_members_show_hide = $options['wc_reply_button_members_show_hide'];
@@ -360,6 +387,7 @@ class WC_Options_Serialize {
             'wc_comment_join_text' => __('Join the discussion', WC_Core::$TEXT_DOMAIN),
             'wc_email_text' => __('Email', WC_Core::$TEXT_DOMAIN),
             'wc_name_text' => __('Name', WC_Core::$TEXT_DOMAIN),
+            'wc_website_text' => __('WebSite URL', WC_Core::$TEXT_DOMAIN),
             'wc_captcha_text' => __('Please insert the code above to comment', WC_Core::$TEXT_DOMAIN),
             'wc_submit_text' => __('Post Comment', WC_Core::$TEXT_DOMAIN),
             'wc_manage_subscribtions' => __('Manage Subscriptions', WC_Core::$TEXT_DOMAIN),
@@ -371,9 +399,12 @@ class WC_Options_Serialize {
             'wc_load_rest_comments_submit_text' => __('Load Rest of Comments', WC_Core::$TEXT_DOMAIN),
             'wc_reply_text' => __('Reply', WC_Core::$TEXT_DOMAIN),
             'wc_share_text' => __('Share', WC_Core::$TEXT_DOMAIN),
+            'wc_edit_text' => __('Edit', WC_Core::$TEXT_DOMAIN),
             'wc_share_facebook' => __('Share On Facebook', WC_Core::$TEXT_DOMAIN),
             'wc_share_twitter' => __('Share On Twitter', WC_Core::$TEXT_DOMAIN),
             'wc_share_google' => __('Share On Google', WC_Core::$TEXT_DOMAIN),
+            'wc_share_vk' => __('Share On vKontakte', WC_Core::$TEXT_DOMAIN),
+            'wc_share_ok' => __('Share On Odnoklassniki', WC_Core::$TEXT_DOMAIN),
             'wc_hide_replies_text' => __('Hide Replies', WC_Core::$TEXT_DOMAIN),
             'wc_show_replies_text' => __('Show Replies', WC_Core::$TEXT_DOMAIN),
             'wc_user_title_guest_text' => __('Guest', WC_Core::$TEXT_DOMAIN),
@@ -396,6 +427,7 @@ class WC_Options_Serialize {
             'wc_confirm_email_message' => __('Hi, <br/> You just subscribed for new comments on our website. This means you will receive an email when new comments are posted according to subscription option you\'ve chosen. <br/> To activate, click confirm below. If you believe this is an error, ignore this message and we\'ll never bother you again.', WC_Core::$TEXT_DOMAIN),
             'wc_error_empty_text' => __('please fill out this field to comment', WC_Core::$TEXT_DOMAIN),
             'wc_error_email_text' => __('email address is invalid', WC_Core::$TEXT_DOMAIN),
+            'wc_error_url_text' => __('url is invalid', WC_Core::$TEXT_DOMAIN),
             'wc_year_text' => array('datetime' => array(__('year', WC_Core::$TEXT_DOMAIN), 1)),
             'wc_year_text_plural' => array('datetime' => array(__('years', WC_Core::$TEXT_DOMAIN), 1)), // PLURAL
             'wc_month_text' => array('datetime' => array(__('month', WC_Core::$TEXT_DOMAIN), 2)),
@@ -428,7 +460,7 @@ class WC_Options_Serialize {
             'wc_invalid_field' => __('Some of field value is invalid', WC_Core::$TEXT_DOMAIN),
             'wc_new_comment_button_text' => __('new comment', WC_Core::$TEXT_DOMAIN),
             'wc_new_comments_button_text' => __('new comments', WC_Core::$TEXT_DOMAIN), // PLURAL
-            'wc_held_for_moderate' => __('Your Comment awaiting moderation', WC_Core::$TEXT_DOMAIN),
+            'wc_held_for_moderate' => __('Comment awaiting moderation', WC_Core::$TEXT_DOMAIN),
             'wc_new_reply_button_text' => __('new reply on your comment', WC_Core::$TEXT_DOMAIN),
             'wc_new_replies_button_text' => __('new replies on your comments', WC_Core::$TEXT_DOMAIN), // PLURAL
             'wc_new_comments_text' => __('New', WC_Core::$TEXT_DOMAIN),
@@ -453,7 +485,10 @@ class WC_Options_Serialize {
             'wc_voting_buttons_show_hide' => $this->wc_voting_buttons_show_hide,
             'wc_share_buttons_show_hide' => $this->wc_share_buttons_show_hide,
             'wc_captcha_show_hide' => $this->wc_captcha_show_hide,
+            'wc_weburl_show_hide' => $this->wc_weburl_show_hide,
             'wc_user_must_be_registered' => $this->wc_user_must_be_registered,
+            'wc_is_name_field_required' => $this->wc_is_name_field_required,
+            'wc_is_email_field_required' => $this->wc_is_email_field_required,
             'wc_show_hide_loggedin_username' => $this->wc_show_hide_loggedin_username,
             'wc_reply_button_guests_show_hide' => $this->wc_reply_button_guests_show_hide,
             'wc_reply_button_members_show_hide' => $this->wc_reply_button_members_show_hide,
@@ -499,7 +534,10 @@ class WC_Options_Serialize {
             'wc_voting_buttons_show_hide' => '0',
             'wc_share_buttons_show_hide' => '0',
             'wc_captcha_show_hide' => '0',
+            'wc_weburl_show_hide' => '1',
             'wc_user_must_be_registered' => '0',
+            'wc_is_name_field_required' => '1',
+            'wc_is_email_field_required' => '1',
             'wc_show_hide_loggedin_username' => '1',
             'wc_reply_button_guests_show_hide' => '0',
             'wc_reply_button_members_show_hide' => '0',
@@ -521,7 +559,7 @@ class WC_Options_Serialize {
             'wc_vote_reply_color' => '#666666',
             'wc_input_border_color' => '#d9d9d9',
             'wc_new_loaded_comment_bg_color' => 'rgb(255,250,214)',
-            'wc_custom_css' => '.comments-area{width:auto; margin: 0 auto;}',
+            'wc_custom_css' => '.comments-area{width:auto;}',
             'wc_show_plugin_powerid_by' => '0'
         );
         add_option($this->wc_options_slug, serialize($options));

@@ -24,6 +24,16 @@
             </tr>
             <tr valign="top">
                 <th scope="row">
+                    <?php _e('Edit', WC_Core::$TEXT_DOMAIN); ?>
+                </th>
+                <td colspan="3">                                
+                    <label for="wc_edit_text">
+                        <input type="text" value="<?php echo $this->wc_options_serialized->wc_phrases['wc_edit_text']; ?>" name="wc_edit_text" id="wc_edit_text" />
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row">
                     <?php _e('Share On Facebook', WC_Core::$TEXT_DOMAIN); ?>
                 </th>
                 <td colspan="3">                                
@@ -49,6 +59,26 @@
                 <td colspan="3">                                
                     <label for="wc_share_google">
                         <input type="text" value="<?php echo $this->wc_options_serialized->wc_phrases['wc_share_google']; ?>" name="wc_share_google" id="wc_share_google" />
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row">
+                    <?php _e('Share On vKontakte', WC_Core::$TEXT_DOMAIN); ?>
+                </th>
+                <td colspan="3">                                
+                    <label for="wc_share_vk">
+                        <input type="text" value="<?php echo $this->wc_options_serialized->wc_phrases['wc_share_vk']; ?>" name="wc_share_vk" id="wc_share_vk" />
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row">
+                    <?php _e('Share On Odnoklassniki', WC_Core::$TEXT_DOMAIN); ?>
+                </th>
+                <td colspan="3">                                
+                    <label for="wc_share_ok">
+                        <input type="text" value="<?php echo $this->wc_options_serialized->wc_phrases['wc_share_ok']; ?>" name="wc_share_ok" id="wc_share_ok" />
                     </label>
                 </td>
             </tr>

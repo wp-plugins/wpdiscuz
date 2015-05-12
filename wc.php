@@ -3,7 +3,7 @@
 /*
   Plugin Name: wpDiscuz - Wordpress Comments
   Description: Better comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share.
-  Version: 2.1.10
+  Version: 2.2.0
   Author: gVectors Team (A. Chakhoyan, G. Zakaryan, H. Martirosyan)
   Author URI: http://www.gvectors.com/
   Plugin URI: http://www.gvectors.com/wpdiscuz/
@@ -56,7 +56,7 @@ class WC_Core {
 
         add_action('admin_enqueue_scripts', array(&$this, 'admin_page_styles_scripts'), 2315);
         add_action('wp_enqueue_scripts', array(&$this, 'front_end_styles_scripts'));
-        add_action('wp_enqueue_scripts', array(&$this->wc_css, 'init_styles'));
+        add_action('wp_head', array(&$this->wc_css, 'init_styles'));
 
         add_action('admin_menu', array(&$this, 'add_plugin_options_page'), -191);
 
@@ -199,45 +199,45 @@ class WC_Core {
         if (is_singular()) {
             $u_agent = $_SERVER['HTTP_USER_AGENT'];
 
-            wp_register_style('wpdiscuz-frontend-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/css/wpdiscuz.css'));
+            wp_register_style('wpdiscuz-frontend-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/css/wpdiscuz.min.css'));
             wp_enqueue_style('wpdiscuz-frontend-css');
 
             if (is_rtl()) {
-                wp_register_style('wpdiscuz-frontend-rtl-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/css/wpdiscuz-rtl.css'));
+                wp_register_style('wpdiscuz-frontend-rtl-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/css/wpdiscuz-rtl.min.css'));
                 wp_enqueue_style('wpdiscuz-frontend-rtl-css');
             }
 
             if ($this->wc_options_serialized->wc_comment_list_update_type != 0) {
-                wp_enqueue_script('wpdiscuz-jquery-ui', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/jquery-ui/jquery-ui.js'), array('jquery'), '1.11.2', false);
+                wp_enqueue_script('wpdiscuz-jquery-ui', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/jquery-ui/jquery-ui.min.js'), array('jquery'), '1.11.2', false);
             }
 
             if (preg_match('/MSIE/i', $u_agent)) {
-                wp_enqueue_script('wpdiscuz-html5-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/tooltipster/js/html5.js'), array('jquery'), '1.2', false);
+                wp_enqueue_script('wpdiscuz-html5-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/tooltipster/js/html5.min.js'), array('jquery'), '1.2', false);
 
-                wp_register_style('wpdiscuz-modal-css-ie', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/modal-box/modal-box-ie.css'));
+                wp_register_style('wpdiscuz-modal-css-ie', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/modal-box/modal-box-ie.min.css'));
                 wp_enqueue_style('wpdiscuz-modal-css-ie');
             }
 
-            wp_register_style('wpdiscuz-modal-box-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/modal-box/modal-box.css'));
+            wp_register_style('wpdiscuz-modal-box-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/modal-box/modal-box.min.css'));
             wp_enqueue_style('wpdiscuz-modal-box-css');
 
-            wp_enqueue_script('wpdiscuz-validator-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/validator.js'), array('jquery'), '1.0.0', false);
+            wp_enqueue_script('wpdiscuz-validator-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/validator.min.js'), array('jquery'), '1.0.0', false);
 
-            wp_register_style('wpdiscuz-validator-style', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/css/fv.css'));
+            wp_register_style('wpdiscuz-validator-style', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/css/fv.min.css'));
             wp_enqueue_style('wpdiscuz-validator-style');
 
-            wp_enqueue_script('wpdiscuz-ajax-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-ajax.js'), array('jquery'), get_option($this->wc_version_slug), false);
-            wp_localize_script('wpdiscuz-ajax-js', 'wc_ajax_obj', array('url' => admin_url('admin-ajax.php')));
+            wp_enqueue_script('wpdiscuz-cookie-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/jquery.cookie.min.js'), array('jquery'), '1.4.1', false);
 
-            wp_enqueue_script('wpdiscuz-cookie-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/jquery.cookie.js'), array('jquery'), '1.4.1', false);
-
-            wp_register_style('wpdiscuz-tooltipster-style', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/tooltipster/css/tooltipster.css'));
+            wp_register_style('wpdiscuz-tooltipster-style', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/tooltipster/css/tooltipster.min.css'));
             wp_enqueue_style('wpdiscuz-tooltipster-style');
 
             wp_enqueue_script('wpdiscuz-tooltipster-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/tooltipster/js/jquery.tooltipster.min.js'), array('jquery'), '1.2', false);
 
             wp_enqueue_script('autogrowtextarea-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/jquery.autogrowtextarea.min.js'), array('jquery'), '3.0', false);
-            wp_enqueue_script('wpdiscuz-frontend-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-frontend.js'), array('jquery'));
+            wp_enqueue_script('wpdiscuz-frontend-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-frontend.min.js'), array('jquery'));
+
+            wp_enqueue_script('wpdiscuz-ajax-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-ajax.min.js'), array('jquery'), get_option($this->wc_version_slug), false);
+            wp_localize_script('wpdiscuz-ajax-js', 'wc_ajax_obj', array('url' => admin_url('admin-ajax.php')));
         }
     }
 
@@ -248,33 +248,34 @@ class WC_Core {
 
         $u_agent = $_SERVER['HTTP_USER_AGENT'];
         if (preg_match('/MSIE/i', $u_agent)) {
-            wp_register_style('wpdiscuz-modal-css-ie', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/modal-box/modal-box-ie.css'));
+            wp_register_style('wpdiscuz-modal-css-ie', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/modal-box/modal-box-ie.min.css'));
             wp_enqueue_style('wpdiscuz-modal-css-ie');
         }
 
-        wp_register_style('wpdiscuz-modal-box-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/modal-box/modal-box.css'));
+        wp_register_style('wpdiscuz-modal-box-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/modal-box/modal-box.min.css'));
         wp_enqueue_style('wpdiscuz-modal-box-css');
 
-        wp_register_style('wpdiscuz-colorpicker-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/colorpicker/css/colorpicker.css'));
+        wp_register_style('wpdiscuz-colorpicker-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/colorpicker/css/colorpicker.min.css'));
         wp_enqueue_style('wpdiscuz-colorpicker-css');
 
-        wp_register_script('wpdiscuz-colorpicker-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/colorpicker/js/colorpicker.js'), array('jquery'), '2.0.0.9', false);
+        wp_register_script('wpdiscuz-colorpicker-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/colorpicker/js/colorpicker.min.js'), array('jquery'), '2.0.0.9', false);
         wp_enqueue_script('wpdiscuz-colorpicker-js');
 
-        wp_register_style('wpdiscuz-options-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/css/options-css.css'));
+        wp_register_style('wpdiscuz-options-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/css/options-css.min.css'));
         wp_enqueue_style('wpdiscuz-options-css');
 
-        wp_register_script('wpdiscuz-option-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/options-js.js'), array('jquery'));
+        wp_register_script('wpdiscuz-option-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/options-js.min.js'), array('jquery'));
         wp_enqueue_script('wpdiscuz-option-js');
 
-        wp_register_script('wpdiscuz-scripts-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-scripts.js'), array('jquery'));
+        wp_register_script('wpdiscuz-scripts-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-scripts.min.js'), array('jquery'));
         wp_enqueue_script('wpdiscuz-scripts-js');
 
-        wp_register_style('wpdiscuz-easy-responsive-tabs-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/easy-responsive-tabs/css/easy-responsive-tabs.css'), true);
+        wp_register_style('wpdiscuz-easy-responsive-tabs-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/easy-responsive-tabs/css/easy-responsive-tabs.min.css'), true);
         wp_enqueue_style('wpdiscuz-easy-responsive-tabs-css');
 
-        wp_register_script('wpdiscuz-easy-responsive-tabs-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/easy-responsive-tabs/js/easy-responsive-tabs.js'), array('jquery'), '1.0.0', true);
+        wp_register_script('wpdiscuz-easy-responsive-tabs-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/third-party/easy-responsive-tabs/js/easy-responsive-tabs.min.js'), array('jquery'), '1.0.0', true);
         wp_enqueue_script('wpdiscuz-easy-responsive-tabs-js');
+        wp_enqueue_script('thickbox');
     }
 
     /*
@@ -286,7 +287,11 @@ class WC_Core {
         $comment_post_ID = intval(filter_input(INPUT_POST, 'comment_post_ID'));
         $comment_parent = intval(filter_input(INPUT_POST, 'comment_parent'));
         $comment_depth = intval(filter_input(INPUT_POST, 'comment_depth'));
-
+        $is_in_same_container = 1;
+        if ($comment_depth > $this->wc_options_serialized->wc_comments_max_depth) {
+            $comment_depth = $this->wc_options_serialized->wc_comments_max_depth;
+            $is_in_same_container = 0;
+        }
         $notification_type = isset($_POST['notification_type']) ? $_POST['notification_type'] : '';
 
 
@@ -303,18 +308,34 @@ class WC_Core {
             }
         }
         $comment = filter_input(INPUT_POST, 'comment');
-
+        $website_url = '';
         if (is_user_logged_in()) {
             $user_id = get_current_user_id();
             $user = get_userdata($user_id);
             $name = $user->display_name;
             $email = $user->user_email;
-            $user_url = $user->user_url;
         } else {
-            $name = filter_input(INPUT_POST, 'name');
-            $email = filter_input(INPUT_POST, 'email');
+            if ($this->wc_options_serialized->wc_is_name_field_required) {
+                $name = filter_input(INPUT_POST, 'name');
+            } else {
+                $name = !(filter_input(INPUT_POST, 'name')) ? __('Anonymous', WC_Core::$TEXT_DOMAIN) : filter_input(INPUT_POST, 'name');
+            }
+            if ($this->wc_options_serialized->wc_is_email_field_required) {
+                $email = filter_input(INPUT_POST, 'email');
+            } else {
+                $email = !(filter_input(INPUT_POST, 'email')) ? 'anonymous_' . md5(uniqid() . time()) . '@example.com' : filter_input(INPUT_POST, 'email');
+            }
             $user_id = 0;
-            $user_url = '';
+            $website_url = filter_input(INPUT_POST, 'website');
+        }
+
+
+
+        if (!filter_var($website_url, FILTER_VALIDATE_URL) === false) {
+            $message_array['code'] = -1;
+            $message_array['message'] = $this->wc_options_serialized->wc_phrases['wc_error_url_text'];
+            echo json_encode($message_array);
+            exit;
         }
 
         $comment = wp_kses($comment, array(
@@ -339,7 +360,7 @@ class WC_Core {
                 'comment_author' => $name,
                 'comment_author_email' => $email,
                 'comment_content' => $comment,
-                'comment_author_url' => $user_url,
+                'comment_author_url' => $website_url,
                 'comment_author_IP' => $author_ip,
                 'comment_agent' => $this->wc_user_agent
             );
@@ -375,6 +396,7 @@ class WC_Core {
             } else {
                 $message_array['code'] = 1;
                 $message_array['message'] = $this->comment_tpl_builder->get_comment_template($new_comment, null, $comment_depth);
+                $message_array['is_in_same_container'] = $is_in_same_container;
                 $message_array['wc_all_comments_count_new'] = $this->wc_db_helper->get_comments_count($comment_post_ID, null, null);
             }
             $message_array['wc_new_comment_id'] = $new_comment_id;
@@ -1040,7 +1062,7 @@ class WC_Core {
             if ($trimmed_comment_content != $comment->comment_content) {
                 $comment_content = wp_kses($comment_content, array(
                     'br' => array(),
-                    'a' => array('href' => array(), 'title' => array()),
+                    'a' => array('href' => array(), 'title' => array(), 'target' => array(), 'rel' => array(), 'download' => array(), 'hreflang' => array(), 'media' => array(), 'type' => array()),
                     'i' => array(),
                     'b' => array(),
                     'u' => array(),
@@ -1058,11 +1080,9 @@ class WC_Core {
                     'comment_agent' => apply_filters('pre_comment_user_agent', $this->wc_user_agent),
                     'comment_approved' => $comment->comment_approved
                 );
-                $wc_comment_updated = wp_update_comment($commentarr);
-                $edited_comment = new WC_Comment(get_comment($comment_ID, OBJECT));
-                if ($wc_comment_updated) {
+                if (wp_update_comment($commentarr)) {
                     $message_array['code'] = 1;
-                    $message_array['message'] = $this->comment_tpl_builder->get_comment_template($edited_comment, null, $comment_depth);
+                    $message_array['message'] = $this->wc_helper->make_clickable($comment_content);
                 } else {
                     $message_array['code'] = -1;
                     $message_array['phrase_message'] = $this->wc_options_serialized->wc_phrases['wc_comment_not_updated'];
@@ -1072,7 +1092,6 @@ class WC_Core {
                 $message_array['phrase_message'] = $this->wc_options_serialized->wc_phrases['wc_comment_not_edited'];
             }
         }
-
         echo json_encode($message_array);
         exit;
     }

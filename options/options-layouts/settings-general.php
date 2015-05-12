@@ -42,6 +42,28 @@
             </tr>
 
             <tr valign="top">
+                <th scope="row" style="width:55%">
+                    <?php _e('Comment author must fill out name', WC_Core::$TEXT_DOMAIN); ?>
+                </th>
+                <td>                                
+                    <label for="wc_is_name_field_required">
+                        <input type="checkbox" <?php checked($this->wc_options_serialized->wc_is_name_field_required == 1) ?> value="1" name="wc_is_name_field_required" id="wc_is_name_field_required" />
+                    </label>
+                </td>
+            </tr>
+
+            <tr valign="top">
+                <th scope="row" style="width:55%">
+                    <?php _e('Comment author must fill out email', WC_Core::$TEXT_DOMAIN); ?>
+                </th>
+                <td>                                
+                    <label for="wc_is_email_field_required">
+                        <input type="checkbox" <?php checked($this->wc_options_serialized->wc_is_email_field_required == 1) ?> value="1" name="wc_is_email_field_required" id="wc_is_email_field_required" />
+                    </label>
+                </td>
+            </tr>
+
+            <tr valign="top">
                 <th scope="row">
                     <?php _e('Show the latest comments on', WC_Core::$TEXT_DOMAIN); ?>
                 </th>

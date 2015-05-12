@@ -298,7 +298,7 @@ msgstr "Управление Подпиской"
 
 #: options-templates/options-template-phrases.php:126
 msgid "Notify on new comments (checkbox)"
-msgstr "Сообщать о новых комментариях (галочка)"
+msgstr "Сообщать о новых ответах на этот коментарий (галочка)"
 
 #: options-templates/options-template-phrases.php:130
 msgid "Notify of all new follow-up comments"
@@ -306,7 +306,7 @@ msgstr "Сообщать о всех последующих комментари
 
 #: options-templates/options-template-phrases.php:137
 msgid "Notify on all new replies (checkbox)"
-msgstr "Сообщать об ответах (галочка)"
+msgstr "Сообщать об ответах на все мои коментарии (галочка)"
 
 #: options-templates/options-template-phrases.php:141
 msgid "Notify of new replies to all my comments"

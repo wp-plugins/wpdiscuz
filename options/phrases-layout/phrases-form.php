@@ -38,10 +38,20 @@
                 </th>
                 <td colspan="3">                                
                     <label for="wc_name_text">
-                        <input type="text" value="<?php echo $this->wc_options_serialized->wc_phrases['wc_name_text']; ?>" name="wc_name_text" id="wc_email_text" />
+                        <input type="text" value="<?php echo $this->wc_options_serialized->wc_phrases['wc_name_text']; ?>" name="wc_name_text" id="wc_name_text" />
                     </label>
                 </td>
             </tr>
+            <tr valign="top">
+                <th scope="row">
+                    <?php _e('WebSite URL Field', WC_Core::$TEXT_DOMAIN); ?>
+                </th>
+                <td colspan="3">                                
+                    <label for="wc_website_text">
+                        <input type="text" value="<?php echo $this->wc_options_serialized->wc_phrases['wc_website_text']; ?>" name="wc_website_text" id="wc_website_text" />
+                    </label>
+                </td>
+            </tr>            
             <tr valign="top">
                 <th scope="row">
                     <?php _e('CAPTCHA Field', WC_Core::$TEXT_DOMAIN); ?>

@@ -1,5 +1,4 @@
 <?php
-
 class WC_Options {
 
     public $wc_options_serialized;
@@ -44,7 +43,10 @@ class WC_Options {
             $this->wc_options_serialized->wc_voting_buttons_show_hide = isset($_POST['wc_voting_buttons_show_hide']) ? $_POST['wc_voting_buttons_show_hide'] : 0;
             $this->wc_options_serialized->wc_share_buttons_show_hide = isset($_POST['wc_share_buttons_show_hide']) ? $_POST['wc_share_buttons_show_hide'] : 0;
             $this->wc_options_serialized->wc_captcha_show_hide = isset($_POST['wc_captcha_show_hide']) ? $_POST['wc_captcha_show_hide'] : 0;
+            $this->wc_options_serialized->wc_weburl_show_hide = isset($_POST['wc_weburl_show_hide']) ? $_POST['wc_weburl_show_hide'] : 0;
             $this->wc_options_serialized->wc_user_must_be_registered = isset($_POST['wc_user_must_be_registered']) ? $_POST['wc_user_must_be_registered'] : 0;
+            $this->wc_options_serialized->wc_is_name_field_required = isset($_POST['wc_is_name_field_required']) ? $_POST['wc_is_name_field_required'] : 0;
+            $this->wc_options_serialized->wc_is_email_field_required = isset($_POST['wc_is_email_field_required']) ? $_POST['wc_is_email_field_required'] : 0;
             $this->wc_options_serialized->wc_show_hide_loggedin_username = isset($_POST['wc_show_hide_loggedin_username']) ? $_POST['wc_show_hide_loggedin_username'] : 0;
             $this->wc_options_serialized->wc_reply_button_guests_show_hide = isset($_POST['wc_reply_button_guests_show_hide']) ? $_POST['wc_reply_button_guests_show_hide'] : 0;
             $this->wc_options_serialized->wc_reply_button_members_show_hide = isset($_POST['wc_reply_button_members_show_hide']) ? $_POST['wc_reply_button_members_show_hide'] : 0;
@@ -175,6 +177,7 @@ class WC_Options {
                         <li><?php _e('Show/Hide Components', WC_Core::$TEXT_DOMAIN); ?></li>
                         <li><?php _e('Email Subscription', WC_Core::$TEXT_DOMAIN); ?> <?php if (class_exists('Prompt_Comment_Form_Handling')): ?> <?php _e('and Postmatic', WC_Core::$TEXT_DOMAIN); ?> <?php endif; ?></li>
                         <li><?php _e('Background and Colors', WC_Core::$TEXT_DOMAIN); ?></li>
+                        <li><?php _e('Social Login', WC_Core::$TEXT_DOMAIN); ?></li>
                     </ul>
                     <div class="resp-tabs-container hor_1">                            
                         <?php
@@ -183,6 +186,7 @@ class WC_Options {
                         include 'options-layouts/settings-show-hide.php';
                         include 'options-layouts/settings-subscription.php';
                         include 'options-layouts/settings-style.php';
+                        include 'options-layouts/settings-social.php';
                         ?>
                     </div>
                 </div>
@@ -237,6 +241,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_phrases['wc_comment_join_text'] = $_POST['wc_comment_join_text'];
             $this->wc_options_serialized->wc_phrases['wc_email_text'] = $_POST['wc_email_text'];
             $this->wc_options_serialized->wc_phrases['wc_name_text'] = $_POST['wc_name_text'];
+            $this->wc_options_serialized->wc_phrases['wc_website_text'] = $_POST['wc_website_text'];
             $this->wc_options_serialized->wc_phrases['wc_captcha_text'] = $_POST['wc_captcha_text'];
             $this->wc_options_serialized->wc_phrases['wc_submit_text'] = $_POST['wc_submit_text'];
             $this->wc_options_serialized->wc_phrases['wc_manage_subscribtions'] = $_POST['wc_manage_subscribtions'];
@@ -248,9 +253,12 @@ class WC_Options {
             $this->wc_options_serialized->wc_phrases['wc_load_rest_comments_submit_text'] = $_POST['wc_load_rest_comments_submit_text'];
             $this->wc_options_serialized->wc_phrases['wc_reply_text'] = $_POST['wc_reply_text'];
             $this->wc_options_serialized->wc_phrases['wc_share_text'] = $_POST['wc_share_text'];
+            $this->wc_options_serialized->wc_phrases['wc_edit_text'] = $_POST['wc_edit_text'];
             $this->wc_options_serialized->wc_phrases['wc_share_facebook'] = $_POST['wc_share_facebook'];
             $this->wc_options_serialized->wc_phrases['wc_share_twitter'] = $_POST['wc_share_twitter'];
             $this->wc_options_serialized->wc_phrases['wc_share_google'] = $_POST['wc_share_google'];
+            $this->wc_options_serialized->wc_phrases['wc_share_vk'] = $_POST['wc_share_vk'];
+            $this->wc_options_serialized->wc_phrases['wc_share_ok'] = $_POST['wc_share_ok'];
             $this->wc_options_serialized->wc_phrases['wc_hide_replies_text'] = $_POST['wc_hide_replies_text'];
             $this->wc_options_serialized->wc_phrases['wc_show_replies_text'] = $_POST['wc_show_replies_text'];
             $this->wc_options_serialized->wc_phrases['wc_user_title_guest_text'] = $_POST['wc_user_title_guest_text'];
@@ -273,6 +281,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_phrases['wc_confirm_email_message'] = $_POST['wc_confirm_email_message'];
             $this->wc_options_serialized->wc_phrases['wc_error_empty_text'] = $_POST['wc_error_empty_text'];
             $this->wc_options_serialized->wc_phrases['wc_error_email_text'] = $_POST['wc_error_email_text'];
+            $this->wc_options_serialized->wc_phrases['wc_error_url_text'] = $_POST['wc_error_url_text'];
             $this->wc_options_serialized->wc_phrases['wc_year_text']['datetime'][0] = $_POST['wc_year_text'];
             $this->wc_options_serialized->wc_phrases['wc_year_text_plural']['datetime'][0] = $_POST['wc_year_text_plural'];
             $this->wc_options_serialized->wc_phrases['wc_month_text']['datetime'][0] = $_POST['wc_month_text'];

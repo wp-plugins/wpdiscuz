@@ -35,6 +35,16 @@
             </tr>
             <tr valign="top">
                 <th scope="row">
+                    <?php _e('Error message for invalid website url field', WC_Core::$TEXT_DOMAIN); ?>
+                </th>
+                <td colspan="3">                                
+                    <label for="wc_error_url_text">
+                        <input type="text" value="<?php echo $this->wc_options_serialized->wc_phrases['wc_error_url_text']; ?>" name="wc_error_url_text" id="wc_error_url_text" />
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row">
                     <?php _e('You must be', WC_Core::$TEXT_DOMAIN); ?>
                 </th>
                 <td colspan="3">                                

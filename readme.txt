@@ -1,10 +1,10 @@
 === wpDiscuz - Wordpress Comments ===
 Contributors: gVectors Team
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UC44WQM5XJFPA
-Tags: wordpress comments, ajax comments, ajax, live update, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system, redirect, comment redirect, first commenter
+Tags: wordpress comments, ajax comments, ajax, live update, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system, redirect, comment redirect, first commenter, social login
 Requires at least: 2.7
-Tested up to: 4.2
-Stable tag: 2.1.10
+Tested up to: 4.2.1
+Stable tag: 2.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,8 @@ New interactive, AJAX comment system. Responsive comment plugin with Live Update
 * | Responsive comments form and comment threads design
 * | Clean, simple and easy user interface and user experience
 * | Live update of new comments with notifier buttons
+* | Anonymous comments ( name and email can be set as not required )
+* | Social Network Login - Facebook, Twitter, Google+, Wordpress, VK, OK and others
 * | Multi-level (nested) comment threads, with maximum levels depth setting option
 * | Allows to create a new discussion thread and reply to existing comment
 * | Ajax button "Load More Comments" instead of simple comments pagination
@@ -116,21 +118,34 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 
 == Screenshots ==
 
-1. wpDiscuz ajax comment form for Guests Screenshot #1
-2. wpDiscuz ajax comment form for logged in user Screenshot #2
+1. wpDiscuz ajax comment list for logged in user Screenshot #1
+2. wpDiscuz ajax comment list for guests Screenshot #2
 3. Discussion Threads with Reply Form Screenshot #3
-4. Live Update: checks for new comments and shows update buttons #4
-5. Front-End View with different colors Screenshot #5
-6. Full Front-End View Screenshot #6
-7. wpDiscuz General Settings #7
+4. Comment editing #4
+5. Live Update: checks for new comments and shows update buttons #5
+6. wpDiscuz ajax comment form with social login buttons Screenshot #6
+7. Full Front-End View Screenshot #7
+8. wpDiscuz General Settings #8
 
 
 == Changelog ==
 
-= 2.1.10 =
-Fixed Bug: First comment redirection without setting the destination page  
+= 2.2.0 =
+* Added: Social Network Login:
+Facebook, Google, Twitter, Wordpress, Vkontakte, Mail.ru, Yandex,  Odnoklassniki, 500px, Windows Live, Yahoo!, LinkedIn, Reddit, Disqus, Tumblr, Stackoverflow, GitHub, Dribbble, Instagram, Foursquare, Steam, Twitch.tv, Mixi, Goodreads, Skyrock, Last.fm, AOL and PixelPin.
+Integrated with WordPress Social Login, Super Socializer and Social Connect plugins.
+* Added: New "WebSite" field in comment form
+* Added: Anonymous commenting ( Name and Email can be optional )
+* Added: VK.com and OK.ru social network share buttons
+* Added: New {rel, target, ...} attributes for <a> link tag
+* Added: CSS and JavaScrip file/code optimization and minifying
+* Fixed Bug: Issues with comment editing
+* Fixed Bug: Custom "Phrases" fail to display if apostrophes are used
 
 IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
+
+= 2.1.10 =
+* Fixed Bug: First comment redirection without setting the destination page  
 
 = 2.1.9 =
 * Added: Option to redirect first commenters to "Thank You" page 

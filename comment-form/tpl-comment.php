@@ -27,7 +27,7 @@ class WC_Comment_Template_Builder {
 
         $comment_content = wp_kses($comment->comment_content, array(
             'br' => array(),
-            'a' => array('href' => array(), 'title' => array()),
+            'a' => array('href' => array(), 'title' => array(), 'target' => array(), 'rel' => array(), 'download' => array(), 'hreflang' => array(), 'media' => array(), 'type' => array()),
             'i' => array(),
             'b' => array(),
             'u' => array(),
@@ -43,7 +43,11 @@ class WC_Comment_Template_Builder {
         $vote_title_text = '';
         $user = get_user_by('id', $comment->user_id);
         $wc_author_title_class = '';
+        $wc_comment_author_url = ('http://' == $comment->comment_author_url) ? '' : $comment->comment_author_url;
+        $wc_comment_author_url = esc_url($wc_comment_author_url, array('http', 'https'));
+        $wc_comment_author_url = apply_filters('get_comment_author_url', $wc_comment_author_url, $comment->comment_ID, $comment);
         if ($user) {
+            $wc_comment_author_url = $wc_comment_author_url ? $wc_comment_author_url : $user->user_url;
             $post = get_post($comment->comment_post_ID);
             if ($user->ID == $post->post_author) {
                 $wc_author_title_class = 'wc-post-author';
@@ -81,14 +85,22 @@ class WC_Comment_Template_Builder {
         $unique_id = $this->get_unique_id($comment);
 
         $wc_author_name = $comment->comment_author ? $comment->comment_author : __('Anonymous', WC_Core::$TEXT_DOMAIN);
-
         $wc_comm_author_avatar = $this->wc_helper->get_comment_author_avatar($comment);
         $wc_profile_url = $this->get_profile_url($user);
 
         if ($wc_profile_url) {
             $wc_comm_author_avatar = "<a href='$wc_profile_url'>" . $this->wc_helper->get_comment_author_avatar($comment) . "</a>";
-            $wc_author_name = "<a href='$wc_profile_url'>" . $wc_author_name . "</a>";
+        } else {
+            $wc_comm_author_avatar = $this->wc_helper->get_comment_author_avatar($comment);
         }
+
+        if ($wc_comment_author_url) {
+            $wc_author_name = "<a href='$wc_comment_author_url'>" . $wc_author_name . "</a>";
+        } else {
+            if ($wc_profile_url) {
+                $wc_author_name = "<a href='$wc_profile_url'>" . $wc_author_name . "</a>";
+            }
+        }       
 
         $child_comments = get_comments(array(
             'parent' => $comment->comment_ID,
@@ -155,9 +167,11 @@ class WC_Comment_Template_Builder {
             $twitt_content = strip_tags($comment_content) . ' ' . get_comment_link($comment);
 
             $output .= '<span id="share_buttons_box-' . $unique_id . '" class="share_buttons_box">';
-            $output .= '<a target="_blank" href="http://www.facebook.com/sharer.php" title="' . $this->wc_options_serialized->wc_phrases['wc_share_facebook'] . '"><img src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/fb-18x18.png') . '"/></a>&nbsp;&nbsp;';
-            $output .= '<a target="_blank" href="https://twitter.com/home?status=' . $twitt_content . '" title="' . $this->wc_options_serialized->wc_phrases['wc_share_twitter'] . '"><img src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/twitter-18x18.png') . '"/></a>&nbsp;&nbsp;';
-            $output .= '<a target="_blank" href="https://plus.google.com/share?url=' . get_permalink($comment->comment_post_ID) . '" title="' . $this->wc_options_serialized->wc_phrases['wc_share_google'] . '"><img src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/google-18x18.png') . '"/></a>&nbsp;&nbsp;';
+            $output .= '<a target="_blank" href="http://www.facebook.com/sharer.php" title="' . $this->wc_options_serialized->wc_phrases['wc_share_facebook'] . '"><img src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/fb-18x18.png') . '" onmouseover="this.src=\'' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/fb-18x18-orig.png') . '\'" onmouseout="this.src=\'' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/fb-18x18.png') . '\'"/></a>&nbsp;&nbsp;';
+            $output .= '<a target="_blank" href="https://twitter.com/home?status=' . $twitt_content . '" title="' . $this->wc_options_serialized->wc_phrases['wc_share_twitter'] . '"><img src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/twitter-18x18.png') . '" onmouseover="this.src=\'' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/twitter-18x18-orig.png') . '\'" onmouseout="this.src=\'' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/twitter-18x18.png') . '\'"/></a>&nbsp;&nbsp;';
+            $output .= '<a target="_blank" href="https://plus.google.com/share?url=' . get_permalink($comment->comment_post_ID) . '" title="' . $this->wc_options_serialized->wc_phrases['wc_share_google'] . '"><img src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/google-18x18.png') . '" onmouseover="this.src=\'' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/google-18x18-orig.png') . '\'" onmouseout="this.src=\'' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/google-18x18.png') . '\'"/></a>&nbsp;&nbsp;';
+            $output .= '<a target="_blank" href="http://vk.com/share.php?url=' . get_permalink($comment->comment_post_ID) . '" title="' . $this->wc_options_serialized->wc_phrases['wc_share_vk'] . '"><img src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/vk-18x18.png') . '" onmouseover="this.src=\'' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/vk-18x18-orig.png') . '\'" onmouseout="this.src=\'' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/vk-18x18.png') . '\'"/></a>&nbsp;&nbsp;';
+            $output .= '<a target="_blank" href="http://www.odnoklassniki.ru/dk?st.cmd=addShare&st.s=1&st._surl=' . get_permalink($comment->comment_post_ID) . '" title="' . $this->wc_options_serialized->wc_phrases['wc_share_ok'] . '"><img src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/ok-18x18.png') . '" onmouseover="this.src=\'' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/ok-18x18-orig.png') . '\'" onmouseout="this.src=\'' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/social-icons/ok-18x18.png') . '\'"/></a>&nbsp;&nbsp;';
             $output .= '</span>';
         }
 
@@ -165,7 +179,7 @@ class WC_Comment_Template_Builder {
             $output .= '-&nbsp;&nbsp; <a href="' . get_edit_comment_link($comment->comment_ID) . '">' . __('Edit', 'default') . '</a>';
         } else {
             if ($this->wc_helper->is_comment_editable($comment) && $current_user->ID && $current_user->ID == $comment->user_id) {
-                $output .= '<span id="wc_editable_comment-' . $unique_id . '" class="wc_editable_comment">-&nbsp;&nbsp;' . __('Edit', 'default') . '</span>';
+                $output .= '<span id="wc_editable_comment-' . $unique_id . '" class="wc_editable_comment">-&nbsp;&nbsp;' . $this->wc_options_serialized->wc_phrases['wc_edit_text'] . '</span>';
                 $output .= '<span id="wc_cancel_edit-' . $unique_id . '" class="wc_cancel_edit">-&nbsp;&nbsp;' . $this->wc_options_serialized->wc_phrases['wc_comment_edit_cancel_button'] . '</span>';
                 $output .= '<span id="wc_save_edited_comment-' . $unique_id . '" class="wc_save_edited_comment" style="display:none;">&nbsp;&nbsp;-&nbsp;&nbsp;' . $this->wc_options_serialized->wc_phrases['wc_comment_edit_save_button'] . '</span>';
             }
@@ -184,14 +198,27 @@ class WC_Comment_Template_Builder {
         $output_form = '';
 
         if (comments_open($comment->comment_post_ID)) {
+
             $output_form = '<div class="wc-form-wrapper wc-secondary-forms-wrapper" id="wc-secondary-forms-wrapper-' . $unique_id . '">';
+            $output_form .= '<div class="wc-secondary-forms-social-content" id="wc-secondary-forms-social-content-' . $unique_id . '"></div>';
             $output_form .= '<form action="" method="post" id="wc_comm_form-' . $unique_id . '" class="wc_comm_form wc_secondary_form">';
             $output_form .= '<div class="wc-field-comment"><div class="wc-field-avatararea">' . $this->wc_helper->get_comment_author_avatar() . '</div><div class="wc-field-textarea wpdiscuz-item"><textarea id="wc_comment-' . $unique_id . '" class="wc_comment wc_field_input" name="wc_comment" required="required" placeholder="' . $textarea_placeholder . '"></textarea></div><div style="clear:both"></div></div>';
 
             $output_form .= '<div id="wc-form-footer-' . $unique_id . '" class="wc-form-footer">';
 
             if (!is_user_logged_in()) {
-                $output_form .= '<div class="wc-author-data"><div class="wc-field-name wpdiscuz-item"><input id="wc_name-' . $unique_id . '" name="wc_name" class="wc_name wc_field_input" required="required" value="" type="text" placeholder="' . $this->wc_options_serialized->wc_phrases['wc_name_text'] . '"/></div><div class="wc-field-email wpdiscuz-item"><input id="wc_email-' . $unique_id . '" class="wc_email wc_field_input email" name="wc_email" required="required" value="" type="email" placeholder="' . $this->wc_options_serialized->wc_phrases['wc_email_text'] . '"/></div><div style="clear:both"></div></div>';
+                $wc_is_name_field_required = ($this->wc_options_serialized->wc_is_name_field_required) ? 'required="required"' : '';
+                $wc_is_email_field_required = ($this->wc_options_serialized->wc_is_email_field_required) ? 'required="required"' : '';
+
+                $output_form .= '<div class="wc-author-data">';
+                $output_form .= '<div class="wc-field-name wpdiscuz-item">';
+                $output_form .= '<input id="wc_name-' . $unique_id . '" name="wc_name" class="wc_name wc_field_input" ' . $wc_is_name_field_required . ' value="" type="text" placeholder="' . $this->wc_options_serialized->wc_phrases['wc_name_text'] . '"/>';
+                $output_form .= '</div>';
+                $output_form .= '<div class="wc-field-email wpdiscuz-item">';
+                $output_form .= '<input id="wc_email-' . $unique_id . '" class="wc_email wc_field_input email" name="wc_email" ' . $wc_is_email_field_required . ' value="" type="email" placeholder="' . $this->wc_options_serialized->wc_phrases['wc_email_text'] . '"/>';
+                $output_form .= '</div>';
+                $output_form .= '<div style="clear:both"></div>';
+                $output_form .= '</div>';
             }
 
             $output_form .= '<div class="wc-form-submit">';
@@ -206,7 +233,14 @@ class WC_Comment_Template_Builder {
                 }
             }
 
-            $output_form .= '<div class="wc-field-submit"><input type="button" name="submit" value="' . $this->wc_options_serialized->wc_phrases['wc_submit_text'] . '" id="wc_comm-' . $unique_id . '" class="wc_comm_submit button alt"/></div>';
+            $output_form .= '<div class="wc-field-submit">';
+            if (!is_user_logged_in() && !$this->wc_options_serialized->wc_weburl_show_hide) {
+                $output_form .= '<div class="wc-field-website wpdiscuz-item">';
+                $output_form .= '<input id="wc_website-' . $unique_id . '" class="wc_website wc_field_input" name="wc_website" value="" type="url" placeholder="' . $this->wc_options_serialized->wc_phrases['wc_website_text'] . '"/>';
+                $output_form .= '</div>';
+            }
+            $output_form .= '<input type="button" name="submit" value="' . $this->wc_options_serialized->wc_phrases['wc_submit_text'] . '" id="wc_comm-' . $unique_id . '" class="wc_comm_submit button alt"/>';
+            $output_form .= '</div>';
             $output_form .= '<div style="clear:both"></div>';
 
             if ($this->wc_options_serialized->wc_show_hide_comment_checkbox || $this->wc_options_serialized->wc_show_hide_reply_checkbox || $this->wc_options_serialized->wc_show_hide_all_reply_checkbox) {
@@ -314,7 +348,6 @@ class WC_Comment_Template_Builder {
     public function init_phrases_on_load() {
 
         if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
-//            var_dump($this->wc)
             $this->wc_options_serialized->wc_phrases = $this->wc_db_helper->get_phrases();
         }
     }

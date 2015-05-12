@@ -140,9 +140,9 @@ class WC_DB_Helper {
                     $phrase_value = $phrase_value[WC_Helper::$datetime][0];
                 }
                 if ($this->is_phrase_exists($phrase_key)) {
-                    $sql = $this->db->prepare("UPDATE `" . $this->phrases . "` SET `phrase_value` = %s WHERE `phrase_key` = %s;", htmlentities($phrase_value), $phrase_key);
+                    $sql = $this->db->prepare("UPDATE `" . $this->phrases . "` SET `phrase_value` = %s WHERE `phrase_key` = %s;", str_replace('"','&#34;',$phrase_value), $phrase_key);
                 } else {
-                    $sql = $this->db->prepare("INSERT INTO `" . $this->phrases . "`(`phrase_key`, `phrase_value`)VALUES(%s, %s);", $phrase_key, htmlentities($phrase_value));
+                    $sql = $this->db->prepare("INSERT INTO `" . $this->phrases . "`(`phrase_key`, `phrase_value`)VALUES(%s, %s);", $phrase_key, str_replace('"','&#34;',$phrase_value));
                 }
                 $this->db->query($sql);
             }

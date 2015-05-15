@@ -69,11 +69,11 @@
 
             <tr valign="top">
                 <th scope="row">
-                    <?php _e('Confirm your subscribtion', WC_Core::$TEXT_DOMAIN); ?>
+                    <?php _e('Confirm your subscription', WC_Core::$TEXT_DOMAIN); ?>
                 </th>
                 <td colspan="3">                                
                     <label for="wc_confirm_email">
-                        <input type="text" name="wc_confirm_email" id="wc_confirm_email" class="wc_confirm_email" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_confirm_email']) ? $this->wc_options_serialized->wc_phrases['wc_confirm_email'] : __('Confirm your subscribtion', WC_Core::$TEXT_DOMAIN); ?>" placeholder="<?php echo _e('Confirm your subscribtion', WC_Core::$TEXT_DOMAIN); ?>"/>
+                        <input type="text" name="wc_confirm_email" id="wc_confirm_email" class="wc_confirm_email" value="<?php echo isset($this->wc_options_serialized->wc_phrases['wc_confirm_email']) ? $this->wc_options_serialized->wc_phrases['wc_confirm_email'] : __('Confirm your subscription', WC_Core::$TEXT_DOMAIN); ?>" placeholder="<?php echo _e('Confirm your subscription', WC_Core::$TEXT_DOMAIN); ?>"/>
                     </label>
                 </td>
             </tr>

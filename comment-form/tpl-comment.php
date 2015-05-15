@@ -42,7 +42,7 @@ class WC_Comment_Template_Builder {
         $vote_cls = '';
         $vote_title_text = '';
         $user = get_user_by('id', $comment->user_id);
-        $wc_author_title_class = '';
+        $wc_author_class = '';
         $wc_comment_author_url = ('http://' == $comment->comment_author_url) ? '' : $comment->comment_author_url;
         $wc_comment_author_url = esc_url($wc_comment_author_url, array('http', 'https'));
         $wc_comment_author_url = apply_filters('get_comment_author_url', $wc_comment_author_url, $comment->comment_ID, $comment);
@@ -50,17 +50,17 @@ class WC_Comment_Template_Builder {
             $wc_comment_author_url = $wc_comment_author_url ? $wc_comment_author_url : $user->user_url;
             $post = get_post($comment->comment_post_ID);
             if ($user->ID == $post->post_author) {
-                $wc_author_title_class = 'wc-post-author';
+                $wc_author_class = 'wc-post-author';
                 $author_title = $this->wc_options_serialized->wc_phrases['wc_user_title_author_text'];
             } else if (in_array('administrator', $user->roles)) {
-                $wc_author_title_class = 'wc-blog-admin';
+                $wc_author_class = 'wc-blog-admin';
                 $author_title = $this->wc_options_serialized->wc_phrases['wc_user_title_admin_text'];
             } else {
-                $wc_author_title_class = 'wc-blog-member';
+                $wc_author_class = 'wc-blog-member';
                 $author_title = $this->wc_options_serialized->wc_phrases['wc_user_title_member_text'];
             }
         } else {
-            $wc_author_title_class = 'wc-blog-guest';
+            $wc_author_class = 'wc-blog-guest';
             $author_title = $this->wc_options_serialized->wc_phrases['wc_user_title_guest_text'];
         }
 
@@ -100,7 +100,7 @@ class WC_Comment_Template_Builder {
             if ($wc_profile_url) {
                 $wc_author_name = "<a href='$wc_profile_url'>" . $wc_author_name . "</a>";
             }
-        }       
+        }
 
         $child_comments = get_comments(array(
             'parent' => $comment->comment_ID,
@@ -123,10 +123,10 @@ class WC_Comment_Template_Builder {
         $wc_visible_parent_comment_ids = isset($args['wc_visible_parent_comment_ids']) ? $args['wc_visible_parent_comment_ids'] : null;
         $comment_content_class = ($wc_visible_parent_comment_ids != null && !in_array($comment->comment_ID, $wc_visible_parent_comment_ids)) ? ' wc_new_loaded_comment' : '';
 
-        $output = '<div id="wc-comm-' . $unique_id . '" class="' . $comment_wrapper_class . ' ' . $parent_comment . ' wc_comment_level-' . $depth . '">';
+        $output = '<div id="wc-comm-' . $unique_id . '" class="' . $comment_wrapper_class . ' ' . $wc_author_class . ' ' . $parent_comment . ' wc_comment_level-' . $depth . '">';
         $output .= '<div class="wc-comment-left" id="comment-' . $comment->comment_ID . '">' . $wc_comm_author_avatar;
         if (!$this->wc_options_serialized->wc_author_titles_show_hide) {
-            $output .= '<div class="' . $wc_author_title_class . ' wc-comment-label">' . $author_title . '</div>';
+            $output .= '<div class="' . $wc_author_class . ' wc-comment-label">' . $author_title . '</div>';
         }
         if (class_exists('userpro_api') && $comment->user_id) {
             $output .= userpro_show_badges($comment->user_id, $inline = true);
@@ -202,7 +202,7 @@ class WC_Comment_Template_Builder {
             $output_form = '<div class="wc-form-wrapper wc-secondary-forms-wrapper" id="wc-secondary-forms-wrapper-' . $unique_id . '">';
             $output_form .= '<div class="wc-secondary-forms-social-content" id="wc-secondary-forms-social-content-' . $unique_id . '"></div>';
             $output_form .= '<form action="" method="post" id="wc_comm_form-' . $unique_id . '" class="wc_comm_form wc_secondary_form">';
-            $output_form .= '<div class="wc-field-comment"><div class="wc-field-avatararea">' . $this->wc_helper->get_comment_author_avatar() . '</div><div class="wc-field-textarea wpdiscuz-item"><textarea id="wc_comment-' . $unique_id . '" class="wc_comment wc_field_input" name="wc_comment" required="required" placeholder="' . $textarea_placeholder . '"></textarea></div><div style="clear:both"></div></div>';
+            $output_form .= '<div class="wc-field-comment"><div class="wc-field-avatararea">' . $this->wc_helper->get_comment_author_avatar($comment) . '</div><div class="wc-field-textarea wpdiscuz-item"><textarea id="wc_comment-' . $unique_id . '" class="wc_comment wc_field_input" name="wc_comment" required="required" placeholder="' . $textarea_placeholder . '"></textarea></div><div style="clear:both"></div></div>';
 
             $output_form .= '<div id="wc-form-footer-' . $unique_id . '" class="wc-form-footer">';
 

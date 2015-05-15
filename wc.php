@@ -3,7 +3,7 @@
 /*
   Plugin Name: wpDiscuz - Wordpress Comments
   Description: Better comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share.
-  Version: 2.2.1
+  Version: 2.2.2
   Author: gVectors Team (A. Chakhoyan, G. Zakaryan, H. Martirosyan)
   Author URI: http://www.gvectors.com/
   Plugin URI: http://www.gvectors.com/wpdiscuz/
@@ -11,7 +11,7 @@
 
 include_once 'options/wc-options.php';
 include_once 'options/wc-options-serialize.php';
-include_once 'helper/wc-helper.php';
+include_once 'includes/wc-helper.php';
 include_once 'includes/wc-db-helper.php';
 include_once 'comment-form/tpl-comment.php';
 include_once 'dto/wc-comment.php';
@@ -37,7 +37,7 @@ class WC_Core {
     public $wc_user_agent = '';
 
     function __construct() {
-        $this->wc_user_agent = $_SERVER['HTTP_USER_AGENT'];
+        $this->wc_user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
         add_action('plugins_loaded', array(&$this, 'load_wpdiscuz_text_domain'));
         add_action('init', array(&$this, 'init_plugin_dir_name'), 1);
 
@@ -264,9 +264,6 @@ class WC_Core {
         wp_register_style('wpdiscuz-options-css', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/css/options-css.min.css'));
         wp_enqueue_style('wpdiscuz-options-css');
 
-        wp_register_script('wpdiscuz-option-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/options-js.min.js'), array('jquery'));
-        wp_enqueue_script('wpdiscuz-option-js');
-
         wp_register_script('wpdiscuz-scripts-js', plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/js/wc-scripts.min.js'), array('jquery'));
         wp_enqueue_script('wpdiscuz-scripts-js');
 
@@ -329,15 +326,15 @@ class WC_Core {
             $website_url = filter_input(INPUT_POST, 'website');
         }
 
-
-
-        if (!filter_var($website_url, FILTER_VALIDATE_URL) === false) {
-            $message_array['code'] = -1;
-            $message_array['message'] = $this->wc_options_serialized->wc_phrases['wc_error_url_text'];
-            echo json_encode($message_array);
-            exit;
+        if ($website_url != '' && (strpos($website_url, 'http://') !== '' && strpos($website_url, 'http://') !== 0) && (strpos($website_url, 'https://') !== '' && strpos($website_url, 'https://') !== 0)) {
+            $website_url = 'http://' . $website_url;
         }
-
+        if ($website_url != '' && (filter_var($website_url, FILTER_VALIDATE_URL) === false)) {
+                $message_array['code'] = -1;
+                $message_array['message'] = $this->wc_options_serialized->wc_phrases['wc_error_url_text'];
+                echo json_encode($message_array);
+                exit;
+            }
         $comment = wp_kses($comment, array(
             'br' => array(),
             'a' => array('href' => array(), 'title' => array()),
@@ -761,6 +758,7 @@ class WC_Core {
         $wc_wp_comments = array();
         $comments = get_comments(array('post_id' => $post_id, 'status' => 'approve', 'order' => $wc_comment_list_order));
         $wc_comments = $this->init_wc_comments($comments);
+//        echo count($comments);exit();
         $wc_wp_comments['wc_list'] = wp_list_comments($comm_list_args, $wc_comments);
         $wc_button_comments_count_style = $wc_hidden_new_comment_count > 0 ? "inline-block" : "none";
 
@@ -1020,8 +1018,8 @@ class WC_Core {
 
 // Add settings link on plugin page
     public function wc_add_plugin_settings_link($links) {
-        $settings_link = '<a href="' . admin_url() . 'admin.php?page=wpdiscuz_options_page">' . __('Settings', 'default') . '</a> |';
-        $settings_link .= '<a href="' . admin_url() . 'admin.php?page=wpdiscuz_phrases_page">' . __('Phrases', 'default') . '</a>';
+        $settings_link = '<a href="' . admin_url() . 'admin.php?page=wpdiscuz_options_page">' . __('Settings', WC_Core::$TEXT_DOMAIN) . '</a> |';
+        $settings_link .= '<a href="' . admin_url() . 'admin.php?page=wpdiscuz_phrases_page">' . __('Phrases', WC_Core::$TEXT_DOMAIN) . '</a>';
         array_unshift($links, $settings_link);
         return $links;
     }
@@ -1053,7 +1051,6 @@ class WC_Core {
         $message_array = array();
         $comment_ID = intval(filter_input(INPUT_POST, 'comment_id'));
         $comment_content = filter_input(INPUT_POST, 'comment_content');
-        $comment_depth = intval(filter_input(INPUT_POST, 'comment_depth'));
         $comment = get_comment($comment_ID);
 
         $trimmed_comment_content = trim($comment_content);
@@ -1072,7 +1069,7 @@ class WC_Core {
                 ));
 
                 $author_ip = WC_Helper::get_real_ip_addr();
-                $this->wc_user_agent = $_SERVER['HTTP_USER_AGENT'];
+                $this->wc_user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
                 $commentarr = array(
                     'comment_ID' => $comment_ID,
                     'comment_content' => apply_filters('pre_comment_content', $comment_content),
@@ -1095,7 +1092,6 @@ class WC_Core {
         echo json_encode($message_array);
         exit;
     }
-
 }
 
 $wc_core = new WC_Core();

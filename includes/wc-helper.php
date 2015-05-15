@@ -104,7 +104,7 @@ class WC_Helper {
 
         $comm_auth_user_email = $current_user->user_email;
         if ($comment) {
-            $comm_auth_avatar = get_avatar($comment->comment_author_email, 48);
+            $comm_auth_avatar = get_avatar($comment, 48);
         } else {
             if ($comm_auth_user_email) {
                 $comm_auth_avatar = get_avatar($comm_auth_user_email, 48);
@@ -257,7 +257,7 @@ class WC_Helper {
      * return boolean
      */
     public static function is_posted_today($comment) {
-        return date('Ymd',  strtotime(current_time('Ymd'))) <=  date('Ymd',  strtotime($comment->comment_date));
+        return date('Ymd', strtotime(current_time('Ymd'))) <= date('Ymd', strtotime($comment->comment_date));
     }
 
     /**
@@ -295,9 +295,9 @@ class WC_Helper {
      * return client real ip
      */
     public static function get_real_ip_addr() {
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {   //check ip from share internet
+        if (isset($_SERVER['HTTP_CLIENT_IP'])) {   //check ip from share internet
             $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {   //to check ip is pass from proxy
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {   //to check ip is pass from proxy
             $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
         } else {
             $ip = $_SERVER['REMOTE_ADDR'];

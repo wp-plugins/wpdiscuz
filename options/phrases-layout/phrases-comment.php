@@ -64,7 +64,7 @@
             </tr>
             <tr valign="top">
                 <th scope="row">
-                    <?php _e('Share On vKontakte', WC_Core::$TEXT_DOMAIN); ?>
+                    <?php _e('Share On VKontakte', WC_Core::$TEXT_DOMAIN); ?>
                 </th>
                 <td colspan="3">                                
                     <label for="wc_share_vk">

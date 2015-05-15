@@ -31,11 +31,11 @@
                     <fieldset>
                         <label title="Yes">
                             <input type="radio" value="1" <?php checked('1' == $this->wc_options_serialized->wc_user_must_be_registered); ?> name="wc_user_must_be_registered" id="wc_user_must_be_registered_yes" /> 
-                            <span>Yes</span>
+                            <span><?php _e('Yes', WC_Core::$TEXT_DOMAIN); ?></span>
                         </label> &nbsp;
                         <label title="No">
                             <input type="radio" value="0" <?php checked('0' == $this->wc_options_serialized->wc_user_must_be_registered); ?> name="wc_user_must_be_registered" id="wc_user_must_be_registered_no" /> 
-                            <span>No</span>
+                            <span><?php _e('No', WC_Core::$TEXT_DOMAIN); ?></span>
                         </label><br>                                    
                     </fieldset>
                 </td>

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wpDiscuz - Wordpress Comments\n"
 "POT-Creation-Date: 2015-05-15 22:52+0400\n"
-"PO-Revision-Date: 2015-05-15 22:52+0400\n"
+"PO-Revision-Date: 2015-05-15 23:57+0400\n"
 "Last-Translator: advancedcoding <advancedcoding@mail.ru>\n"
 "Language-Team: advancedcoding <advancedcoding@mail.ru>\n"
 "Language: en\n"
@@ -21,100 +21,100 @@ msgstr ""
 
 #: comment-form/form.php:178 comment-form/tpl-comment.php:265
 msgid "Participate in this discussion via email"
-msgstr ""
+msgstr "Մասնակցել այս քննարկմանը էլ-փոստով"
 
 #: comment-form/form.php:316
 msgid "Connect with"
-msgstr ""
+msgstr "Մուտք գործել"
 
 #: comment-form/tpl-comment.php:87 wc.php:318
 msgid "Anonymous"
-msgstr ""
+msgstr "Անանուն"
 
 #: comment-form/tpl-comment.php:179
 #: options/phrases-layout/phrases-comment.php:27
 #: options/wc-options-serialize.php:402
 msgid "Edit"
-msgstr ""
+msgstr "Խմբագրել"
 
 #: options/options-layouts/settings-general.php:2
 msgid "General Settings"
-msgstr ""
+msgstr "Գլխավոր պարամետրեր"
 
 #: options/options-layouts/settings-general.php:7
 msgid "Display comment form for post types:"
-msgstr ""
+msgstr "Միացնել մեկնաբանությունները այս տիպերի համար"
 
 #: options/options-layouts/settings-general.php:28
 msgid "User Must be registered to comment"
-msgstr ""
+msgstr "Մեկնաբանություն թողնելու համար գրանցվելը պարտադիր է"
 
 #: options/options-layouts/settings-general.php:34
 msgid "Yes"
-msgstr ""
+msgstr "Այո"
 
 #: options/options-layouts/settings-general.php:38
 msgid "No"
-msgstr ""
+msgstr "Ոչ"
 
 #: options/options-layouts/settings-general.php:46
 msgid "Comment author must fill out name"
-msgstr ""
+msgstr "Մեկնաբանության հեղինակը պետք է պարտադիր լրացնի անունը"
 
 #: options/options-layouts/settings-general.php:57
 msgid "Comment author must fill out email"
-msgstr ""
+msgstr "Մեկնաբանության հեղինակը պետք է պարտադիր լրացնի էլ-փոստը"
 
 #: options/options-layouts/settings-general.php:68
 msgid "Show the latest comments on"
-msgstr ""
+msgstr "Ցույց տալ վերջին մեկնաբանությունները"
 
 #: options/options-layouts/settings-general.php:72
 msgid "the top of the list"
-msgstr ""
+msgstr "վերևում"
 
 #: options/options-layouts/settings-general.php:74
 msgid "top of the threads"
-msgstr ""
+msgstr "վերևում"
 
 #: options/options-layouts/settings-general.php:76
 msgid "bottom of the threads"
-msgstr ""
+msgstr "ներքևում"
 
 #: options/options-layouts/settings-general.php:78
 msgid "the bottom of the list"
-msgstr ""
+msgstr "ներքևում"
 
 #: options/options-layouts/settings-general.php:86
 msgid "Comment Threads Per Page"
-msgstr ""
+msgstr "Գլպավոր մեկնաբանությունների քանակը "
 
 #: options/options-layouts/settings-general.php:98
 msgid "Comments max depth"
-msgstr ""
+msgstr "Մեկնաբանությունների խորությունը"
 
 #: options/options-layouts/settings-general.php:103
 msgid "Level"
-msgstr ""
+msgstr "Մակարդակ"
 
 #: options/options-layouts/settings-general.php:104
 #: options/options-layouts/settings-general.php:105
 #: options/options-layouts/settings-general.php:106
 #: options/options-layouts/settings-general.php:107
 msgid "Levels"
-msgstr ""
+msgstr "Մակարդակներ"
 
 #: options/options-layouts/settings-general.php:114
 msgid "Comment text size in pixels"
-msgstr ""
+msgstr "Մեկնաբանության տեքստի չափը "
 
 #: options/options-layouts/settings-general.php:131
 msgid "Allow comment editing for"
-msgstr ""
+msgstr "Թույլատրել մեկնաբանությունների խմբագրումը"
 
 #: options/options-layouts/settings-general.php:136
 msgid "Not Allow"
-msgstr ""
+msgstr "Չթույլատրել"
 
 #: options/options-layouts/settings-general.php:137
 #: options/options-layouts/settings-general.php:138
@@ -122,53 +122,55 @@ msgstr ""
 #: options/options-layouts/settings-live-update.php:42
 #: options/options-layouts/settings-live-update.php:43
 msgid "Minutes"
-msgstr ""
+msgstr "Րոպեներ"
 
 #: options/options-layouts/settings-general.php:139
 #: options/phrases-layout/phrases-datetime.php:73
 msgid "Hour"
-msgstr ""
+msgstr "Ժամ"
 
 #: options/options-layouts/settings-general.php:140
 #: options/options-layouts/settings-general.php:141
 msgid "Hours"
-msgstr ""
+msgstr "Ժամեր"
 
 #: options/options-layouts/settings-general.php:148
 msgid "Redirect first commenter to"
-msgstr ""
+msgstr "Վերահղել առաջին մեկնաբանություն անողին դեպի"
 
 #: options/options-layouts/settings-general.php:155
 msgid "Do not redirect"
-msgstr ""
+msgstr "Չվերահղել"
 
 #: options/options-layouts/settings-general.php:164
 msgid "Allow guests to vote on comments"
-msgstr ""
+msgstr "Թույլատրել \"հյուրերին\" քվեարկել մեկնաբանություններին"
 
 #: options/options-layouts/settings-general.php:174
 msgid "Load rest of all comments on clicking the [Load More Comments] button"
-msgstr ""
+msgstr "Ցույց տալ բոլոր մեկնաբանությունները"
 
 #: options/options-layouts/settings-general.php:185
 msgid "Use WordPress Date/Time format"
-msgstr ""
+msgstr "Օգտվել WordPress-ի ամսաթվային ֆորմատից"
 
 #: options/options-layouts/settings-general.php:186
 msgid ""
 "wpDiscuz shows Human Readable date format. If you check this option it'll "
 "show the date/time format set in WordPress General Settings."
-msgstr ""
+msgstr "wpDiscuz-ը ցույց ե տալիս ամսաթիվը ընթռնելի ֆորմատով"
 
 #: options/options-layouts/settings-general.php:193
 msgid "Current Wordpress date/time format"
-msgstr ""
+msgstr "Wordpress-ի Ընթացիկ ամսաթվային ֆորմատ"
 
 #: options/options-layouts/settings-general.php:202
 msgid ""
 "Help wpDiscuz to grow allowing people to recognize which comment plugin you "
 "use"
 msgstr ""
+"Օգնեք wpDiscuz-ին զարգանալու համար, թույլ տալով մարդկանց տեսնելու թե ինչ "
+"plugin եք դուք օգտագործում"
 
 #: options/options-layouts/settings-general.php:204
 msgid ""
@@ -177,19 +179,21 @@ msgid ""
 "small (16x16px) icon under the comment section which will allow your site "
 "visitors recognize the name of comment solution you use."
 msgstr ""
+"Խնդրում ենք միացրեք այս օպցիան որպեսզի օգնեք wpDiscuz-ին ավելի ճանաչելի "
+"դառնալու ճանապարհին"
 
 #: options/options-layouts/settings-general.php:209
 msgid "Thank you!"
-msgstr ""
+msgstr "Շնորհակալություն"
 
 #: options/options-layouts/settings-live-update.php:2
 #: options/wc-options.php:176
 msgid "Live Update"
-msgstr ""
+msgstr "Մեկնաբանությունների ընթացիկ թարմացում"
 
 #: options/options-layouts/settings-live-update.php:8
 msgid "Live update options"
-msgstr ""
+msgstr "ընթացիկ թարմացման օպցիաներ"
 
 #: options/options-layouts/settings-live-update.php:9
 msgid ""
@@ -197,53 +201,58 @@ msgid ""
 "function doesn't overload your server resources. This function is good for "
 "VPS and Dedicated Hosting Plans."
 msgstr ""
+"Եթե դուք օգտագործում եք Shared Վեբ Հոսթինգ դուք պետք է համոզվեք, որ  \"Live "
+"Update \" օպցիան չի ծանրաբեռնել ձեր սերվերի ռեսուրսները. Այս օպցաին լավ է "
+"VPS սերվերների համար."
 
 #: options/options-layouts/settings-live-update.php:14
 msgid "Never update"
-msgstr ""
+msgstr "Չթարմացնել"
 
 #: options/options-layouts/settings-live-update.php:16
 msgid "Turn off \"Live Update\" function"
-msgstr ""
+msgstr "Անջատել ընթացիկ թարմացումը"
 
 #: options/options-layouts/settings-live-update.php:18
 msgid "Show new comment/reply buttons to update manualy"
 msgstr ""
+"Ցույց տալ նոր մեկնաբանություն / պատասխան կոճակները ձեռքով թարմացնելու համար"
 
 #: options/options-layouts/settings-live-update.php:20
 msgid "Always check for new comments and show update buttons"
-msgstr ""
+msgstr "Միշտ ստուգել նոր մեկնաբանությունները եւ ցույց տալ թարմացման կոճակները"
 
 #: options/options-layouts/settings-live-update.php:22
 msgid "Always update"
-msgstr ""
+msgstr "Միշտ թարմացնել"
 
 #: options/options-layouts/settings-live-update.php:24
 msgid "Always check for new comments and update automatically"
-msgstr ""
+msgstr "Միշտ ստուգել նոր մեկնաբանությունները եւ թարմացնել ավտոմատ կերպով"
 
 #: options/options-layouts/settings-live-update.php:32
 msgid "Update comment list every"
-msgstr ""
+msgstr "Թարմացնել մեկնաբանությունները ամեն"
 
 #: options/options-layouts/settings-live-update.php:37
 #: options/options-layouts/settings-live-update.php:38
 #: options/options-layouts/settings-live-update.php:39
 msgid "Seconds"
-msgstr ""
+msgstr "Վարկյաններ"
 
 #: options/options-layouts/settings-live-update.php:40
 #: options/phrases-layout/phrases-datetime.php:95
 msgid "Minute"
-msgstr ""
+msgstr "Րոպե"
 
 #: options/options-layouts/settings-show-hide.php:2 options/wc-options.php:177
 msgid "Show/Hide Components"
-msgstr ""
+msgstr "Ցույց տալ / չտալ կոմպոնենտներ"
 
 #: options/options-layouts/settings-show-hide.php:7
 msgid "Show logged-in user name and logout link on top of main form"
 msgstr ""
+"Ցույց տալ լոգին եխած օգտագործողների անունը և լոգաուտ լինկը ֆորմի վերևում"
 
 #: options/options-layouts/settings-show-hide.php:17
 msgid "Hide Reply button for Guests"

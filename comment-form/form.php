@@ -54,16 +54,14 @@ $header_text .= ($post->comment_count > 1) ? $wc_core->wc_options_serialized->wc
 $header_text .= ' ' . $wc_core->wc_options_serialized->wc_phrases['wc_header_on_text'];
 $header_text .= ' "' . get_the_title($post) . '"';
 
+$wc_main_form_comment_object = (object)array('user_id' => $current_user->ID ,'comment_author_email' => $current_user->user_email, 'comment_type' => '' );
+
 $wc_is_name_field_required = ($wc_core->wc_options_serialized->wc_is_name_field_required) ? 'required="required"' : '';
 $wc_is_email_field_required = ($wc_core->wc_options_serialized->wc_is_email_field_required) ? 'required="required"' : '';
-
-
-ob_start(); do_action('comment_form_top'); $wc_comment_form_top_content = ob_get_contents(); ob_clean();
-if( strpos('champ_login') !== FALSE ){ if( preg_match_all('|<li[^><]*>.+?</li>|is', $wc_comment_form_top_content, $wc_social_buttons, PREG_SET_ORDER ) ){ foreach( $wc_social_buttons as $wc_social_button ){ $wc_social_buttons_array[] = $wc_social_button[0]; } $wc_comment_form_top_content = '<div class="wp-social-login-widget"><div class="wp-social-login-connect-with_by_the_champ">'.__('Connect with').':</div><div class="wp-social-login-provider-list"><ul class="wc_social_login_by_the_champ">'.implode('', $wc_social_buttons_array).'</ul><div style="clear:both"></div></div></div>'; } }
-?>
+ob_start();do_action('comment_form_top');$wc_comment_form_top_content = ob_get_contents();ob_clean();$wc_comment_form_top_content = wpdiscuz_close_divs($wc_comment_form_top_content);?>
 <div style="clear:both"></div>
 
-<?php if (comments_open($post->ID)): ?>
+<?php if (comments_open($post->ID)) { ?>
     <div id="comments" class="comments-area">
         <?php
         if (isset($_GET['wpdiscuzSubscribeID']) && isset($_GET['key'])) {
@@ -90,7 +88,6 @@ if( strpos('champ_login') !== FALSE ){ if( preg_match_all('|<li[^><]*>.+?</li>|i
         <?php if (comments_open($post->ID)) { ?>
             <h3 id="wc-comment-header"><?php echo $wc_core->wc_options_serialized->wc_phrases['wc_leave_a_reply_text']; ?></h3>    
         <?php } ?>
-        <?php do_action('comment_form_before'); ?>
         <?php
         if ($wc_core->wc_options_serialized->wc_show_hide_loggedin_username) {
             if (is_user_logged_in()) {
@@ -107,13 +104,14 @@ if( strpos('champ_login') !== FALSE ){ if( preg_match_all('|<li[^><]*>.+?</li>|i
             }
         }
         ?>
-        <div id="wpcomm"> 
+        <div id="wpcomm">
             <div class="wc-comment-bar">
                 <p class="wc-comment-title">
                     <?php echo ($post->comment_count) ? $header_text : $wc_core->wc_options_serialized->wc_phrases['wc_be_the_first_text']; ?>
                 </p>
                 <div style="clear:both"></div>
             </div> 
+            <?php do_action('comment_form_before');?>
             <div class="wc_social_plugin_wrapper">
                 <?php echo $wc_comment_form_top_content; ?>
             </div>
@@ -125,7 +123,7 @@ if( strpos('champ_login') !== FALSE ){ if( preg_match_all('|<li[^><]*>.+?</li>|i
                     <form action="" method="post" id="wc_comm_form-<?php echo $unique_id; ?>" class="wc_comm_form wc_main_comm_form">
                         <div class="wc-field-comment">
                             <div class="wc-field-avatararea">
-                                <?php echo $wc_core->wc_helper->get_comment_author_avatar(); ?>                        
+                                <?php echo $wc_core->wc_helper->get_comment_author_avatar($wc_main_form_comment_object); ?>                        
                             </div>
                             <div class="wpdiscuz-item wc-field-textarea"><textarea id="wc_comment-<?php echo $unique_id; ?>" class="wc_comment wc_field_input" name="wc_comment" required="required" placeholder="<?php echo $textarea_placeholder; ?>"></textarea></div>
                             <div style="clear:both"></div>
@@ -225,12 +223,14 @@ if( strpos('champ_login') !== FALSE ){ if( preg_match_all('|<li[^><]*>.+?</li>|i
                         <input type="hidden" name="wc_comment_post_ID" value="<?php echo $post->ID; ?>" id="wc_comment_post_ID-<?php echo $unique_id; ?>" />
                         <input type="hidden" name="wc_comment_parent"  value="0" id="wc_comment_parent-<?php echo $unique_id; ?>" />
                     </form>
+                    
                 <?php } else { ?>
                     <p class="wc-must-login"><?php echo $wc_core->wc_options_serialized->wc_phrases['wc_you_must_be_text']; ?> <a href="<?php echo wp_login_url(); ?>"><?php echo $wc_core->wc_options_serialized->wc_phrases['wc_logged_in_text']; ?></a> <?php echo $wc_core->wc_options_serialized->wc_phrases['wc_to_post_comment_text']; ?></p>
                     <?php
                 }
                 ?>
             </div>
+            <?php do_action('comment_form_after'); ?>
             <hr/>
             <?php if ($wc_comment_list_update_type == 2) { ?>
                 <div class="wc_new_comment_and_replies">
@@ -240,14 +240,16 @@ if( strpos('champ_login') !== FALSE ){ if( preg_match_all('|<li[^><]*>.+?</li>|i
                 </div>
                 <div style="clear:both"></div>
             <?php } ?>
-        <?php else: ?>
-            <?php if ($post->comment_count > 0): ?>
+        <?php } else { ?>
+            <?php if ($post->comment_count > 0) { ?>
                 <div class="comments-area" style="border:none;">
-                <?php else: ?>
+                    <?php do_action('comment_form_closed'); ?>
+                <?php } else { ?>
                     <div class="comments-area" style="display:none">
-                    <?php endif; ?>
+                        <?php do_action('comment_form_closed'); ?>
+                    <?php } ?>
                     <div id="wpcomm" style="border:none;">    
-                    <?php endif; ?>
+                    <?php } ?>
                     <div class="wc-thread-wrapper">
                         <?php
                         $wc_wp_comments = $wc_core->get_wp_comments(1);
@@ -294,6 +296,26 @@ if( strpos('champ_login') !== FALSE ){ if( preg_match_all('|<li[^><]*>.+?</li>|i
                     </div>
                 </div><!-- wpcomm -->
             </div><!-- comments-area -->      
-            <?php if (comments_open($post->ID)) { ?>
-                <?php do_action('comment_form_after'); ?>
-            <?php } ?>
+            <?php
+
+            function wpdiscuz_close_divs($html) {
+                @preg_match_all('|<div|is', $html, $wc_div_open, PREG_SET_ORDER);
+                @preg_match_all('|</div|is', $html, $wc_div_close, PREG_SET_ORDER);
+                $wc_div_open = count((array) $wc_div_open);
+                $wc_div_close = count((array) $wc_div_close);
+                $wc_div_delta = $wc_div_open - $wc_div_close;
+                if ($wc_div_delta) {
+                    $wc_div_end_html = str_repeat('</div>', $wc_div_delta);
+                    $html = $html . $wc_div_end_html;
+                }
+                //Custom case for social login plugin
+                if (strpos('champ_login') !== FALSE) {
+                    if (preg_match_all('|<li[^><]*>.+?</li>|is', $html, $wc_social_buttons, PREG_SET_ORDER)) {
+                        foreach ($wc_social_buttons as $wc_social_button) {
+                            $wc_social_buttons_array[] = $wc_social_button[0];
+                        } $html = '<div class="wp-social-login-widget"><div class="wp-social-login-connect-with_by_the_champ">' . __('Connect with') . ':</div><div class="wp-social-login-provider-list"><ul class="wc_social_login_by_the_champ">' . implode('', $wc_social_buttons_array) . '</ul><div style="clear:both"></div></div></div>';
+                    }
+                }
+                return $html;
+            }
+            ?>

@@ -117,7 +117,7 @@ class WC_DB_Helper {
      * update vote type
      */
     public function update_vote_type($user_id, $comment_id, $vote_type) {
-        $sql = $this->db->prepare("UPDATE `" . $this->users_voted . "` SET `vote_type` = %d WHERE `user_id` = %d AND `comment_id` = %d", $vote_type, $user_id, $comment_id);
+        $sql = $this->db->prepare("UPDATE `" . $this->users_voted . "` SET `vote_type` = %d WHERE `user_id` = %s AND `comment_id` = %d", $vote_type, $user_id, $comment_id);
         return $this->db->query($sql);
     }
 

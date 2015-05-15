@@ -73,7 +73,7 @@ if (isset($_GET['wc_social_action'])) {
 ?>
 <div>
     <h2 style="padding:5px 10px 10px 10px; margin:0px;"><?php _e('Social Login', WC_Core::$TEXT_DOMAIN); ?> </h2>
-    <p style="padding-bottom:10px; padding-left:10px;">You can use one of these most popular Social Login Plugins to allow your visitors login and comment with Facebook, Twitter, Google+, Wordpress, VK, OK and lots of other social network service accounts. All social login buttons will be fully integrated with wpDiscuz comment forms. </p>
+    <p style="padding-bottom:10px; padding-left:10px;"><?php _e('You can use one of these most popular Social Login Plugins to allow your visitors login and comment with Facebook, Twitter, Google+, Wordpress, VK, OK and lots of other social network service accounts. All social login buttons will be fully integrated with wpDiscuz comment forms.', WC_Core::$TEXT_DOMAIN); ?> </p>
     <table class="wp-list-table widefat plugins" style="margin-top:10px; border:none;">
         <tbody>
             <?php echo $wc_social_plugin; ?>

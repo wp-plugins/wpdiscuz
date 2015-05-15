@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: wordpress comments, ajax comments, ajax, live update, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system, redirect, comment redirect, first commenter, social login
 Requires at least: 2.7
 Tested up to: 4.2.2
-Stable tag: 2.2.1
+Stable tag: 2.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -129,8 +129,18 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 
 
 == Changelog ==
+
+= 2.2.2 =
+* Fixed Bug: Some phrases were not translate-able
+* Fixed Bug: Social Network Avatar display problem
+* Fixed Bug: Issues with site layout, website field and Facebook login button
+* Fixed Bug: Error message "URL is invalid" for Website URLs starting with http://
+* Fixed Bug: Unlimited voting issue for guests
+
+IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
+
 = 2.2.1 =
-* Fixed Bug : Front-end Phrases don't suport Special Characters
+* Fixed Bug: Front-end Phrases don't suport Special Characters
 
 = 2.2.0 =
 * Added: Social Network Login:
@@ -143,8 +153,6 @@ Integrated with WordPress Social Login, Super Socializer and Social Connect plug
 * Added: CSS and JavaScrip file/code optimization and minifying
 * Fixed Bug: Issues with comment editing
 * Fixed Bug: Custom "Phrases" fail to display if apostrophes are used
-
-IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
 
 = 2.1.10 =
 * Fixed Bug: First comment redirection without setting the destination page  

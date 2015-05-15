@@ -6,7 +6,7 @@
             <tr valign="top">
                 <th scope="row" style="width:55%;">
                     <?php _e('Live update options', WC_Core::$TEXT_DOMAIN); ?>
-        <p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;">If you use Shared Web Hosting you should make sure the "Live Update" function doesn't overload your server resources. This function is good for VPS and Dedicated Hosting Plans.</p>
+        <p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;"><?php _e('If you use Shared Web Hosting you should make sure the "Live Update" function doesn\'t overload your server resources. This function is good for VPS and Dedicated Hosting Plans.', WC_Core::$TEXT_DOMAIN); ?></p>
         </th>
         <td>
             <fieldset class="wc_comment_list_update_type">

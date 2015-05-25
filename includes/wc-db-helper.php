@@ -7,7 +7,7 @@ class WC_DB_Helper {
     private $users_voted;
     private $phrases;
     private $email_notification;
-
+    
     function __construct() {
         global $wpdb;
         $this->db = $wpdb;
@@ -109,7 +109,7 @@ class WC_DB_Helper {
      */
     public function add_vote_type($user_id, $comment_id, $vote_type) {
         $is_guest = is_user_logged_in() ? 0 : 1;
-        $sql = $this->db->prepare("INSERT INTO `" . $this->users_voted . "`(`user_id`, `comment_id`, `vote_type`,`is_guest`)VALUES(%s,%d,%d,%d);", $user_id, $comment_id, $vote_type,$is_guest);
+        $sql = $this->db->prepare("INSERT INTO `" . $this->users_voted . "`(`user_id`, `comment_id`, `vote_type`,`is_guest`)VALUES(%s,%d,%d,%d);", $user_id, $comment_id, $vote_type, $is_guest);
         return $this->db->query($sql);
     }
 
@@ -140,9 +140,9 @@ class WC_DB_Helper {
                     $phrase_value = $phrase_value[WC_Helper::$datetime][0];
                 }
                 if ($this->is_phrase_exists($phrase_key)) {
-                    $sql = $this->db->prepare("UPDATE `" . $this->phrases . "` SET `phrase_value` = %s WHERE `phrase_key` = %s;", str_replace('"','&#34;',$phrase_value), $phrase_key);
+                    $sql = $this->db->prepare("UPDATE `" . $this->phrases . "` SET `phrase_value` = %s WHERE `phrase_key` = %s;", str_replace('"', '&#34;', $phrase_value), $phrase_key);
                 } else {
-                    $sql = $this->db->prepare("INSERT INTO `" . $this->phrases . "`(`phrase_key`, `phrase_value`)VALUES(%s, %s);", $phrase_key, str_replace('"','&#34;',$phrase_value));
+                    $sql = $this->db->prepare("INSERT INTO `" . $this->phrases . "`(`phrase_key`, `phrase_value`)VALUES(%s, %s);", $phrase_key, str_replace('"', '&#34;', $phrase_value));
                 }
                 $this->db->query($sql);
             }
@@ -307,11 +307,12 @@ class WC_DB_Helper {
      * create unsubscribe link 
      */
     public function wc_unsubscribe_link($id, $email, $subscribtion_type) {
+        global $wp_rewrite;
         $sql_subscriber_data = $this->db->prepare("SELECT `id`, `post_id`, `activation_key` FROM `" . $this->email_notification . "` WHERE `subscribtion_type` = %s AND `subscribtion_id` = %d  AND `email` LIKE %s", $subscribtion_type, $id, $email);
         $wc_unsubscribe = $this->db->get_row($sql_subscriber_data, ARRAY_A);
         $post_id = $wc_unsubscribe['post_id'];
-
-        $wc_unsubscribe_link = get_permalink($post_id) . "?wpdiscuzSubscribeID=" . $wc_unsubscribe['id'] . "&key=" . $wc_unsubscribe['activation_key'] . '&#wc_unsubscribe_message';
+        $wc_unsubscribe_link = !$wp_rewrite->using_permalinks() ?  get_permalink($post_id) . "&" : get_permalink($post_id) . "?" ;
+        $wc_unsubscribe_link .= "wpdiscuzSubscribeID=" . $wc_unsubscribe['id'] . "&key=" . $wc_unsubscribe['activation_key'] . '&#wc_unsubscribe_message';
         return $wc_unsubscribe_link;
     }
 
@@ -319,10 +320,12 @@ class WC_DB_Helper {
      * generate confirm link
      */
     public function wc_confirm_link($subscrib_id) {
+        global $wp_rewrite;
         $sql_subscriber_data = $this->db->prepare("SELECT `id`, `post_id`, `activation_key` FROM `" . $this->email_notification . "` WHERE `id` = %d ", $subscrib_id);
         $wc_confirm = $this->db->get_row($sql_subscriber_data, ARRAY_A);
         $post_id = $wc_confirm['post_id'];
-        $wc_confirm_link = get_permalink($post_id) . "?wpdiscuzConfirmID=" . $wc_confirm['id'] . "&wpdiscuzConfirmKey=" . $wc_confirm['activation_key'] . '&wpDiscuzComfirm=yes&#wc_unsubscribe_message';
+        $wc_confirm_link = !$wp_rewrite->using_permalinks() ?  get_permalink($post_id) . "&" : get_permalink($post_id) . "?" ;
+        $wc_confirm_link .= "wpdiscuzConfirmID=" . $wc_confirm['id'] . "&wpdiscuzConfirmKey=" . $wc_confirm['activation_key'] . '&wpDiscuzComfirm=yes&#wc_unsubscribe_message';
         return $wc_confirm_link;
     }
 
@@ -346,7 +349,7 @@ class WC_DB_Helper {
         $sql_alter = "ALTER TABLE `" . $this->phrases . "` MODIFY `phrase_value` TEXT NOT NULL;";
         $this->db->query($sql_alter);
     }
-    
+
     public function wc_alter_voting_table() {
         $sql_alter = "ALTER TABLE `" . $this->users_voted . "` MODIFY `user_id` VARCHAR(255) NOT NULL, ADD COLUMN `is_guest` TINYINT(1) DEFAULT 0, ADD INDEX `is_guest` (`is_guest`);";
         $this->db->query($sql_alter);

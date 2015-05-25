@@ -92,6 +92,16 @@
                 </td>
             </tr>
 
+            <tr valign="top">
+                <th scope="row">
+                    <?php _e('Comment text max length', WC_Core::$TEXT_DOMAIN); ?> 
+                </th>
+                <td>
+                    <label for="wc_comment_text_max_length">
+                        <input type="number" value="<?php echo isset($this->wc_options_serialized->wc_comment_text_max_length) ? $this->wc_options_serialized->wc_comment_text_max_length : ''; ?>" name="wc_comment_text_max_length" id="wc_comment_text_max_length" />
+                    </label><br/>
+                </td>
+            </tr>
 
             <tr valign="top">
                 <th scope="row">
@@ -194,7 +204,17 @@
             </label>
         </td>
         </tr>
-
+        <tr valign="top">
+            <th scope="row" >
+                <?php _e('Use Plugin .PO/.MO files', WC_Core::$TEXT_DOMAIN); ?>
+                <p style="font-size:13px; color:#999999; width:80%; padding-left:0px; margin-left:0px;"><?php _e('wpDiscuz phrase system allows you to translate all front-end phrases. However if you have a multi-language website it\'ll not allow you to add more than one language translation. The only way to get it is the plugin translation files (.PO / .MO). If wpDiscuz has the languages you need you should check this option to disable phrase system and it\'ll automatically translate all phrases based on language files according to current language.', WC_Core::$TEXT_DOMAIN); ?></p>
+        	</th>
+            <td colspan="3">                                
+                <label for="wc_is_use_po_mo">
+                    <input type="checkbox" <?php checked($this->wc_options_serialized->wc_is_use_po_mo == 1) ?> value="1" name="wc_is_use_po_mo" id="wc_is_use_po_mo" />
+                </label>
+            </td>
+        </tr>
 
         <tr valign="top">
             <th scope="row" >

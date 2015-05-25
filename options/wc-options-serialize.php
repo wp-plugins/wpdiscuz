@@ -99,7 +99,23 @@ class WC_Options_Serialize {
      * Default Value - Unchecked
      */
     public $wc_weburl_show_hide;
+    
+    /*
+     * Type - Checkbox
+     * Available Values - Checked/Unchecked
+     * Description - Show/Hide header text
+     * Default Value - Unchecked
+     */
+    public $wc_header_text_show_hide;
 
+    
+    /*
+     * Type - Checkbox
+     * Available Values - Checked/Unchecked
+     * Description - Show/Hide user avatar
+     * Default Value - Unchecked
+     */
+    public $wc_avatar_show_hide;
     /**
      * Type - Radiobutton
      * Available Values - Yes/No
@@ -322,6 +338,23 @@ class WC_Options_Serialize {
      * Default Value - Unchecked
      */
     public $wc_show_plugin_powerid_by;
+    
+    /**
+     * Type - Checkbox
+     * Available Values - Checked/Unchecked
+     * Description - Use .PO/.MO files
+     * Default Value - Unchecked
+     */
+    public $wc_is_use_po_mo;
+    
+    /**
+     * Type - Input
+     * Available Values - Integer (comment text length)
+     * Description - Define comment text max length (leave blank for unlimit length)
+     * Default Value - Unlimit
+     */
+    public $wc_comment_text_max_length;
+    
 
     function __construct($wc_db_helper) {
         $this->wc_db_helper = $wc_db_helper;
@@ -345,6 +378,8 @@ class WC_Options_Serialize {
         $this->wc_share_buttons_show_hide = $options['wc_share_buttons_show_hide'];
         $this->wc_captcha_show_hide = $options['wc_captcha_show_hide'];
         $this->wc_weburl_show_hide = isset($options['wc_weburl_show_hide']) ? $options['wc_weburl_show_hide'] : 0;
+        $this->wc_header_text_show_hide = isset($options['wc_header_text_show_hide']) ? $options['wc_header_text_show_hide'] : 0;
+        $this->wc_avatar_show_hide = isset($options['wc_avatar_show_hide']) ? $options['wc_avatar_show_hide'] : 0;
         $this->wc_user_must_be_registered = $options['wc_user_must_be_registered'];
         $this->wc_is_name_field_required = isset($options['wc_is_name_field_required']) ? $options['wc_is_name_field_required'] : 0;
         $this->wc_is_email_field_required = isset($options['wc_is_email_field_required']) ? $options['wc_is_email_field_required'] : 0;
@@ -371,6 +406,8 @@ class WC_Options_Serialize {
         $this->wc_new_loaded_comment_bg_color = isset($options['wc_new_loaded_comment_bg_color']) ? $options['wc_new_loaded_comment_bg_color'] : "rgb(255,250,214)";
         $this->wc_custom_css = isset($options['wc_custom_css']) ? $options['wc_custom_css'] : '.comments-area{width:auto; margin: 0 auto;}';
         $this->wc_show_plugin_powerid_by = isset($options['wc_show_plugin_powerid_by']) ? $options['wc_show_plugin_powerid_by'] : 0;
+        $this->wc_is_use_po_mo = isset($options['wc_is_use_po_mo']) ? $options['wc_is_use_po_mo'] : 0;
+        $this->wc_comment_text_max_length = isset($options['wc_comment_text_max_length']) ? $options['wc_comment_text_max_length'] : '';
     }
 
     /**
@@ -469,6 +506,7 @@ class WC_Options_Serialize {
             'wc_comment_not_edited' => __('You\'ve not made any changes', WC_Core::$TEXT_DOMAIN),
             'wc_comment_edit_save_button' => __('Save', WC_Core::$TEXT_DOMAIN),
             'wc_comment_edit_cancel_button' => __('Cancel', WC_Core::$TEXT_DOMAIN),
+            'wc_msg_comment_text_max_length' => __('Comment text is too long (maximum %s characters allowed)', WC_Core::$TEXT_DOMAIN)
         );
     }
 
@@ -486,6 +524,8 @@ class WC_Options_Serialize {
             'wc_share_buttons_show_hide' => $this->wc_share_buttons_show_hide,
             'wc_captcha_show_hide' => $this->wc_captcha_show_hide,
             'wc_weburl_show_hide' => $this->wc_weburl_show_hide,
+            'wc_header_text_show_hide' => $this->wc_header_text_show_hide,
+            'wc_avatar_show_hide' => $this->wc_avatar_show_hide,
             'wc_user_must_be_registered' => $this->wc_user_must_be_registered,
             'wc_is_name_field_required' => $this->wc_is_name_field_required,
             'wc_is_email_field_required' => $this->wc_is_email_field_required,
@@ -511,7 +551,9 @@ class WC_Options_Serialize {
             'wc_input_border_color' => $this->wc_input_border_color,
             'wc_new_loaded_comment_bg_color' => $this->wc_new_loaded_comment_bg_color,
             'wc_custom_css' => $this->wc_custom_css,
-            'wc_show_plugin_powerid_by' => $this->wc_show_plugin_powerid_by
+            'wc_show_plugin_powerid_by' => $this->wc_show_plugin_powerid_by,
+            'wc_is_use_po_mo' => $this->wc_is_use_po_mo,
+            'wc_comment_text_max_length' => $this->wc_comment_text_max_length
         );
 
         return $options;
@@ -535,6 +577,8 @@ class WC_Options_Serialize {
             'wc_share_buttons_show_hide' => '0',
             'wc_captcha_show_hide' => '0',
             'wc_weburl_show_hide' => '1',
+            'wc_header_text_show_hide' => '0',
+            'wc_avatar_show_hide' => '0',
             'wc_user_must_be_registered' => '0',
             'wc_is_name_field_required' => '1',
             'wc_is_email_field_required' => '1',
@@ -560,14 +604,18 @@ class WC_Options_Serialize {
             'wc_input_border_color' => '#d9d9d9',
             'wc_new_loaded_comment_bg_color' => 'rgb(255,250,214)',
             'wc_custom_css' => '.comments-area{width:auto;}',
-            'wc_show_plugin_powerid_by' => '0'
+            'wc_show_plugin_powerid_by' => '0',
+            'wc_is_use_po_mo' => '0',
+            'wc_comment_text_max_length' => ''
         );
         add_option($this->wc_options_slug, serialize($options));
     }
 
     public function init_phrases_on_load() {
-        if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
+        if (!$this->wc_is_use_po_mo && $this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
             $this->wc_phrases = $this->wc_db_helper->get_phrases();
+        }else{
+            $this->init_phrases();
         }
     }
 

@@ -25,16 +25,16 @@ class WC_Comment {
         $this->comment_author = $comment->comment_author;
         $this->comment_author_email = $comment->comment_author_email;
         $this->comment_author_url = $comment->comment_author_url;
-        $this->comment_author_IP = $comment->comment_author_IP;
+        $this->comment_author_IP = '';
         $this->comment_date = $comment->comment_date;
         $this->comment_date_gmt = $comment->comment_date_gmt;
         $this->comment_content = $comment->comment_content;
-        $this->comment_karma = $comment->comment_karma;
-        $this->comment_approved = $comment->comment_approved;
-        $this->comment_agent = $comment->comment_agent;
-        $this->comment_type = $comment->comment_type;
+        $this->comment_karma = '';
+        $this->comment_approved = '';
+        $this->comment_agent = '';
+        $this->comment_type = '';
         $this->comment_parent = $comment->comment_parent;
-        $this->user_id = $comment->user_id;
+        $this->user_id = '';
         $this->votes = $this->get_vote_count($comment->comment_ID);
     }
 

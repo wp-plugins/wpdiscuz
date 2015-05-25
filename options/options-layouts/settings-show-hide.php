@@ -82,6 +82,26 @@
                     </label>
                 </td>
             </tr>
+                    <tr valign="top">
+                        <th scope="row">
+                    <?php _e('Hide header text', WC_Core::$TEXT_DOMAIN); ?>
+                </th>
+                <td>                                
+                    <label for="wc_header_text_show_hide">
+                        <input type="checkbox" <?php checked($this->wc_options_serialized->wc_header_text_show_hide == 1) ?> value="1" name="wc_header_text_show_hide" id="wc_header_text_show_hide" />
+                    </label>
+                </td>
+            </tr>
+                    <tr valign="top">
+                        <th scope="row">
+                    <?php _e('Hide user avatar', WC_Core::$TEXT_DOMAIN); ?>
+                </th>
+                <td>                                
+                    <label for="wc_avatar_show_hide">
+                        <input type="checkbox" <?php checked($this->wc_options_serialized->wc_avatar_show_hide == 1) ?> value="1" name="wc_avatar_show_hide" id="wc_avatar_show_hide" />
+                    </label>
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>

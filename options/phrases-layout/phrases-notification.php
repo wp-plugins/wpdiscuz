@@ -185,6 +185,16 @@
             </tr>
             <tr valign="top">
                 <th scope="row">
+                    <?php _e('Message if comment content length is too long', WC_Core::$TEXT_DOMAIN); ?>
+                </th>
+                <td colspan="3">                                
+                    <label for="wc_msg_comment_text_max_length">
+                        <input type="text" value="<?php echo $this->wc_options_serialized->wc_phrases['wc_msg_comment_text_max_length']; ?>" name="wc_msg_comment_text_max_length" id="wc_msg_comment_text_max_length" />
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row">
                     <?php _e('Message if comment was not updated', WC_Core::$TEXT_DOMAIN); ?>
                 </th>
                 <td colspan="3">                                

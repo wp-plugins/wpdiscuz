@@ -16,6 +16,29 @@ class WC_Helper {
     public static $second = 'wc_second_text';
     public static $seconds = 'wc_second_text_plural';
     private $wc_options_serialized;
+    public $wc_allowed_tags = array(
+            'br' => array(),
+            'a' => array('href' => array(), 'title' => array(), 'target' => array(), 'rel' => array(), 'download' => array(), 'hreflang' => array(), 'media' => array(), 'type' => array()),
+            'i' => array(),
+            'b' => array(),
+            'u' => array(),
+            'strong' => array(),
+            's' => array(),
+            'p' => array(),
+            'img' => array('src' => array(), 'width' => array(), 'height' => array(), 'alt' => array()),
+            'blockquote' => array('cite'=>array()),
+            'ul'=> array(),
+            'li'=> array(),
+            'ol'=> array(),
+            'code'=> array(),
+            'em'=> array(),
+            'abbr'=>array('title'=>array()),
+            'q'=>array('cite'=>array()),
+            'acronym'=>array('title'=>array()),
+            'cite'=>array(),
+            'strike'=>array(),
+            'del'=>array('datetime'=>array()),
+        );
 
     function __construct($wc_options_serialize) {
         $this->wc_options_serialized = $wc_options_serialize;

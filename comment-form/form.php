@@ -3,11 +3,7 @@ global $post, $wc_core, $current_user;
 get_currentuserinfo();
 
 error_reporting(0);
-
-if ($wc_core->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
-    $wc_core->wc_options_serialized->wc_phrases = $wc_core->wc_db_helper->get_phrases();
-}
-
+$wc_core->wc_options_serialized->init_phrases_on_load();
 $wc_comment_list_update_type = $wc_core->wc_options_serialized->wc_comment_list_update_type;
 ?>
 <script type="text/javascript">
@@ -16,6 +12,7 @@ $wc_comment_list_update_type = $wc_core->wc_options_serialized->wc_comment_list_
     wpdiscuzValidator.message['empty'] = '<?php echo $wc_core->wc_options_serialized->wc_phrases['wc_error_empty_text']; ?>';
     wpdiscuzValidator.message['email'] = '<?php echo $wc_core->wc_options_serialized->wc_phrases['wc_error_email_text']; ?>';
     wpdiscuzValidator.message['url'] = '<?php echo $wc_core->wc_options_serialized->wc_phrases['wc_error_url_text']; ?>';
+    wpdiscuzValidator.message['max'] = '<?php echo sprintf($wc_core->wc_options_serialized->wc_phrases['wc_msg_comment_text_max_length'], $wc_core->wc_options_serialized->wc_comment_text_max_length); ?>';
 
     jQuery(document).ready(function ($) {
         $(document).delegate('.wc-toggle', 'click', function () {
@@ -54,11 +51,14 @@ $header_text .= ($post->comment_count > 1) ? $wc_core->wc_options_serialized->wc
 $header_text .= ' ' . $wc_core->wc_options_serialized->wc_phrases['wc_header_on_text'];
 $header_text .= ' "' . get_the_title($post) . '"';
 
-$wc_main_form_comment_object = (object)array('user_id' => $current_user->ID ,'comment_author_email' => $current_user->user_email, 'comment_type' => '' );
+$wc_main_form_comment_object = (object) array('user_id' => $current_user->ID, 'comment_author_email' => $current_user->user_email, 'comment_type' => '');
 
 $wc_is_name_field_required = ($wc_core->wc_options_serialized->wc_is_name_field_required) ? 'required="required"' : '';
 $wc_is_email_field_required = ($wc_core->wc_options_serialized->wc_is_email_field_required) ? 'required="required"' : '';
-ob_start();do_action('comment_form_top');$wc_comment_form_top_content = ob_get_contents();ob_clean();$wc_comment_form_top_content = wpdiscuz_close_divs($wc_comment_form_top_content);?>
+
+if( ini_get('output_buffering') ){ $wc_ob_allowed = true; ob_start(); do_action('comment_form_top'); $wc_comment_form_top_content = ob_get_contents(); ob_clean(); $wc_comment_form_top_content = wpdiscuz_close_divs($wc_comment_form_top_content); } else{ $wc_ob_allowed = false; }
+$wc_validate_comment_text_length = (intval($wc_core->wc_options_serialized->wc_comment_text_max_length)) ? 'data-validate-length-range="1,' . $wc_core->wc_options_serialized->wc_comment_text_max_length . '"' : '';
+?>
 <div style="clear:both"></div>
 
 <?php if (comments_open($post->ID)) { ?>
@@ -105,15 +105,17 @@ ob_start();do_action('comment_form_top');$wc_comment_form_top_content = ob_get_c
         }
         ?>
         <div id="wpcomm">
-            <div class="wc-comment-bar">
-                <p class="wc-comment-title">
-                    <?php echo ($post->comment_count) ? $header_text : $wc_core->wc_options_serialized->wc_phrases['wc_be_the_first_text']; ?>
-                </p>
-                <div style="clear:both"></div>
-            </div> 
-            <?php do_action('comment_form_before');?>
+            <?php if (!$wc_core->wc_options_serialized->wc_header_text_show_hide) { ?>
+                <div class="wc-comment-bar">
+                    <p class="wc-comment-title">
+                        <?php echo ($post->comment_count) ? $header_text : $wc_core->wc_options_serialized->wc_phrases['wc_be_the_first_text']; ?>
+                    </p>
+                    <div style="clear:both"></div>
+                </div> 
+            <?php } ?>
+            <?php do_action('comment_form_before'); ?>
             <div class="wc_social_plugin_wrapper">
-                <?php echo $wc_comment_form_top_content; ?>
+                <?php if( $wc_ob_allowed ){ echo $wc_comment_form_top_content; } else{ do_action('comment_form_top'); }?>
             </div>
             <div class="wc-form-wrapper">
                 <?php
@@ -122,10 +124,16 @@ ob_start();do_action('comment_form_top');$wc_comment_form_top_content = ob_get_c
 
                     <form action="" method="post" id="wc_comm_form-<?php echo $unique_id; ?>" class="wc_comm_form wc_main_comm_form">
                         <div class="wc-field-comment">
-                            <div class="wc-field-avatararea">
-                                <?php echo $wc_core->wc_helper->get_comment_author_avatar($wc_main_form_comment_object); ?>                        
-                            </div>
-                            <div class="wpdiscuz-item wc-field-textarea"><textarea id="wc_comment-<?php echo $unique_id; ?>" class="wc_comment wc_field_input" name="wc_comment" required="required" placeholder="<?php echo $textarea_placeholder; ?>"></textarea></div>
+                            <?php if (!$wc_core->wc_options_serialized->wc_avatar_show_hide) { ?>
+                                <div class="wc-field-avatararea">
+                                    <?php echo $wc_core->wc_helper->get_comment_author_avatar($wc_main_form_comment_object); ?>                        
+                                </div>
+                            <?php } ?>
+                            <div class="wpdiscuz-item wc-field-textarea" <?php
+                            if ($wc_core->wc_options_serialized->wc_avatar_show_hide) {
+                                echo ' style="margin-left: 0;"';
+                            }
+                            ?>><textarea <?php echo $wc_validate_comment_text_length; ?> id="wc_comment-<?php echo $unique_id; ?>" class="wc_comment wc_field_input" name="wc_comment" required="required" placeholder="<?php echo $textarea_placeholder; ?>"></textarea></div>
                             <div style="clear:both"></div>
                         </div>
                         <div id="wc-form-footer-<?php echo $unique_id; ?>" class="wc-form-footer">
@@ -140,10 +148,10 @@ ob_start();do_action('comment_form_top');$wc_comment_form_top_content = ob_get_c
                                 <?php if (!$wc_core->wc_options_serialized->wc_captcha_show_hide) { ?>
                                     <?php if (!is_user_logged_in()) { ?>
                                         <div class="wc-field-captcha wpdiscuz-item">
-                                            <input id="wc_captcha-<?php echo $unique_id; ?>" class="wc_field_input wc_field_captcha" name="wc_captcha" required="required" value="" type="text" />
+                                            <input id="wc_captcha-<?php echo $unique_id; ?>" class="wc_field_input wc_field_captcha" name="wc_captcha" required="required" value="" type="text" maxlength="5"/>
                                             <span class="wc-label wc-captcha-label">
-                                                <img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/captcha/captcha.php?comm_id=' . $post->ID . '-' . 0); ?>" id="wc_captcha_img-<?php echo $unique_id; ?>" rel="nofollow"/>
-                                                <img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/refresh-16x16.png'); ?>" id="wc_captcha_refresh_img-<?php echo $unique_id; ?>" class="wc_captcha_refresh_img" rel="nofollow"/>
+                                                <img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/captcha/captcha.php?comm_id=' . $post->ID . '-' . 0); ?>" id="wc_captcha_img-<?php echo $unique_id; ?>" rel="nofollow" noimageindex />
+                                                <img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/refresh-16x16.png'); ?>" id="wc_captcha_refresh_img-<?php echo $unique_id; ?>" class="wc_captcha_refresh_img" rel="nofollow" noimageindex/>
                                             </span>
                                             <span class="captcha_msg"><?php echo $wc_core->wc_options_serialized->wc_phrases['wc_captcha_text']; ?></span>
                                         </div>
@@ -223,7 +231,7 @@ ob_start();do_action('comment_form_top');$wc_comment_form_top_content = ob_get_c
                         <input type="hidden" name="wc_comment_post_ID" value="<?php echo $post->ID; ?>" id="wc_comment_post_ID-<?php echo $unique_id; ?>" />
                         <input type="hidden" name="wc_comment_parent"  value="0" id="wc_comment_parent-<?php echo $unique_id; ?>" />
                     </form>
-                    
+
                 <?php } else { ?>
                     <p class="wc-must-login"><?php echo $wc_core->wc_options_serialized->wc_phrases['wc_you_must_be_text']; ?> <a href="<?php echo wp_login_url(); ?>"><?php echo $wc_core->wc_options_serialized->wc_phrases['wc_logged_in_text']; ?></a> <?php echo $wc_core->wc_options_serialized->wc_phrases['wc_to_post_comment_text']; ?></p>
                     <?php

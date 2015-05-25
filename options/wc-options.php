@@ -44,6 +44,8 @@ class WC_Options {
             $this->wc_options_serialized->wc_share_buttons_show_hide = isset($_POST['wc_share_buttons_show_hide']) ? $_POST['wc_share_buttons_show_hide'] : 0;
             $this->wc_options_serialized->wc_captcha_show_hide = isset($_POST['wc_captcha_show_hide']) ? $_POST['wc_captcha_show_hide'] : 0;
             $this->wc_options_serialized->wc_weburl_show_hide = isset($_POST['wc_weburl_show_hide']) ? $_POST['wc_weburl_show_hide'] : 0;
+            $this->wc_options_serialized->wc_header_text_show_hide = isset($_POST['wc_header_text_show_hide']) ? $_POST['wc_header_text_show_hide'] : 0;
+            $this->wc_options_serialized->wc_avatar_show_hide = isset($_POST['wc_avatar_show_hide']) ? $_POST['wc_avatar_show_hide'] : 0;
             $this->wc_options_serialized->wc_user_must_be_registered = isset($_POST['wc_user_must_be_registered']) ? $_POST['wc_user_must_be_registered'] : 0;
             $this->wc_options_serialized->wc_is_name_field_required = isset($_POST['wc_is_name_field_required']) ? $_POST['wc_is_name_field_required'] : 0;
             $this->wc_options_serialized->wc_is_email_field_required = isset($_POST['wc_is_email_field_required']) ? $_POST['wc_is_email_field_required'] : 0;
@@ -70,6 +72,8 @@ class WC_Options {
             $this->wc_options_serialized->wc_new_loaded_comment_bg_color = isset($_POST['wc_new_loaded_comment_bg_color']) ? $_POST['wc_new_loaded_comment_bg_color'] : 'rgb(254,254,254)';
             $this->wc_options_serialized->wc_custom_css = isset($_POST['wc_custom_css']) ? $_POST['wc_custom_css'] : '.comments-area{width:auto; margin: 0 auto;}';
             $this->wc_options_serialized->wc_show_plugin_powerid_by = isset($_POST['wc_show_plugin_powerid_by']) ? $_POST['wc_show_plugin_powerid_by'] : 0;
+            $this->wc_options_serialized->wc_is_use_po_mo = isset($_POST['wc_is_use_po_mo']) ? $_POST['wc_is_use_po_mo'] : 0;
+            $this->wc_options_serialized->wc_comment_text_max_length = (isset($_POST['wc_comment_text_max_length']) && intval($_POST['wc_comment_text_max_length']) && intval($_POST['wc_comment_text_max_length']) > 0) ? intval($_POST['wc_comment_text_max_length']) : '';
 
             $this->wc_options_serialized->update_options();
         }
@@ -111,7 +115,7 @@ class WC_Options {
                             </thead>
                             <tr valign="top">
                                 <td style="background:#FFF; text-align:left; font-size:13px;">
-                                    wpDiscuz is alsow available for WooCommerce. The WooCommerce Comments plugin name is <a href="https://wordpress.org/plugins/woodiscuz-woocommerce-comments/" style="color:#993399; text-decoration:underline;"><strong>WooDiscuz</strong></a>. It adds a new "Discussion" Tab on product page and allows your customers ask Pre-Sale Questions and discuss about your products. 
+                                    wpDiscuz is also available for WooCommerce. The WooCommerce Comments plugin name is <a href="https://wordpress.org/plugins/woodiscuz-woocommerce-comments/" style="color:#993399; text-decoration:underline;"><strong>WooDiscuz</strong></a>. It adds a new "Discussion" Tab on product page and allows your customers ask Pre-Sale Questions and discuss about your products. 
                                 </td>
                             </tr>
                         </table><br />
@@ -126,7 +130,7 @@ class WC_Options {
                                 <td style="background:#FFF; text-align:left; font-size:13px;">
                                     We do our best to make wpDiscuz the best self-hosted comment plugin for Wordpress. Thousands users are currently satisfied with wpDiscuz but only about 1% of them give us 5 start rating.
                                     However we have a very few users who for some very specific reasons are not satisfied and they are very active in decreasing wpDiscuz rating. 
-                                    Please help us keep plugin rating high, encouraging us to develop and maintain this plugin. Take a one minute to leave <a href="https://wordpress.org/support/view/plugin-reviews/wpdiscuz?filter=5" title="Go to wpDiscuz Reviews section on Wordpress.org"><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/'); ?>files/img/gc/5s.png" border="0" align="absmiddle" /></a> star review on <a href="https://wordpress.org/support/view/plugin-reviews/wpdiscuz?filter=5">Wordpress.org</a>
+                                    Please help us keep plugin rating high, encouraging us to develop and maintain this plugin. Take a one minute to leave <a href="https://wordpress.org/support/view/plugin-reviews/wpdiscuz?filter=5" title="Go to wpDiscuz Reviews section on Wordpress.org"><img src="<?php echo plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/'); ?>files/img/gc/5s.png" border="0" align="absmiddle" /></a> star review on <a href="https://wordpress.org/support/view/plugin-reviews/wpdiscuz?filter=5">Wordpress.org</a>. Thank You!
                                     <hr style="border-style:dotted;" />
                                     <div style="width:200px; float:right;">
                                         <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
@@ -323,12 +327,11 @@ class WC_Options {
             $this->wc_options_serialized->wc_phrases['wc_comment_not_edited'] = $_POST['wc_comment_not_edited'];
             $this->wc_options_serialized->wc_phrases['wc_comment_edit_save_button'] = $_POST['wc_comment_edit_save_button'];
             $this->wc_options_serialized->wc_phrases['wc_comment_edit_cancel_button'] = $_POST['wc_comment_edit_cancel_button'];
+            $this->wc_options_serialized->wc_phrases['wc_msg_comment_text_max_length'] = $_POST['wc_msg_comment_text_max_length'];
 
             $this->wc_db_helper->update_phrases($this->wc_options_serialized->wc_phrases);
         }
-        if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
-            $this->wc_options_serialized->wc_phrases = $this->wc_db_helper->get_phrases();
-        }
+            $this->wc_options_serialized->init_phrases_on_load();
         ?>
         <div class="wrap wpdiscuz_options_page">
 

@@ -6,13 +6,15 @@ class WC_Comment_Template_Builder {
     public $wc_db_helper;
     public $wc_options;
     public $wc_options_serialized;
+    private $wc_validate_comment_text_length;
 
     function __construct($wc_helper, $wc_db_helper, $wc_options, $wc_options_serialized) {
         $this->wc_helper = $wc_helper;
         $this->wc_db_helper = $wc_db_helper;
         $this->wc_options = $wc_options;
         $this->wc_options_serialized = $wc_options_serialized;
-        add_action('plugins_loaded', array(&$this, 'init_phrases_on_load'), 2129);
+        add_action('plugins_loaded', array(&$this->wc_options_serialized, 'init_phrases_on_load'), 2129);
+        $this->wc_validate_comment_text_length = (intval($this->wc_options_serialized->wc_comment_text_max_length)) ? 'data-validate-length-range="1,' . $this->wc_options_serialized->wc_comment_text_max_length . '"' : '';
     }
 
     /**
@@ -25,19 +27,11 @@ class WC_Comment_Template_Builder {
         get_currentuserinfo();
 
 
-        $comment_content = wp_kses($comment->comment_content, array(
-            'br' => array(),
-            'a' => array('href' => array(), 'title' => array(), 'target' => array(), 'rel' => array(), 'download' => array(), 'hreflang' => array(), 'media' => array(), 'type' => array()),
-            'i' => array(),
-            'b' => array(),
-            'u' => array(),
-            'strong' => array(),
-            'p' => array(),
-            'img' => array('src' => array(), 'width' => array(), 'height' => array(), 'alt' => array())
-        ));
+        $comment_content = wp_kses($comment->comment_content, $this->wc_helper->wc_allowed_tags);
 
         $comment_content = $this->wc_helper->make_clickable($comment_content);
         $comment_content = apply_filters('comment_text', $comment_content, $comment, $args);
+        $hide_avatar_style = $this->wc_options_serialized->wc_avatar_show_hide ? 'style = "margin-left : 0;"' : '';
 
         $vote_cls = '';
         $vote_title_text = '';
@@ -80,11 +74,11 @@ class WC_Comment_Template_Builder {
         $share_text = $this->wc_options_serialized->wc_phrases['wc_share_text'];
         $comment_wrapper_class = ($comment->comment_parent) ? 'wc-comment wc-reply' : 'wc-comment';
         $textarea_placeholder = $this->get_textarea_placeholder($comment);
-
-        $vote_count = ($comment->votes) ? $comment->votes : 0;
+        $vote_count_meta = get_comment_meta($comment->comment_ID, 'wpdiscuz_votes', true);
+        $vote_count = $vote_count_meta ? $vote_count_meta : 0;
         $unique_id = $this->get_unique_id($comment);
 
-        $wc_author_name = $comment->comment_author ? $comment->comment_author : __('Anonymous', WC_Core::$TEXT_DOMAIN);
+        $wc_author_name = $this->get_author_name($comment);
         $wc_comm_author_avatar = $this->wc_helper->get_comment_author_avatar($comment);
         $wc_profile_url = $this->get_profile_url($user);
 
@@ -124,15 +118,17 @@ class WC_Comment_Template_Builder {
         $comment_content_class = ($wc_visible_parent_comment_ids != null && !in_array($comment->comment_ID, $wc_visible_parent_comment_ids)) ? ' wc_new_loaded_comment' : '';
 
         $output = '<div id="wc-comm-' . $unique_id . '" class="' . $comment_wrapper_class . ' ' . $wc_author_class . ' ' . $parent_comment . ' wc_comment_level-' . $depth . '">';
-        $output .= '<div class="wc-comment-left" id="comment-' . $comment->comment_ID . '">' . $wc_comm_author_avatar;
-        if (!$this->wc_options_serialized->wc_author_titles_show_hide) {
-            $output .= '<div class="' . $wc_author_class . ' wc-comment-label">' . $author_title . '</div>';
+        if (!$this->wc_options_serialized->wc_avatar_show_hide) {
+            $output .= '<div class="wc-comment-left" id="comment-' . $comment->comment_ID . '">' . $wc_comm_author_avatar;
+            if (!$this->wc_options_serialized->wc_author_titles_show_hide) {
+                $output .= '<div class="' . $wc_author_class . ' wc-comment-label">' . $author_title . '</div>';
+            }
+            if (class_exists('userpro_api') && $comment->user_id) {
+                $output .= userpro_show_badges($comment->user_id, $inline = true);
+            }
+            $output .= '</div>';
         }
-        if (class_exists('userpro_api') && $comment->user_id) {
-            $output .= userpro_show_badges($comment->user_id, $inline = true);
-        }
-        $output .= '</div>';
-        $output .= '<div class="wc-comment-right ' . $comment_content_class . '">';
+        $output .= '<div class="wc-comment-right ' . $comment_content_class . '" ' . $hide_avatar_style . '>';
         $output .= '<div class="wc-comment-header"><div class="wc-comment-author">' . $wc_author_name . '</div><div class="wc-comment-date">' . $posted_date . '</div><div style="clear:both"></div></div>';
         $output .= '<div class="wc-comment-text">' . $comment_content . '</div>';
         $output .= '<div class="wc-comment-footer">';
@@ -201,8 +197,12 @@ class WC_Comment_Template_Builder {
 
             $output_form = '<div class="wc-form-wrapper wc-secondary-forms-wrapper" id="wc-secondary-forms-wrapper-' . $unique_id . '">';
             $output_form .= '<div class="wc-secondary-forms-social-content" id="wc-secondary-forms-social-content-' . $unique_id . '"></div>';
-            $output_form .= '<form action="" method="post" id="wc_comm_form-' . $unique_id . '" class="wc_comm_form wc_secondary_form">';
-            $output_form .= '<div class="wc-field-comment"><div class="wc-field-avatararea">' . $this->wc_helper->get_comment_author_avatar($comment) . '</div><div class="wc-field-textarea wpdiscuz-item"><textarea id="wc_comment-' . $unique_id . '" class="wc_comment wc_field_input" name="wc_comment" required="required" placeholder="' . $textarea_placeholder . '"></textarea></div><div style="clear:both"></div></div>';
+            $output_form .= '<form action="" method="post" id="wc_comm_form-' . $unique_id . '" class="wc_comm_form wc_secondary_form"><div class="wc-field-comment">';
+            if (!$this->wc_options_serialized->wc_avatar_show_hide) {
+                $wc_reply_form_comment_object = (object) array('user_id' => $current_user->ID, 'comment_author_email' => $current_user->user_email, 'comment_type' => '');
+                $output_form .= '<div class="wc-field-avatararea">' . get_avatar($wc_reply_form_comment_object) . '</div>';
+            }
+            $output_form .= '<div class="wc-field-textarea wpdiscuz-item" ' . $hide_avatar_style . '><textarea ' . $this->wc_validate_comment_text_length . ' id="wc_comment-' . $unique_id . '" class="wc_comment wc_field_input" name="wc_comment" required="required" placeholder="' . $textarea_placeholder . '"></textarea></div><div style="clear:both"></div></div>';
 
             $output_form .= '<div id="wc-form-footer-' . $unique_id . '" class="wc-form-footer">';
 
@@ -226,9 +226,9 @@ class WC_Comment_Template_Builder {
             if (!$this->wc_options_serialized->wc_captcha_show_hide) {
                 if (!is_user_logged_in()) {
                     $output_form .= '<div class="wc-field-captcha wpdiscuz-item">';
-                    $output_form .= '<input id="wc_captcha-' . $unique_id . '" class="wc_field_input wc_field_captcha" name="wc_captcha" required="required" value="" type="text" /><span class="wc-label wc-captcha-label">';
-                    $output_form .= '<img rel="nofollow" src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/captcha/captcha.php?comm_id=' . $comment->comment_post_ID . '-' . $comment->comment_ID) . '" id="wc_captcha_img-' . $unique_id . '" />';
-                    $output_form .= '<img rel="nofollow" src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/refresh-16x16.png') . '" id="wc_captcha_refresh_img-' . $unique_id . '" class="wc_captcha_refresh_img" />';
+                    $output_form .= '<input id="wc_captcha-' . $unique_id . '" class="wc_field_input wc_field_captcha" name="wc_captcha" required="required" value="" type="text" maxlength="5" /><span class="wc-label wc-captcha-label">';
+                    $output_form .= '<img rel="nofollow" noimageindex src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/captcha/captcha.php?comm_id=' . $comment->comment_post_ID . '-' . $comment->comment_ID) . '" id="wc_captcha_img-' . $unique_id . '" />';
+                    $output_form .= '<img rel="nofollow" noimageindex src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/refresh-16x16.png') . '" id="wc_captcha_refresh_img-' . $unique_id . '" class="wc_captcha_refresh_img" />';
                     $output_form .= '</span><span class="captcha_msg">' . $this->wc_options_serialized->wc_phrases['wc_captcha_text'] . '</span></div>';
                 }
             }
@@ -345,13 +345,6 @@ class WC_Comment_Template_Builder {
         return $user_can_comment;
     }
 
-    public function init_phrases_on_load() {
-
-        if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
-            $this->wc_options_serialized->wc_phrases = $this->wc_db_helper->get_phrases();
-        }
-    }
-
     /**
      * 
      * get profile url 
@@ -383,6 +376,17 @@ class WC_Comment_Template_Builder {
         }
 
         return $wc_profile_url_filter ? $wc_profile_url_filter : $wc_profile_url;
+    }
+
+    public function get_author_name($comment) {
+        if (class_exists('UM_API') && isset($comment->user_id) && !empty($comment->user_id)) {
+            um_fetch_user($comment->user_id);
+            $author_name = um_user('display_name');
+            um_reset_user();
+        } else {
+            $author_name = $comment->comment_author ? $comment->comment_author : __('Anonymous', WC_Core::$TEXT_DOMAIN);
+        }
+        return $author_name;
     }
 
     /**

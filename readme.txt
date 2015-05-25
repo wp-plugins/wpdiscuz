@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: wordpress comments, ajax comments, ajax, live update, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system, redirect, comment redirect, first commenter, social login
 Requires at least: 2.7
 Tested up to: 4.2.2
-Stable tag: 2.2.2
+Stable tag: 2.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -130,14 +130,25 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 
 == Changelog ==
 
+= 2.2.3 =
+* Added: Option to hide/show user avatars on comment form and list
+* Added: Option to hide/show comment form header text
+* Added: Option to set maximum character limit for comment text
+* Added: Option to enable .po/.mo translation files for mult-language sites
+* Added: Allowed new HTML tags (blockquote, ul, ol, li, code, em, abbr...)
+* Fixed Bug: Avatar duplication on reply form
+* Fixed Bug: Author display name update when it changed on UM profile page
+* Fixed Bug: 404 error on clicking subscription confirmation link
+* Fixed Bug: Email validation issue with .info and other TLD with more than 3 chars
+
+IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
+
 = 2.2.2 =
 * Fixed Bug: Some phrases were not translate-able
 * Fixed Bug: Social Network Avatar display problem
 * Fixed Bug: Issues with site layout, website field and Facebook login button
 * Fixed Bug: Error message "URL is invalid" for Website URLs starting with http://
 * Fixed Bug: Unlimited voting issue for guests
-
-IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
 
 = 2.2.1 =
 * Fixed Bug: Front-end Phrases don't suport Special Characters

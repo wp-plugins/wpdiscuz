@@ -3,7 +3,7 @@
 /*
   Plugin Name: wpDiscuz - Wordpress Comments
   Description: Better comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share.
-  Version: 2.2.2
+  Version: 2.2.3
   Author: gVectors Team (A. Chakhoyan, G. Zakaryan, H. Martirosyan)
   Author URI: http://www.gvectors.com/
   Plugin URI: http://www.gvectors.com/wpdiscuz/
@@ -14,7 +14,6 @@ include_once 'options/wc-options-serialize.php';
 include_once 'includes/wc-helper.php';
 include_once 'includes/wc-db-helper.php';
 include_once 'comment-form/tpl-comment.php';
-include_once 'dto/wc-comment.php';
 include_once 'wc-css.php';
 
 class WC_Core {
@@ -188,7 +187,9 @@ class WC_Core {
     public function add_plugin_options_page() {
         if (function_exists('add_options_page')) {
             add_menu_page('WpDiscuz', 'WpDiscuz', 'manage_options', 'wpdiscuz_options_page', array(&$this->wc_options, 'main_options_form'), plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/plugin-icon/plugin-icon-20.png'), 1246);
-            add_submenu_page('wpdiscuz_options_page', 'Phrases', 'Phrases', 'manage_options', 'wpdiscuz_phrases_page', array(&$this->wc_options, 'phrases_options_form'));
+            if (!$this->wc_options_serialized->wc_is_use_po_mo) {
+                add_submenu_page('wpdiscuz_options_page', 'Phrases', 'Phrases', 'manage_options', 'wpdiscuz_phrases_page', array(&$this->wc_options, 'phrases_options_form'));
+            }
         }
     }
 
@@ -304,7 +305,7 @@ class WC_Core {
                 }
             }
         }
-        $comment = filter_input(INPUT_POST, 'comment');
+        $comment_content = filter_input(INPUT_POST, 'comment');
         $website_url = '';
         if (is_user_logged_in()) {
             $user_id = get_current_user_id();
@@ -330,23 +331,23 @@ class WC_Core {
             $website_url = 'http://' . $website_url;
         }
         if ($website_url != '' && (filter_var($website_url, FILTER_VALIDATE_URL) === false)) {
-                $message_array['code'] = -1;
-                $message_array['message'] = $this->wc_options_serialized->wc_phrases['wc_error_url_text'];
-                echo json_encode($message_array);
-                exit;
-            }
-        $comment = wp_kses($comment, array(
-            'br' => array(),
-            'a' => array('href' => array(), 'title' => array()),
-            'i' => array(),
-            'b' => array(),
-            'u' => array(),
-            'strong' => array(),
-            'p' => array(),
-            'img' => array('src' => array(), 'width' => array(), 'height' => array(), 'alt' => array())
-        ));
+            $message_array['code'] = -1;
+            $message_array['message'] = $this->wc_options_serialized->wc_phrases['wc_error_url_text'];
+            echo json_encode($message_array);
+            exit;
+        }
 
-        if ($name && filter_var($email, FILTER_VALIDATE_EMAIL) && $comment && filter_var($comment_post_ID)) {
+        $comment_content = wp_kses($comment_content, $this->wc_helper->wc_allowed_tags);
+        $wc_comment_text_max_length = intval($this->wc_options_serialized->wc_comment_text_max_length);
+
+        if ($wc_comment_text_max_length && $wc_comment_text_max_length > 0 && mb_strlen(trim($comment_content)) > $wc_comment_text_max_length) {
+            $message_array['code'] = -1;
+            $message_array['message'] = $this->wc_options_serialized->wc_phrases['wc_msg_comment_text_max_length'];
+            echo json_encode($message_array);
+            exit;
+        }
+
+        if ($name && filter_var($email, FILTER_VALIDATE_EMAIL) && $comment_content && filter_var($comment_post_ID)) {
 
             $author_ip = WC_Helper::get_real_ip_addr();
 
@@ -356,7 +357,7 @@ class WC_Core {
                 'comment_parent' => $comment_parent,
                 'comment_author' => $name,
                 'comment_author_email' => $email,
-                'comment_content' => $comment,
+                'comment_content' => $comment_content,
                 'comment_author_url' => $website_url,
                 'comment_author_IP' => $author_ip,
                 'comment_agent' => $this->wc_user_agent
@@ -386,7 +387,7 @@ class WC_Core {
                 $this->wc_confirm_email_sender($wc_notification_inserted_id, $email, $comment_post_ID, $new_comment_id, $notification_type);
             }
 
-            $new_comment = new WC_Comment(get_comment($new_comment_id, OBJECT));
+            $new_comment = get_comment($new_comment_id, OBJECT);
             if ($held_moderate) {
                 $message_array['code'] = -2;
                 $message_array['message'] = $this->wc_options_serialized->wc_phrases['wc_held_for_moderate'];
@@ -435,10 +436,8 @@ class WC_Core {
         if ($this->wc_options_serialized->wc_voting_buttons_show_hide) {
             exit();
         }
-
-        if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
-            $this->wc_options_serialized->wc_phrases = $this->wc_db_helper->get_phrases();
-        }
+        $a = get_locale();
+        $this->wc_options_serialized->init_phrases_on_load();
         $messageArray = array();
         $messageArray['code'] = -1;
         $comment_id = '';
@@ -621,6 +620,7 @@ class WC_Core {
                 'max_depth' => $wc_comments_max_depth,
                 'reverse_top_level' => false,
                 'echo' => false,
+                'page' => 1,
                 'wc_visible_parent_comment_ids' => $wc_visible_parent_comment_ids
             );
 
@@ -632,7 +632,7 @@ class WC_Core {
             }
 
             $wc_parent_comments = $this->get_comments_tree($wc_parent_comments, $wc_child_comments);
-            $wc_parent_comments = $this->init_wc_comments($wc_parent_comments);
+            $this->init_wc_comments($wc_parent_comments);
             $message_array['wc_last_comment_id'] = max($wc_new_comments_ids);
             $message_array['message'] = wp_list_comments($comm_list_args, $wc_parent_comments);
             $wc_post_parent_comments_count = $this->wc_db_helper->get_post_parent_comments_count($wc_post_id);
@@ -735,10 +735,7 @@ class WC_Core {
 // MUST BE CHANGED IN NEXT VERSION OF PLUGIN
     public function get_wp_comments($comments_offset, $post_id = null, $wc_curr_user_comment_count = 0, $wc_hidden_new_comment_count = 0) {
         global $post;
-        if ($this->wc_db_helper->is_phrase_exists('wc_leave_a_reply_text')) {
-            $this->wc_options_serialized->wc_phrases = $this->wc_db_helper->get_phrases();
-        }
-
+        $this->wc_options_serialized->init_phrases_on_load();
         if (!$post_id) {
             $post_id = $post->ID;
         }
@@ -752,14 +749,14 @@ class WC_Core {
             'per_page' => $comments_offset ? $comments_offset * $wc_comment_count + $wc_curr_user_comment_count : '',
             'max_depth' => $wc_comments_max_depth,
             'reverse_top_level' => false,
+            'page' => 1,
             'echo' => false
         );
 
         $wc_wp_comments = array();
         $comments = get_comments(array('post_id' => $post_id, 'status' => 'approve', 'order' => $wc_comment_list_order));
-        $wc_comments = $this->init_wc_comments($comments);
-//        echo count($comments);exit();
-        $wc_wp_comments['wc_list'] = wp_list_comments($comm_list_args, $wc_comments);
+        $this->init_wc_comments($comments);
+        $wc_wp_comments['wc_list'] = wp_list_comments($comm_list_args, $comments);
         $wc_button_comments_count_style = $wc_hidden_new_comment_count > 0 ? "inline-block" : "none";
 
         if ($this->wc_parent_comments_count > $this->wc_options_serialized->wc_comment_count * $comments_offset + $wc_curr_user_comment_count && $comments_offset) {
@@ -821,16 +818,13 @@ class WC_Core {
      * initialize WPC comments 
      */
     public function init_wc_comments($comments) {
-        $wc_comments = array();
         if ($comments) {
             foreach ($comments as $comment) {
                 if (!$comment->comment_parent) {
                     $this->wc_parent_comments_count++;
                 }
-                $wc_comments[] = new WC_Comment($comment);
             }
         }
-        return $wc_comments;
     }
 
     public function wc_comment_callback($comment, $args, $depth) {
@@ -857,7 +851,7 @@ class WC_Core {
 
     public function init_current_post_type() {
         global $post;
-        if ($post && in_array($post->post_type, $this->wc_options_serialized->wc_post_types)) {
+        if ($post && in_array($post->post_type, $this->wc_options_serialized->wc_post_types) && is_singular()) {
             add_filter('comments_template', array(&$this, 'remove_comments_template_on_pages'), 10);
         }
     }
@@ -1018,8 +1012,10 @@ class WC_Core {
 
 // Add settings link on plugin page
     public function wc_add_plugin_settings_link($links) {
-        $settings_link = '<a href="' . admin_url() . 'admin.php?page=wpdiscuz_options_page">' . __('Settings', WC_Core::$TEXT_DOMAIN) . '</a> |';
-        $settings_link .= '<a href="' . admin_url() . 'admin.php?page=wpdiscuz_phrases_page">' . __('Phrases', WC_Core::$TEXT_DOMAIN) . '</a>';
+        $settings_link = '<a href="' . admin_url() . 'admin.php?page=wpdiscuz_options_page">' . __('Settings', WC_Core::$TEXT_DOMAIN) . '</a>';
+        if (!$this->wc_options_serialized->wc_is_use_po_mo) {
+            $settings_link .= ' | <a href="' . admin_url() . 'admin.php?page=wpdiscuz_phrases_page">' . __('Phrases', WC_Core::$TEXT_DOMAIN) . '</a>';
+        }
         array_unshift($links, $settings_link);
         return $links;
     }
@@ -1028,17 +1024,21 @@ class WC_Core {
      * get comment text from db
      */
     public function wc_get_editable_comment_content() {
+        $current_user = wp_get_current_user();
         $message_array = array();
         $comment_ID = intval(filter_input(INPUT_POST, 'comment_id'));
         if ($comment_ID) {
             $comment = get_comment($comment_ID);
-            if ($this->wc_helper->is_comment_editable($comment)) {
+            if (isset($current_user) && $comment->user_id == $current_user->ID && $this->wc_helper->is_comment_editable($comment)) {
                 $message_array['code'] = 1;
                 $message_array['message'] = $comment->comment_content;
             } else {
                 $message_array['code'] = -1;
                 $message_array['phrase_message'] = $this->wc_options_serialized->wc_phrases['wc_comment_edit_not_possible'];
             }
+        } else {
+            $message_array['code'] = -1;
+            $message_array['phrase_message'] = $this->wc_options_serialized->wc_phrases['wc_comment_edit_not_possible'];
         }
         echo json_encode($message_array);
         exit();
@@ -1052,21 +1052,12 @@ class WC_Core {
         $comment_ID = intval(filter_input(INPUT_POST, 'comment_id'));
         $comment_content = filter_input(INPUT_POST, 'comment_content');
         $comment = get_comment($comment_ID);
-
+        $current_user = wp_get_current_user();
         $trimmed_comment_content = trim($comment_content);
         // Change messages in next version - shoud be diff. messages for each specific error
-        if ($trimmed_comment_content) {
+        if ($trimmed_comment_content && isset($current_user) && $comment->user_id == $current_user->ID) {
             if ($trimmed_comment_content != $comment->comment_content) {
-                $comment_content = wp_kses($comment_content, array(
-                    'br' => array(),
-                    'a' => array('href' => array(), 'title' => array(), 'target' => array(), 'rel' => array(), 'download' => array(), 'hreflang' => array(), 'media' => array(), 'type' => array()),
-                    'i' => array(),
-                    'b' => array(),
-                    'u' => array(),
-                    'strong' => array(),
-                    'p' => array(),
-                    'img' => array('src' => array(), 'width' => array(), 'height' => array(), 'alt' => array())
-                ));
+                $comment_content = wp_kses($comment_content, $this->wc_helper->wc_allowed_tags);
 
                 $author_ip = WC_Helper::get_real_ip_addr();
                 $this->wc_user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
@@ -1088,10 +1079,15 @@ class WC_Core {
                 $message_array['code'] = -2;
                 $message_array['phrase_message'] = $this->wc_options_serialized->wc_phrases['wc_comment_not_edited'];
             }
+        } else {
+            $message_array['code'] = -1;
+            $message_array['phrase_message'] = $this->wc_options_serialized->wc_phrases['wc_comment_edit_not_possible'];
         }
+        
         echo json_encode($message_array);
         exit;
     }
+
 }
 
 $wc_core = new WC_Core();

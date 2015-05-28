@@ -118,7 +118,7 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 
 == Screenshots ==
 
-#1
+1. wpDiscuz ajax comment list for logged in user Screenshot #1
 2. wpDiscuz ajax comment list for guests Screenshot #2
 3. Discussion Threads with Reply Form Screenshot #3
 4. Comment editing #4

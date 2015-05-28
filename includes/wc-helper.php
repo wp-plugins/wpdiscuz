@@ -16,29 +16,30 @@ class WC_Helper {
     public static $second = 'wc_second_text';
     public static $seconds = 'wc_second_text_plural';
     private $wc_options_serialized;
+    public $wc_form_avatar;
     public $wc_allowed_tags = array(
-            'br' => array(),
-            'a' => array('href' => array(), 'title' => array(), 'target' => array(), 'rel' => array(), 'download' => array(), 'hreflang' => array(), 'media' => array(), 'type' => array()),
-            'i' => array(),
-            'b' => array(),
-            'u' => array(),
-            'strong' => array(),
-            's' => array(),
-            'p' => array(),
-            'img' => array('src' => array(), 'width' => array(), 'height' => array(), 'alt' => array()),
-            'blockquote' => array('cite'=>array()),
-            'ul'=> array(),
-            'li'=> array(),
-            'ol'=> array(),
-            'code'=> array(),
-            'em'=> array(),
-            'abbr'=>array('title'=>array()),
-            'q'=>array('cite'=>array()),
-            'acronym'=>array('title'=>array()),
-            'cite'=>array(),
-            'strike'=>array(),
-            'del'=>array('datetime'=>array()),
-        );
+        'br' => array(),
+        'a' => array('href' => array(), 'title' => array(), 'target' => array(), 'rel' => array(), 'download' => array(), 'hreflang' => array(), 'media' => array(), 'type' => array()),
+        'i' => array(),
+        'b' => array(),
+        'u' => array(),
+        'strong' => array(),
+        's' => array(),
+        'p' => array(),
+        'img' => array('src' => array(), 'width' => array(), 'height' => array(), 'alt' => array()),
+        'blockquote' => array('cite' => array()),
+        'ul' => array(),
+        'li' => array(),
+        'ol' => array(),
+        'code' => array(),
+        'em' => array(),
+        'abbr' => array('title' => array()),
+        'q' => array('cite' => array()),
+        'acronym' => array('title' => array()),
+        'cite' => array(),
+        'strike' => array(),
+        'del' => array('datetime' => array()),
+    );
 
     function __construct($wc_options_serialize) {
         $this->wc_options_serialized = $wc_options_serialize;
@@ -124,16 +125,15 @@ class WC_Helper {
     public function get_comment_author_avatar($comment = null) {
         global $current_user;
         get_currentuserinfo();
-
         $comm_auth_user_email = $current_user->user_email;
+
         if ($comment) {
-            $comm_auth_avatar = get_avatar($comment, 48);
+            $comm_auth_avatar = get_avatar($comment->comment_author_email, 48);
         } else {
-            if ($comm_auth_user_email) {
-                $comm_auth_avatar = get_avatar($comm_auth_user_email, 48);
-            } else {
-                $comm_auth_avatar = '<img width="48" height="48" class="avatar avatar-48 photo avatar-default" src="' . plugins_url(WC_Core::$PLUGIN_DIRECTORY . '/files/img/avatar_default.png') . '" alt=""/>';
-            }
+            $comm_auth_avatar = get_avatar($comm_auth_user_email, 48);
+        }
+        if (!$this->wc_form_avatar) {
+            $this->wc_form_avatar = get_avatar($comm_auth_user_email, 48);
         }
         return $comm_auth_avatar;
     }

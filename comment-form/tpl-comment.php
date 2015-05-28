@@ -79,7 +79,6 @@ class WC_Comment_Template_Builder {
         $unique_id = $this->get_unique_id($comment);
 
         $wc_author_name = $this->get_author_name($comment);
-        $wc_comm_author_avatar = $this->wc_helper->get_comment_author_avatar($comment);
         $wc_profile_url = $this->get_profile_url($user);
 
         if ($wc_profile_url) {
@@ -199,8 +198,7 @@ class WC_Comment_Template_Builder {
             $output_form .= '<div class="wc-secondary-forms-social-content" id="wc-secondary-forms-social-content-' . $unique_id . '"></div>';
             $output_form .= '<form action="" method="post" id="wc_comm_form-' . $unique_id . '" class="wc_comm_form wc_secondary_form"><div class="wc-field-comment">';
             if (!$this->wc_options_serialized->wc_avatar_show_hide) {
-                $wc_reply_form_comment_object = (object) array('user_id' => $current_user->ID, 'comment_author_email' => $current_user->user_email, 'comment_type' => '');
-                $output_form .= '<div class="wc-field-avatararea">' . get_avatar($wc_reply_form_comment_object) . '</div>';
+                $output_form .= '<div class="wc-field-avatararea">' .  $this->wc_helper->wc_form_avatar . '</div>';
             }
             $output_form .= '<div class="wc-field-textarea wpdiscuz-item" ' . $hide_avatar_style . '><textarea ' . $this->wc_validate_comment_text_length . ' id="wc_comment-' . $unique_id . '" class="wc_comment wc_field_input" name="wc_comment" required="required" placeholder="' . $textarea_placeholder . '"></textarea></div><div style="clear:both"></div></div>';
 
@@ -262,7 +260,7 @@ class WC_Comment_Template_Builder {
             }
 
             if (class_exists('Prompt_Comment_Form_Handling') && $this->wc_options_serialized->wc_use_postmatic_for_comment_notification) {
-                $output_form .= '<input id="wc_notification_new_comment-' . $unique_id . '" class="wc_notification_new_comment" value="wc_notification_new_comment" ' . $post_sub_status . 'type="checkbox" name="wc_comment_reply_notification-' . $unique_id . '"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-' . $unique_id . '">' . __('Participate in this discussion via email', 'Postmatic') . '</label>';
+                $output_form .= '<input id="wc_notification_new_comment-' . $unique_id . '" class="wc_notification_new_comment" value="wc_notification_new_comment" ' . $post_sub_status . 'type="checkbox" name="wc_comment_reply_notification-' . $unique_id . '"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-' . $unique_id . '">' . __('Participate in this discussion via email',  WC_Core::$TEXT_DOMAIN) . '</label>';
             } else {
                 if ($current_user->ID && $this->wc_db_helper->wc_has_post_notification($comment->comment_post_ID, $current_user->user_email)) {
                     $wc_confirmation_phrase = ($wc_is_user_subscription_confirmed == 1) ? $this->wc_options_serialized->wc_phrases['wc_subscribed_on_post'] : $this->wc_options_serialized->wc_phrases['wc_confirm_email'];

@@ -5,6 +5,7 @@ get_currentuserinfo();
 error_reporting(0);
 $wc_core->wc_options_serialized->init_phrases_on_load();
 $wc_comment_list_update_type = $wc_core->wc_options_serialized->wc_comment_list_update_type;
+$wc_form_avatar = $wc_core->wc_helper->get_comment_author_avatar();
 ?>
 <script type="text/javascript">
 //    initialize the wpdiscuzValidator function
@@ -50,8 +51,6 @@ $header_text = '<span class="wc_header_text_count">' . $post->comment_count . '<
 $header_text .= ($post->comment_count > 1) ? $wc_core->wc_options_serialized->wc_phrases['wc_header_text_plural'] : $wc_core->wc_options_serialized->wc_phrases['wc_header_text'];
 $header_text .= ' ' . $wc_core->wc_options_serialized->wc_phrases['wc_header_on_text'];
 $header_text .= ' "' . get_the_title($post) . '"';
-
-$wc_main_form_comment_object = (object) array('user_id' => $current_user->ID, 'comment_author_email' => $current_user->user_email, 'comment_type' => '');
 
 $wc_is_name_field_required = ($wc_core->wc_options_serialized->wc_is_name_field_required) ? 'required="required"' : '';
 $wc_is_email_field_required = ($wc_core->wc_options_serialized->wc_is_email_field_required) ? 'required="required"' : '';
@@ -126,7 +125,7 @@ $wc_validate_comment_text_length = (intval($wc_core->wc_options_serialized->wc_c
                         <div class="wc-field-comment">
                             <?php if (!$wc_core->wc_options_serialized->wc_avatar_show_hide) { ?>
                                 <div class="wc-field-avatararea">
-                                    <?php echo $wc_core->wc_helper->get_comment_author_avatar($wc_main_form_comment_object); ?>                        
+                                    <?php echo $wc_form_avatar; ?>                        
                                 </div>
                             <?php } ?>
                             <div class="wpdiscuz-item wc-field-textarea" <?php

@@ -3,7 +3,7 @@
 /*
   Plugin Name: wpDiscuz - Wordpress Comments
   Description: Better comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share.
-  Version: 2.2.4
+  Version: 2.2.5
   Author: gVectors Team (A. Chakhoyan, G. Zakaryan, H. Martirosyan)
   Author URI: http://www.gvectors.com/
   Plugin URI: http://www.gvectors.com/wpdiscuz/
@@ -49,8 +49,10 @@ class WC_Core {
         $this->wc_helper = new WC_Helper($this->wc_options_serialized);
         $this->wc_css = new WC_CSS($this->wc_options_serialized);
         $this->comment_tpl_builder = new WC_Comment_Template_Builder($this->wc_helper, $this->wc_db_helper, $this->wc_options, $this->wc_options_serialized);
-
-        add_action('init', array(&$this, 'register_session'), 2);
+        
+        if (!$this->wc_options_serialized->wc_captcha_show_hide) {
+            add_action('init', array(&$this, 'register_session'), 2);
+        }
         add_action('admin_init', array(&$this, 'wc_plugin_new_version'), 2);
 
         add_action('admin_enqueue_scripts', array(&$this, 'admin_page_styles_scripts'), 2315);
@@ -120,11 +122,11 @@ class WC_Core {
             } else {
                 update_option($this->wc_version_slug, $wc_plugin_data['Version']);
             }
-            if (version_compare($wc_version, '2.1.2', '<=')) {
+            if (version_compare($wc_version, '2.1.2', '<=') && version_compare($wc_version, '1.0.0', '!=')) {
                 $this->wc_db_helper->wc_alter_phrases_table();
             }
 
-            if (version_compare($wc_version, '2.1.7', '<=')) {
+            if (version_compare($wc_version, '2.1.7', '<=') && version_compare($wc_version, '1.0.0', '!=')) {
                 $this->wc_db_helper->wc_alter_voting_table();
             }
         }
@@ -151,7 +153,7 @@ class WC_Core {
      */
 
     public function register_session() {
-        if (!session_id()) {
+        if (!session_id() && !is_user_logged_in()) {
             @session_start();
         }
     }
@@ -792,6 +794,7 @@ class WC_Core {
         $post_id = intval($_POST['wc_post_id']);
         $message_array = array();
         if ($post_id) {
+            $this->wc_helper->get_comment_author_avatar();
             $wc_limit = $c_offset ? $c_offset * $this->wc_options_serialized->wc_comment_count : $this->wc_db_helper->get_comments_count($post_id);
             $wc_last_comment_id = isset($_POST['wc_last_comment_id']) ? $_POST['wc_last_comment_id'] : 0;
             $wc_curr_user_comment_count = isset($_POST['wc_curr_user_comment_count']) ? $_POST['wc_curr_user_comment_count'] : 0;
@@ -1083,7 +1086,7 @@ class WC_Core {
             $message_array['code'] = -1;
             $message_array['phrase_message'] = $this->wc_options_serialized->wc_phrases['wc_comment_edit_not_possible'];
         }
-        
+
         echo json_encode($message_array);
         exit;
     }

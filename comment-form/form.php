@@ -182,7 +182,7 @@ $wc_validate_comment_text_length = (intval($wc_core->wc_options_serialized->wc_c
 
                                 if (class_exists('Prompt_Comment_Form_Handling') && $wc_core->wc_options_serialized->wc_use_postmatic_for_comment_notification) {
                                     ?>
-                                    <input id="wc_notification_new_comment-<?php echo $unique_id; ?>" class="wc_notification_new_comment" value="wc_notification_new_comment" <?php echo $post_sub_status; ?> type="checkbox" name="wc_comment_reply_notification-<?php echo $unique_id; ?>"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-<?php echo $unique_id; ?>"><?php _e('Participate in this discussion via email', 'Postmatic'); ?></label>
+                                    <input id="wc_notification_new_comment-<?php echo $unique_id; ?>" class="wc_notification_new_comment" value="wc_notification_new_comment" <?php echo $post_sub_status; ?> type="checkbox" name="wc_comment_reply_notification-<?php echo $unique_id; ?>"/> <label class="wc-label-comment-notify" for="wc_notification_new_comment-<?php echo $unique_id; ?>"><?php _e('Participate in this discussion via email', WC_Core::$TEXT_DOMAIN); ?></label>
                                     <?php
                                 } else {
                                     if ($current_user->ID && $wc_core->wc_db_helper->wc_has_post_notification($post->ID, $current_user->user_email)) {

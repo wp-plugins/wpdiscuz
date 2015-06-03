@@ -387,7 +387,7 @@ class WC_Options_Serialize {
         $this->wc_reply_button_guests_show_hide = $options['wc_reply_button_guests_show_hide'];
         $this->wc_reply_button_members_show_hide = $options['wc_reply_button_members_show_hide'];
         $this->wc_author_titles_show_hide = $options['wc_author_titles_show_hide'];
-        $this->wc_comment_count = $options['wc_comment_count'];
+        $this->wc_comment_count = isset($options['wc_comment_count']) ? $options['wc_comment_count'] : 5;
         $this->wc_comments_max_depth = isset($options['wc_comments_max_depth']) ? $options['wc_comments_max_depth'] : 2;
         $this->wc_simple_comment_date = isset($options['wc_simple_comment_date']) ? $options['wc_simple_comment_date'] : 0;
         $this->wc_comment_reply_checkboxes_default_checked = isset($options['wc_comment_reply_checkboxes_default_checked']) ? $options['wc_comment_reply_checkboxes_default_checked'] : 0;

@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: wordpress comments, ajax comments, ajax, live update, theme, post comments, comments box, community, discussion, discuss, comment form, reply, comments, discussions, comment template, activity, comment author, comment system, redirect, comment redirect, first commenter, social login
 Requires at least: 2.7
 Tested up to: 4.2.2
-Stable tag: 2.2.5
+Stable tag: 2.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -130,11 +130,18 @@ http://www.gvectors.com/questions/wpdiscuz-comment-form-is-missing/
 
 == Changelog ==
 
+= 2.2.6 =
+* Added: Supports "Social Login" Plugin
+* Added: Redirection to current page after login/logout
+* Fixed Bug: Super Socializer comment author avatar problem
+* Fixed Bug: Author website URL rel="nofollow"
+* Fixed Bug: Other small bugs
+
+IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
+
 = 2.2.5 =
 * Fixed Bug: Comment author profile image issue when using Gravatar
 * Fixed Bug: Conditional php session start (optimized).
-
-IMPORTANT: If you have a Cache Plugin, please delete all caches after wpDiscuz update.
 
 = 2.2.4 =
 * Fixed Bug: CSS/Layout issue. Breaks some theme layout.

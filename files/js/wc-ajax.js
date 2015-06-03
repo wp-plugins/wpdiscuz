@@ -47,6 +47,8 @@ jQuery(document).ready(function ($) {
             $('.wc_social_plugin_wrapper .the_champ_login_container').clone().prependTo('#wc-secondary-forms-social-content-' + uniqueID);
         } else if ($('.wc_social_plugin_wrapper .social_connect_form').length && !($('#wc-secondary-forms-social-content-' + uniqueID + ' .social_connect_form').length)) {
             $('.wc_social_plugin_wrapper .social_connect_form').clone().prependTo('#wc-secondary-forms-social-content-' + uniqueID);
+        }else if ($('.wc_social_plugin_wrapper .oneall_social_login_providers').length && !($('#wc-secondary-forms-social-content-' + uniqueID + ' .oneall_social_login_providers').length)) {
+            $('.wc_social_plugin_wrapper .oneall_social_login .oneall_social_login_providers').clone().prependTo('#wc-secondary-forms-social-content-' + uniqueID);
         }
 
         $('#wc-secondary-forms-wrapper-' + uniqueID).slideToggle(700);

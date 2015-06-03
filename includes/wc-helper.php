@@ -126,14 +126,15 @@ class WC_Helper {
         global $current_user;
         get_currentuserinfo();
         $comm_auth_user_email = $current_user->user_email;
-
-        if ($comment) {
-            $comm_auth_avatar = get_avatar($comment->comment_author_email, 48);
-        } else {
-            $comm_auth_avatar = get_avatar($comm_auth_user_email, 48);
+        if (function_exists('the_champ_init') && get_user_meta($current_user->ID, 'thechamp_avatar') && is_null($comment)) {
+            $comment = (object) array('user_id' => $current_user->ID, 'comment_author_email' => $current_user->user_email, 'comment_type' => '');
+        } elseif (!$comment) {
+            $comment = $current_user->user_email;
         }
+        $comm_auth_avatar = get_avatar($comment, 48);
+
         if (!$this->wc_form_avatar) {
-            $this->wc_form_avatar = get_avatar($comm_auth_user_email, 48);
+            $this->wc_form_avatar = $comm_auth_avatar;
         }
         return $comm_auth_avatar;
     }

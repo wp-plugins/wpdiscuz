@@ -55,13 +55,13 @@ $header_text .= ' "' . get_the_title($post) . '"';
 $wc_is_name_field_required = ($wc_core->wc_options_serialized->wc_is_name_field_required) ? 'required="required"' : '';
 $wc_is_email_field_required = ($wc_core->wc_options_serialized->wc_is_email_field_required) ? 'required="required"' : '';
 
-if( ini_get('output_buffering') ){ $wc_ob_allowed = true; ob_start(); do_action('comment_form_top'); $wc_comment_form_top_content = ob_get_contents(); ob_clean(); $wc_comment_form_top_content = wpdiscuz_close_divs($wc_comment_form_top_content); } else{ $wc_ob_allowed = false; }
+$ob_stat = ini_get('output_buffering'); if( $ob_stat || $ob_stat === '' ){ $wc_ob_allowed = true; ob_start(); do_action('comment_form_top'); $wc_comment_form_top_content = ob_get_contents(); ob_clean(); $wc_comment_form_top_content = wpdiscuz_close_divs($wc_comment_form_top_content); } else{ $wc_ob_allowed = false; }
 $wc_validate_comment_text_length = (intval($wc_core->wc_options_serialized->wc_comment_text_max_length)) ? 'data-validate-length-range="1,' . $wc_core->wc_options_serialized->wc_comment_text_max_length . '"' : '';
 ?>
 <div style="clear:both"></div>
 
 <?php if (comments_open($post->ID)) { ?>
-    <div id="comments" class="comments-area">
+    <div id="comments" class="comments-area"><div id="respond" style="width: 0;height: 0;clear: both;margin: 0;padding: 0;"></div>
         <?php
         if (isset($_GET['wpdiscuzSubscribeID']) && isset($_GET['key'])) {
             $wc_core->wc_unsubscribe($_GET['wpdiscuzSubscribeID'], $_GET['key']);
@@ -96,7 +96,11 @@ $wc_validate_comment_text_length = (intval($wc_core->wc_options_serialized->wc_c
                 ?>
                 <div id="wc_show_hide_loggedin_username">
                     <span class="wc_show_hide_loggedin_username">
-                        <?php echo $wc_core->wc_options_serialized->wc_phrases['wc_logged_in_as'] . ' <a href="' . $user_url . '">' . $current_user->display_name . '</a> | <a href="' . wp_logout_url() . '">' . $wc_core->wc_options_serialized->wc_phrases['wc_log_out'] . '</a>'; ?> 
+                        <?php
+                          $logout = wp_loginout(get_permalink(),false) ;
+                          $logout = preg_replace('!>([^<]+)!is','>'.$wc_core->wc_options_serialized->wc_phrases['wc_log_out'], $logout);
+                        echo $wc_core->wc_options_serialized->wc_phrases['wc_logged_in_as'] . ' <a href="' . $user_url . '">' . $current_user->display_name . '</a> | '. $logout;
+                        ?>
                     </span>
                 </div>
                 <?php
@@ -232,7 +236,12 @@ $wc_validate_comment_text_length = (intval($wc_core->wc_options_serialized->wc_c
                     </form>
 
                 <?php } else { ?>
-                    <p class="wc-must-login"><?php echo $wc_core->wc_options_serialized->wc_phrases['wc_you_must_be_text']; ?> <a href="<?php echo wp_login_url(); ?>"><?php echo $wc_core->wc_options_serialized->wc_phrases['wc_logged_in_text']; ?></a> <?php echo $wc_core->wc_options_serialized->wc_phrases['wc_to_post_comment_text']; ?></p>
+                    <p class="wc-must-login">
+                        <?php echo $wc_core->wc_options_serialized->wc_phrases['wc_you_must_be_text'];
+                        $login = wp_loginout(get_permalink(),false);
+                        $login = preg_replace('!>([^<]+)!is','>'.$wc_core->wc_options_serialized->wc_phrases['wc_logged_in_text'],$login);
+                        echo ' ' . $login . ' ' .$wc_core->wc_options_serialized->wc_phrases['wc_to_post_comment_text']; ?>
+                    </p>
                     <?php
                 }
                 ?>
@@ -316,7 +325,7 @@ $wc_validate_comment_text_length = (intval($wc_core->wc_options_serialized->wc_c
                     $html = $html . $wc_div_end_html;
                 }
                 //Custom case for social login plugin
-                if (strpos('champ_login') !== FALSE) {
+                if (strpos($html, 'champ_login') !== FALSE) {
                     if (preg_match_all('|<li[^><]*>.+?</li>|is', $html, $wc_social_buttons, PREG_SET_ORDER)) {
                         foreach ($wc_social_buttons as $wc_social_button) {
                             $wc_social_buttons_array[] = $wc_social_button[0];

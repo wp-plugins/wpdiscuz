@@ -201,7 +201,7 @@ class WC_Options {
                             type: 'default', //Types: default, vertical, accordion
                             width: 'auto', //auto or any width like 600px
                             fit: true, // 100% fit in a container
-                            tabidentify: 'hor_1', // The tab groups identifier
+                            tabidentify: 'hor_1' // The tab groups identifier
                         });
                     });
                 </script>
@@ -371,7 +371,7 @@ class WC_Options {
                             type: 'default', //Types: default, vertical, accordion
                             width: 'auto', //auto or any width like 600px
                             fit: true, // 100% fit in a container
-                            tabidentify: 'hor_2', // The tab groups identifier
+                            tabidentify: 'hor_2' // The tab groups identifier
                         });
                     });
                 </script>

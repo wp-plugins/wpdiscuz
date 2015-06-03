@@ -88,7 +88,7 @@ class WC_Comment_Template_Builder {
         }
 
         if ($wc_comment_author_url) {
-            $wc_author_name = "<a href='$wc_comment_author_url'>" . $wc_author_name . "</a>";
+            $wc_author_name = "<a rel='nofollow' href='$wc_comment_author_url'>" . $wc_author_name . "</a>";
         } else {
             if ($wc_profile_url) {
                 $wc_author_name = "<a href='$wc_profile_url'>" . $wc_author_name . "</a>";
@@ -118,7 +118,7 @@ class WC_Comment_Template_Builder {
 
         $output = '<div id="wc-comm-' . $unique_id . '" class="' . $comment_wrapper_class . ' ' . $wc_author_class . ' ' . $parent_comment . ' wc_comment_level-' . $depth . '">';
         if (!$this->wc_options_serialized->wc_avatar_show_hide) {
-            $output .= '<div class="wc-comment-left" id="comment-' . $comment->comment_ID . '">' . $wc_comm_author_avatar;
+            $output .= '<div class="wc-comment-left">' . $wc_comm_author_avatar;
             if (!$this->wc_options_serialized->wc_author_titles_show_hide) {
                 $output .= '<div class="' . $wc_author_class . ' wc-comment-label">' . $author_title . '</div>';
             }
@@ -127,7 +127,7 @@ class WC_Comment_Template_Builder {
             }
             $output .= '</div>';
         }
-        $output .= '<div class="wc-comment-right ' . $comment_content_class . '" ' . $hide_avatar_style . '>';
+        $output .= '<div id="comment-' . $comment->comment_ID . '" class="wc-comment-right ' . $comment_content_class . '" ' . $hide_avatar_style . '>';
         $output .= '<div class="wc-comment-header"><div class="wc-comment-author">' . $wc_author_name . '</div><div class="wc-comment-date">' . $posted_date . '</div><div style="clear:both"></div></div>';
         $output .= '<div class="wc-comment-text">' . $comment_content . '</div>';
         $output .= '<div class="wc-comment-footer">';

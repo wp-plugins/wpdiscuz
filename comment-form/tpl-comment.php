@@ -377,10 +377,13 @@ class WC_Comment_Template_Builder {
     }
 
     public function get_author_name($comment) {
-        if (class_exists('UM_API') && isset($comment->user_id) && !empty($comment->user_id)) {
+        if (class_exists('UM_API') && isset($comment->user_id) && $comment->user_id) {
             um_fetch_user($comment->user_id);
             $author_name = um_user('display_name');
             um_reset_user();
+        }else if(isset($comment->user_id) && $comment->user_id){
+            $author_name = get_the_author_meta( 'display_name', $comment->user_id );
+            $author_name = $author_name ? $author_name : get_the_author_meta('user_login',$comment->user_id );
         } else {
             $author_name = $comment->comment_author ? $comment->comment_author : __('Anonymous', WC_Core::$TEXT_DOMAIN);
         }

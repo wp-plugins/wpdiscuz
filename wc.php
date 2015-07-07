@@ -3,7 +3,7 @@
 /*
   Plugin Name: wpDiscuz - Wordpress Comments
   Description: Better comment system. Wordpress post comments and discussion plugin. Allows your visitors discuss, vote for comments and share.
-  Version: 2.2.6
+  Version: 2.2.7
   Author: gVectors Team (A. Chakhoyan, G. Zakaryan, H. Martirosyan)
   Author URI: http://www.gvectors.com/
   Plugin URI: http://www.gvectors.com/wpdiscuz/
@@ -352,7 +352,7 @@ class WC_Core {
         if ($name && filter_var($email, FILTER_VALIDATE_EMAIL) && $comment_content && filter_var($comment_post_ID)) {
 
             $author_ip = WC_Helper::get_real_ip_addr();
-
+            $comment_content = addslashes($comment_content);
             $new_commentdata = array(
                 'user_id' => $user_id,
                 'comment_post_ID' => $comment_post_ID,
@@ -927,8 +927,8 @@ class WC_Core {
      */
     public function wc_notify_on_new_reply($parent_comment_id, $new_comment_id, $email) {
         $emails_array = $this->wc_db_helper->wc_get_post_new_reply_notification($parent_comment_id, $email);
-        $subject = ($this->wc_options_serialized->wc_phrases['wc_new_reply_email_subject']) ? $this->wc_options_serialized->wc_phrases['wc_new_reply_email_subject'] : 'New Reply';
-        $message = ($this->wc_options_serialized->wc_phrases['wc_new_reply_email_message']) ? $this->wc_options_serialized->wc_phrases['wc_new_reply_email_message'] : 'New reply on the discussion section you\'ve been interested in';
+        $subject = ($this->wc_options_serialized->wc_phrases['wc_new_reply_email_subject']) ? $this->wc_options_serialized->wc_phrases['wc_new_reply_email_subject'] : __('New Reply',WC_Core::$TEXT_DOMAIN);
+        $message = ($this->wc_options_serialized->wc_phrases['wc_new_reply_email_message']) ? $this->wc_options_serialized->wc_phrases['wc_new_reply_email_message'] : __('New reply on the discussion section you\'ve been interested in',WC_Core::$TEXT_DOMAIN);
         foreach ($emails_array as $e_row) {
             $this->wc_email_sender($e_row, $new_comment_id, $subject, $message);
         }
@@ -1064,6 +1064,7 @@ class WC_Core {
 
                 $author_ip = WC_Helper::get_real_ip_addr();
                 $this->wc_user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+                $comment_content = addslashes($comment_content);
                 $commentarr = array(
                     'comment_ID' => $comment_ID,
                     'comment_content' => apply_filters('pre_comment_content', $comment_content),

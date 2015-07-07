@@ -233,7 +233,7 @@ jQuery(document).ready(function ($) {
                     $('#wc_openModalFormAction').css('opacity', '1');
                     $('#wc_openModalFormAction').css('pointer-events', 'auto');
                     $('#wc_openModalFormAction .close').css('display', 'block');
-                    if (response.contains('<') && response.contains('>')) {
+                    if (response.indexOf('<') >= 0 && response.indexOf('>') >= 0) {
                         $('#wc_openModalFormAction > #wc_response_info').html(html + e);
                     } else {
                         $('#wc_openModalFormAction > #wc_response_info').html(html + response);

@@ -9,7 +9,7 @@ add_thickbox();
 if (function_exists('wsl_render_auth_widget_in_comment_form')) {
     $wc_social_plugin = '<tr valign="top"><td>WordPress Social Login</td><td><a href="options-general.php?page=wordpress-social-login" class="button button-primary">' . __('Settings', 'default') . '</a></td></tr>';
 } else if (function_exists('the_champ_login_button')) {
-    $wc_social_plugin = '<tr valign="top"><td>Super Socializer</td><td><a href="admin.php?page=the-champ-social-login" class="button button-primary">' . __('Settings', 'default') . '</a></td></tr>';
+    $wc_social_plugin = '<tr valign="top"><td>Super Socializer</td><td><a href="admin.php?page=super-socializer" class="button button-primary">' . __('Settings', 'default') . '</a></td></tr>';
 } else if (function_exists('sc_render_comment_form_social_connect')) {
     $wc_social_plugin = '<tr valign="top"><td>Social Connect</td><td><a href="options-general.php?page=social-connect-id" class="button button-primary">' . __('Settings', 'default') . '</a></td></tr>';
 } else if (function_exists('oa_social_login_render_login_form_comments')) {
@@ -74,7 +74,7 @@ if (isset($_GET['wc_social_action'])) {
             $wc_social_plugin_file = 'wordpress-social-login/wp-social-login.php';
             break;
         case 'super-socializer':
-            $wc_activation_redirect_url = 'admin.php?page=the-champ-social-login';
+            $wc_activation_redirect_url = 'admin.php?page=super-socializer';
             $wc_social_plugin_file = 'super-socializer/super_socializer.php';
             break;
         case 'social-connect':

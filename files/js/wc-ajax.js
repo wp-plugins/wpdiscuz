@@ -17,6 +17,7 @@ jQuery(document).ready(function ($) {
     var wc_comment_list_update_timer = parseInt($('#wc_comment_list_update_timer').val());
     var wc_all_comments_count_new;
     var wc_comment_text_before_editting;
+    var wc_website_placeholder_text = $('.wc_website').attr('placeholder');
 
     $(".wc_comment").autoGrow();
 
@@ -72,6 +73,7 @@ jQuery(document).ready(function ($) {
         wc_name = $('#wc_name-' + uniqueID).val();
         wc_email = $('#wc_email-' + uniqueID).val();
         wc_website = ($('#wc_website-' + uniqueID).length) ? $('#wc_website-' + uniqueID).val() : '';
+        if(wc_website_placeholder_text == wc_website){wc_website ='';}
         wc_comment = $('textarea#wc_comment-' + uniqueID).val();
         wc_captcha = $('#wc_captcha-' + uniqueID).val();
         wc_comment_post_ID = $('#wc_comment_post_ID-' + uniqueID).val();

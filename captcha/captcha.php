@@ -21,9 +21,7 @@ for ($i = 0; $i < $captcha_length; $i++) {
 
 $_SESSION['wc_captcha'][$comm_id] = md5(strtolower(trim($randomString)));
 
-
 $im = @imagecreatefrompng("captcha_bg_easy.png");
-
 
 $font_path = './consolai.ttf';
 

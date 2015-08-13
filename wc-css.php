@@ -9,7 +9,7 @@ class WC_CSS {
     }
 
     /**
-     * init woo discuss styles
+     * init wpdiscuz styles
      */
     public function init_styles() {
         if (is_singular()) {

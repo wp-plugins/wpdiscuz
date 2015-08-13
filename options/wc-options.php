@@ -74,6 +74,7 @@ class WC_Options {
             $this->wc_options_serialized->wc_show_plugin_powerid_by = isset($_POST['wc_show_plugin_powerid_by']) ? $_POST['wc_show_plugin_powerid_by'] : 0;
             $this->wc_options_serialized->wc_is_use_po_mo = isset($_POST['wc_is_use_po_mo']) ? $_POST['wc_is_use_po_mo'] : 0;
             $this->wc_options_serialized->wc_comment_text_max_length = (isset($_POST['wc_comment_text_max_length']) && intval($_POST['wc_comment_text_max_length']) && intval($_POST['wc_comment_text_max_length']) > 0) ? intval($_POST['wc_comment_text_max_length']) : '';
+            $this->wc_options_serialized->wc_load_js_css_on_home = isset($_POST['wc_load_js_css_on_home']) ? $_POST['wc_load_js_css_on_home'] : 0;
 
             $this->wc_options_serialized->update_options();
         }

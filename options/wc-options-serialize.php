@@ -354,7 +354,16 @@ class WC_Options_Serialize {
      * Default Value - Unlimit
      */
     public $wc_comment_text_max_length;
-    
+
+
+    /**
+     * Type - Checkbox
+     * Available Values - Checked/Unchecked
+     * Description - Disable / Enable wpdiscuz js and css loading on home page
+     * Default Value - Checked
+     */
+    public $wc_load_js_css_on_home;
+
 
     function __construct($wc_db_helper) {
         $this->wc_db_helper = $wc_db_helper;
@@ -408,6 +417,7 @@ class WC_Options_Serialize {
         $this->wc_show_plugin_powerid_by = isset($options['wc_show_plugin_powerid_by']) ? $options['wc_show_plugin_powerid_by'] : 0;
         $this->wc_is_use_po_mo = isset($options['wc_is_use_po_mo']) ? $options['wc_is_use_po_mo'] : 0;
         $this->wc_comment_text_max_length = isset($options['wc_comment_text_max_length']) ? $options['wc_comment_text_max_length'] : '';
+        $this->wc_load_js_css_on_home = isset($options['wc_load_js_css_on_home']) ? $options['wc_load_js_css_on_home'] : 1;
     }
 
     /**
@@ -553,7 +563,8 @@ class WC_Options_Serialize {
             'wc_custom_css' => $this->wc_custom_css,
             'wc_show_plugin_powerid_by' => $this->wc_show_plugin_powerid_by,
             'wc_is_use_po_mo' => $this->wc_is_use_po_mo,
-            'wc_comment_text_max_length' => $this->wc_comment_text_max_length
+            'wc_comment_text_max_length' => $this->wc_comment_text_max_length,
+            'wc_load_js_css_on_home' => $this->wc_load_js_css_on_home
         );
 
         return $options;
@@ -606,7 +617,8 @@ class WC_Options_Serialize {
             'wc_custom_css' => '.comments-area{width:auto;}',
             'wc_show_plugin_powerid_by' => '0',
             'wc_is_use_po_mo' => '0',
-            'wc_comment_text_max_length' => ''
+            'wc_comment_text_max_length' => '',
+            'wc_load_js_css_on_home' => '1'
         );
         add_option($this->wc_options_slug, serialize($options));
     }

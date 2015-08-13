@@ -180,6 +180,16 @@
                 </td>
             </tr>
             <tr valign="top">
+                <th scope="row" >
+                    <?php _e('Load WpDiscuz CSS and JS on home page', WC_Core::$TEXT_DOMAIN); ?>
+                </th>
+                <td colspan="3">
+                    <label for="wc_load_js_css_on_home">
+                        <input type="checkbox" <?php checked($this->wc_options_serialized->wc_load_js_css_on_home == 1) ?> value="1" name="wc_load_js_css_on_home" id="wc_load_js_css_on_home" />
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
                 <th scope="row">
                     <?php _e('Load rest of all comments on clicking the [Load More Comments] button', WC_Core::$TEXT_DOMAIN); ?>
                 </th>
@@ -215,7 +225,6 @@
                 </label>
             </td>
         </tr>
-
         <tr valign="top">
             <th scope="row" >
                 <label for="wc_show_plugin_powerid_by">
@@ -230,7 +239,6 @@
             </label>
         </td>
         </tr>
-
         </tbody>
     </table>
 </div>
